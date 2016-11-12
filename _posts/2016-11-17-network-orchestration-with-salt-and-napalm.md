@@ -6,13 +6,13 @@ subtitle: Because rendering templates is simply not enough
 
 ## Introduction
 
-Automation is the new buzzword in networking nowdays. By automation many people understand a configuration management system, i.e. keeping the configuration of their devices consistent across their networks. Which is perfectly fine if that's all you want from your devices, it is already a big step forward. But there are many use cases when you need much more than that! Therefore, in order to avoid any ambiguity, we need to use a different term: orchestration - which is much more... it is what SREs have been doing for years on servers: of course configuration management is one of the required features, but not limited to: retrieving essential information about your devices and reacting are equally important.
+Automation is the new buzzword in networking today. By automation many people understand a configuration management system, i.e. keeping the configuration of their devices consistent across their networks. Which is perfectly fine if that's all you want from your devices, it is already a big step forward. But there are many use cases when you need much more than that! Therefore, in order to avoid any ambiguity, we should use a different term: orchestration - which is much more... it is what SREs have been doing for years on servers. Of course configuration management is one of the required features, but not limited to: retrieving essential information about your devices and reacting are equally important.
 
 ## Motivation
 
-To achieve these goals, for sure you need presence of mind and firstly draw your requirements. Doing what your neighbour/friend does, it's not enough reason to repeat the same mistakes and discover after several months that your tools cannot do the job you actually need.
+To achieve these goals, for sure you need presence of mind and firstly draw your requirements. Doing what your neighbour/friend does, is not enough reason to repeat the same mistakes and discover after several months that your tools cannot do the job you actually need.
 
-For network orchestration, I use two ingredients: Salt and NAPALM.
+For network orchestration, I recommend two ingredients: Salt and NAPALM.
 
 ### NAPALM
 
@@ -34,21 +34,23 @@ At Cloudflare we had certain requirements solved thanks to the following feature
 - GPG encryption
 - Pull from Git or SVN
 
-We have mixed them together and NAPALM will be fully integrated in the core of Salt beginning with release ```2016.11```: you can explore documentation [starting from the proxy module](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html). This is very good news as the setup process will be highly simplified - you only need to [install](https://docs.saltstack.com/en/latest/topics/installation/) (usually one command, e.g. for Debian: ```sudo apt-get install salt-master```) & use.
+We have mixed them together and NAPALM will be fully integrated in the core of Salt beginning with release ```2016.11```: available documentation can be explored starting from [the proxy module](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html). This is very good news as the setup process will be highly simplified - you only need to [install](https://docs.saltstack.com/en/latest/topics/installation/) (usually one command, e.g. for Debian: ```sudo apt-get install salt-master```) & use.
 
 #### Architecture
 
-The general picture is hub and spoke with a master controlling several _minions_. On each minion server is installed a software package called _salt-minion_. This is currently impossible on all platforms, network vendors still prefer to keep their devices closed and is not possible to install custom software directly.
-Therefore Salt will fork a different process per network device, emulating the behavior of a salt-minion. This is called proxy minion.
+The general picture is hub and spoke with a master controlling several _minions_. On the server side, on each minion server is installed a software package called _salt-minion_. This is currently impossible on all network devices, vendors still prefer to keep their platforms closed, not allowing to install custom software directly.
+
+For these reasons, Salt intorduced the proxy minion. This is not a different platform, this is just another process forked for each minion representing the network device, emulating the emulating the behavior of a salt-minion. Basically it is still a hub and spoke pattern, but with virtual minions.
+
 It also worths looking at the speed: the connection is established just once and kept open; anytime you need to execute a command, the session is ready to deliver the data requested almost instantly.
 
 ## How to use?
 
 Assuming the setup is ready to be used (for example [these notes](https://github.com/napalm-automation/napalm-salt)) you are now ready to define the first device.
 
-Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) create the SLS file descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls```.
+Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls```.
 
-In the ```top.sls``` file under the same directory must include the file defined above and map the name of the file with the minion ID you want:
+In the [top.sls](https://docs.saltstack.com/en/latest/ref/states/top.html) file under the same directory must include the file defined above and map the name of the file with the minion ID you want:
 
 ```yaml
 base:
@@ -58,7 +60,7 @@ base:
 
 Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!).
 
-After every update of the ```top.sls``` the salt-master process has to be restarted. To do so, it's easier to control the process using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
+*After every update of the top file, the salt-master process has to be restarted*. To do so, it's easier to control the process using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
 
 ```bash
 $ sudo systemctl restart salt-master
@@ -125,3 +127,7 @@ $ sudo salt -G 'model:MX480' probes.results
 ```bash
 $ sudo salt -G 'serial:FOX*' grains.get serial
 ```
+
+## Conclusion
+
+In this blog post I have covered the very basic setup details and a brief introduction to the command syntax and available execution modules. Salt is a swiss knife, very complex, with tons of features ready to help: there are about [20 more](https://docs.saltstack.com/en/latest/ref/index.html) types of modules to be covered. The most important will be explained and exemplified soon!
