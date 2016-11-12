@@ -10,7 +10,7 @@ Automation is the new buzzword in networking today. By automation many people un
 
 ## Motivation
 
-To achieve these goals, for sure you need presence of mind and firstly draw your requirements. Doing what your neighbour/friend does, is not enough reason to repeat the same mistakes and discover after several months that your tools cannot do the job you actually need.
+To achieve these goals, for sure you need presence of mind and firstly draw your requirements. Doing what your neighbour/friend does, is not enough reason to repeat the same mistakes and find out after several months that your tools cannot do the job you actually need.
 
 For network orchestration, I recommend two ingredients: Salt and NAPALM.
 
@@ -98,15 +98,79 @@ Similarly, can be executed the commands from the [NET](https://docs.saltstack.co
 
 ```bash
 $ sudo salt edge01.bjm01 net.arp
+edge01.bjm01:
+    ----------
+    comment:
+    out:
+        |_
+          ----------
+          age:
+              1152.0
+          interface:
+              irb.10 [ae0.10]
+          ip:
+              172.17.17.4
+          mac:
+              00:0F:53:2E:E1:A1
+        |_
+          ----------
+          age:
+              995.0
+          interface:
+              irb.10 [ae0.10]
+          ip:
+              172.17.17.5
+          mac:
+              00:0F:53:2E:C8:81
+    result:
+        True
 ```
 
-You can also display in the output you need (e.g. YAML):
+Displaying the result in the default Salt specific format and color scheme. A different format (e.g. YAML) can be specified using the ```--out``` option:
 
 ```bash
 $ sudo salt --out=yaml edge01.bjm01 net.arp
+edge01.bjm01:
+  comment: ''
+  out:
+  - age: 1152.0
+    interface: irb.10 [ae0.10]
+    ip: 172.17.17.4
+    mac: 00:0F:53:2E:E1:A1
+  - age: 995.0
+    interface: irb.10 [ae0.10]
+    ip: 172.17.17.5
+    mac: 00:0F:53:2E:C8:81
+  result: true
 ```
 
-The complete list of available output formats can be found [here](https://docs.saltstack.com/en/latest/ref/renderers/#full-list-of-renderers).
+Or JSON:
+
+```bash
+$ sudo salt --out=json edge01.bjm01 net.arp
+{
+    "edge01.bjm01": {
+        "comment": "",
+        "result": true,
+        "out": [
+            {
+                "interface": "irb.10 [ae0.10]",
+                "ip": "172.17.17.4",
+                "mac": "00:0F:53:2E:E1:A1",
+                "age": 1152.0
+            },
+            {
+                "interface": "irb.10 [ae0.10]",
+                "ip": "172.17.17.5",
+                "mac": "00:0F:53:2E:C8:81",
+                "age": 995.0
+            }
+        ]
+    }
+}
+```
+
+The complete list of available output formats (called _renderers_) can be found [here](https://docs.saltstack.com/en/latest/ref/renderers/#full-list-of-renderers).
 
 Exactly in the same manner can be used for the other available modules (examples in the documentation): [BGP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#module-salt.modules.napalm_bgp), [NTP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#module-salt.modules.napalm_ntp), [SNMP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_snmp.html#module-salt.modules.napalm_snmp), [Users](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_users.html#module-salt.modules.napalm_users), [Route](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#module-salt.modules.napalm_route) etc.
 
