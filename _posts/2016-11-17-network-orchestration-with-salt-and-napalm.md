@@ -25,9 +25,9 @@ Without diving into extensive details and comparisons, Salt is the most complete
 At Cloudflare we had certain requirements solved thanks to the following features:
 
 - Find reliably and fast relevant details (e.g. MAC addresses, IP addresses, interfaces given a circuit ID, VLAN IDs etc., looking into the ARP tables, MAC address tables, LLDP neighbors and other sources of information, from all network devices)
-- Schedule jobs to make sure the config is consistent (without running manually a command)
+- Schedule jobs to make sure the config is consistent (without running manually a command; yes, the system will do that for you!)
 - Parallel execution (because that's what computers are good at, aren't they?)
-- abstracted & vendor-agnostic configurations
+- Abstracted & vendor-agnostic configurations
 - Native cache, without requiring us to deploy and maintain complex database systems (e.g. LLDP neighbors details, which don't change very often, you can cache the data and you can access it instantly whenever needed)
 - REST API
 - High availability
@@ -40,7 +40,7 @@ We have mixed them together and NAPALM will be fully integrated in the core of S
 
 The general picture is hub and spoke with a master controlling several _minions_. On the server side, on each minion server is installed a software package called _salt-minion_. This is currently impossible on all network devices, vendors still prefer to keep their platforms closed, not allowing to install custom software directly.
 
-For these reasons, Salt intorduced the proxy minion. This is not a different platform, this is just another process forked for each minion representing the network device, emulating the emulating the behavior of a salt-minion. Basically it is still a hub and spoke pattern, but with virtual minions.
+For these reasons, Salt introduced the proxy minion. The proxy is not a different platform, it is just another process forked per each minion representing the network device, emulating the behavior of a salt-minion. Basically it is still a hub and spoke pattern, but with virtual minions.
 
 It also worths looking at the speed: the connection is established just once and kept open; anytime you need to execute a command, the session is ready to deliver the data requested almost instantly.
 
@@ -58,9 +58,9 @@ base:
     - edge01_bjm01
 ```
 
-Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice to avoid mistakes!
+Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice in order to avoid mistakes!
 
-**After every update of the top file, the salt-master process has to be restarted**. To do so, it's easier to control the process using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
+**After each update of the top file, the salt-master process needs to be restarted**. To do so, the process can be easier controlled using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
 
 ```bash
 $ sudo systemctl restart salt-master
@@ -72,13 +72,15 @@ $ sudo systemctl restart salt-master
 $ sudo systemctl start salt-proxy@edge01.bjm01
 ```
 
-If the connection succeeded, you are now able to execute:
+Logs can be found usually under ```/var/log/salt/master``` and ```/var/log/salt/proxy```. The level can be set in the master config file specifying the desired level as ```log_level_logfile``` (default is ```warning```). To store the logs in a different location, set the custom value for ```log_file``` - [see more](https://github.com/napalm-automation/napalm-salt/blob/master/master#L392-L431).
+
+After the proxy minion process is started, you are now able to execute:
 
 ```bash
 $ sudo salt edge01.bjm01 net.connected
 ```
 
-If everything was fine and was able to connect to the device, will return ```True```. Observe the command syntax begins with the keyword ```salt``` followed by the minion ID and then the name of the function.
+If everything is fine and the connection succeeded, will return ```True```. Observe the command syntax begins with the keyword ```salt``` followed by the minion ID and then the name of the function.
 
 Similarly, can be executed the commands from the [NET](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#module-salt.modules.napalm_network) execution module, for example ```net.arp``` which returns the ARP table:
 
