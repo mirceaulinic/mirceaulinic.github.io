@@ -46,9 +46,21 @@ It also worths looking at the speed: the connection is established just once and
 
 ## How to use?
 
-Assuming the environment is setup and ready to be used (for example [these notes](https://github.com/napalm-automation/napalm-salt)), you are now ready to define the first device.
+Assuming the environment is setup and ready to be used (see for example [these notes](https://github.com/napalm-automation/napalm-salt)), you are now ready to define the first device.
 
-Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls``` corresponding to hostname ```edge01.bjm01```.
+Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls``` corresponding to hostname ```edge01.bjm01```. Example:
+
+```yaml
+proxy:
+    proxytype: napalm
+    driver: junos
+    host: edge01.bjm01
+    username: my_username
+    passwd: my_password
+    optional_args:
+        port: 12201
+        config_format: set
+```
 
 In the [top.sls](https://docs.saltstack.com/en/latest/ref/states/top.html) file under the same directory must include the file defined above and map the name of the file with the minion ID you want:
 
@@ -98,7 +110,7 @@ The complete list of available output formats can be found [here](https://docs.s
 
 Exactly in the same manner can be used for the other available modules (examples in the documentation): [BGP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#module-salt.modules.napalm_bgp), [NTP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#module-salt.modules.napalm_ntp), [SNMP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_snmp.html#module-salt.modules.napalm_snmp), [Users](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_users.html#module-salt.modules.napalm_users), [Route](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#module-salt.modules.napalm_route) etc.
 
-In the examples above we have been working with one single minion for simplicity. Moving forward, let's introduce the [grains](https://docs.saltstack.com/en/develop/ref/grains/all/salt.grains.napalm.html#module-salt.grains.napalm) -- they help you group devices based on their characteristics. The collection of this information is immediately after the connection is established. Few examples:
+In the examples above we have been working with one single minion for simplicity. Moving forward, let's introduce the [grains](https://docs.saltstack.com/en/develop/ref/grains/all/salt.grains.napalm.html#module-salt.grains.napalm) -- they help you select devices based on their characteristics. This information is collected immediately after the connection is established. Few examples:
 
 - Execute traceroute on all minions whose ID begins with ```edge``` (yes, you can use regex to match):
 
