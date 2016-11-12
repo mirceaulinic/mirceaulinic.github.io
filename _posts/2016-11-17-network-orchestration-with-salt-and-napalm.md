@@ -20,7 +20,7 @@ NAPALM stands for _Network Automation and Programmability Abstraction Layer with
 
 ### Salt
 
-Without diving into extensive details and comparisons, Salt is the most complete framework you can get for free. On the other hand is good to keep in mind that the perfect software was not invented yet (and never will, in my opinion) - in order to make the right choice, you definitely need to know your goals and determine what product can accomplish them (or at least most of them). The major drawback of Salt is the setup - I tried to provide some easier introduction steps in [the dedicated repo under NAPALM](https://github.com/napalm-automation/napalm-salt) having as target users the network engineers interested in this software; but after you have it up and running, everything is natural and the documentation is just great. This is also because the syntax cannot have any ambiguities, e.g. it is quite obvious that executing ```snmp.config``` would provide the configuration of SNMP, ```ntp.peers``` the list of NTP peers configured on the device etc.
+Without diving into extensive details and comparisons, Salt is the most complete framework you can get for free. On the other hand is good to keep in mind that the perfect software was not invented yet (and never will, in my opinion) - in order to make the right choice, you definitely need to know your goals and determine what product can accomplish them (or at least most of them). Right now, the major drawback of Salt is the setup (but will be simplified very soon). I provided some easier instruction notes in [the dedicated repo under NAPALM](https://github.com/napalm-automation/napalm-salt) having as target users the network engineers interested in this software; but after you have it up and running, everything is natural and the documentation is just great. This is also because the syntax cannot have any ambiguities, e.g. it is quite obvious that executing ```snmp.config``` would provide the configuration of SNMP, ```ntp.peers``` the list of NTP peers configured on the device etc.
 
 At Cloudflare we had certain requirements solved thanks to the following features:
 
@@ -46,9 +46,9 @@ It also worths looking at the speed: the connection is established just once and
 
 ## How to use?
 
-Assuming the setup is ready to be used (for example [these notes](https://github.com/napalm-automation/napalm-salt)) you are now ready to define the first device.
+Assuming the environment is setup and ready to be used (for example [these notes](https://github.com/napalm-automation/napalm-salt)), you are now ready to define the first device.
 
-Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls```.
+Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls``` corresponding to hostname ```edge01.bjm01```.
 
 In the [top.sls](https://docs.saltstack.com/en/latest/ref/states/top.html) file under the same directory must include the file defined above and map the name of the file with the minion ID you want:
 
@@ -58,9 +58,9 @@ base:
     - edge01_bjm01
 ```
 
-Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!).
+Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice to avoid mistakes!
 
-*After every update of the top file, the salt-master process has to be restarted*. To do so, it's easier to control the process using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
+**After every update of the top file, the salt-master process has to be restarted**. To do so, it's easier to control the process using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
 
 ```bash
 $ sudo systemctl restart salt-master
