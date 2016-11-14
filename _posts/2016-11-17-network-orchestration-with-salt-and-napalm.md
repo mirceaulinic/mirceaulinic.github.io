@@ -20,7 +20,7 @@ NAPALM stands for _Network Automation and Programmability Abstraction Layer with
 
 ### Salt
 
-Without diving into extensive details and comparisons, Salt is the most complete framework you can get for free. On the other hand is good to keep in mind that the perfect software was not invented yet (and never will, in my opinion) - in order to make the right choice, you definitely need to know your goals and determine what product can accomplish them (or at least most of them). Right now, the major drawback of Salt is the setup (but will be simplified very soon). I provided some easier instruction notes in [the dedicated repo under NAPALM](https://github.com/napalm-automation/napalm-salt) having as target users the network engineers interested in this software; but after you have it up and running, everything is natural and the documentation is just great. This is also because the syntax cannot have any ambiguities, e.g. it is quite obvious that executing ```snmp.config``` would provide the configuration of SNMP, ```ntp.peers``` the list of NTP peers configured on the device etc.
+Without diving into extensive details and comparisons, Salt offers the greatest list of features you can get for free. On the other hand, keep in mind that the perfect software was not invented yet (and never will, in my opinion) - in order to make the right choice, you definitely need to know your goals and determine what product can accomplish them (or at least most of them). Right now, the major drawback of Salt is the setup (but will be simplified very soon). I provided some easier instruction notes in [the dedicated repo under NAPALM](https://github.com/napalm-automation/napalm-salt) having as target users the network engineers interested in this software; but after you have it up and running, everything is natural and the documentation is just great. This is also because the syntax is quite natural, e.g. it is close to obvious that executing ```snmp.config``` would provide the configuration of SNMP, ```ntp.peers``` the list of NTP peers configured on the device etc.
 
 At Cloudflare we had certain requirements solved thanks to the following features:
 
@@ -48,6 +48,8 @@ It also worths looking at the speed: the connection is established just once and
 
 Assuming the environment is setup and ready to be used (see for example [these notes](https://github.com/napalm-automation/napalm-salt)), you are now ready to define the first device.
 
+#### Proxy minion config
+
 Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls``` corresponding to hostname ```edge01.bjm01```. Example:
 
 ```yaml
@@ -70,7 +72,7 @@ base:
     - edge01_bjm01
 ```
 
-Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice in order to avoid mistakes!
+Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice to have a consistent rules to avoid mistakes!
 
 **After each update of the top file, the salt-master process needs to be restarted**. To do so, the process can be easier controlled using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
 
@@ -93,6 +95,8 @@ $ sudo salt edge01.bjm01 net.connected
 ```
 
 If everything is fine and the connection succeeded, will return ```True```. Observe the command syntax begins with the keyword ```salt``` followed by the minion ID and then the name of the function.
+
+#### Basic commands
 
 Similarly, can be executed the commands from the [NET](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#module-salt.modules.napalm_network) execution module, for example ```net.arp``` which returns the ARP table:
 
@@ -174,13 +178,64 @@ The complete list of available output formats (called _renderers_) can be found 
 
 Exactly in the same manner can be used for the other available modules (examples in the documentation): [BGP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#module-salt.modules.napalm_bgp), [NTP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#module-salt.modules.napalm_ntp), [SNMP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_snmp.html#module-salt.modules.napalm_snmp), [Users](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_users.html#module-salt.modules.napalm_users), [Route](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#module-salt.modules.napalm_route) etc.
 
-In the examples above we have been working with one single minion for simplicity. Moving forward, let's introduce the [grains](https://docs.saltstack.com/en/develop/ref/grains/all/salt.grains.napalm.html#module-salt.grains.napalm) -- they help you select devices based on their characteristics. This information is collected immediately after the connection is established. Few examples:
+### Targeting devices
 
-- Execute traceroute on all minions whose ID begins with ```edge``` (yes, you can use regex to match):
+In the examples above we have been working with one single minion for simplicity. It is very flexible to select the minions needed, using:
+
+- their ID, using [regular expressions](https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#regular-expressions). E.g., select all edge routers:
 
 ```bash
 $ sudo salt 'edge*' net.traceroute 8.8.8.8
 ```
+
+Select core routers from two locations (e.g.: core01.bjm01, core02.bjm01, core03.bjm01, core01.bjm02, core01.pos01, core07.pos02 etc.):
+
+```bash
+$ sudo salt -E 'core(.*)\.(bjm|pos)(.*)' net.lldp
+```
+
+- [list](https://docs.saltstack.com/en/latest/topics/targeting/globbing.html#lists) of IDs. E.g. retrieve the LLDP neighbors from two devices:
+
+```bash
+$ sudo salt -L 'edge01.bjm01, core01.pos01' net.lldp
+```
+
+- [data from the pillar](https://docs.saltstack.com/en/latest/topics/targeting/pillar.html), e.g. determine where username ```example``` is used for authentication using the proxy module NAPALM:
+
+```bash
+$ sudo salt -I 'proxy:username:example' test.ping
+```
+
+- [specific number or percent of devices](https://docs.saltstack.com/en/latest/topics/targeting/batch.html), e.g.: execute traceroute on a batch of 25% of edge routers:
+
+```bash
+$ sudo salt 'edge*' -b 25% net.traceroute 8.8.8.8
+```
+
+- [compound](https://docs.saltstack.com/en/latest/topics/targeting/compound.html) -- mixing all above plus *grains* see next section). E.g. select edge routers which are Juniper MX480 running JunOS 14.2 (any release), using ```example``` as username for authentication:
+
+```bash
+$ sudo salt -C 'edge* and G@model:MX480 and G@version:14.2* and I@proxy:username:example' test.ping
+```
+
+- [nodegroups](https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html) are static replacements for complex compound matchers as in the example above. To avoid typing the same structure repeatedly, can define in the master config file the structure:
+
+```yaml
+nodegroups:
+  winners: 'edge* and G@model:MX480 and G@version:14.2* and I@proxy:username:example'
+  juniper-cores: 'core* and G@os:junos'
+```
+
+And call using:
+
+```bash
+$ sudo salt -N winners test.ping
+$ sudo salt -N juniper-cores net.mac
+```
+
+#### Grains
+
+Moving forward, let's introduce the [grains](https://docs.saltstack.com/en/develop/ref/grains/all/salt.grains.napalm.html#module-salt.grains.napalm) selector -- they help you select devices based on their characteristics. This information is collected immediately after the connection is established. Few examples:
 
 - Execute the raw CLI command ```show version``` on all devices running JunOS:
 
@@ -208,4 +263,4 @@ $ sudo salt -G 'serial:FOX*' grains.get serial
 
 ## Conclusion
 
-In this blog post I have covered the very basic setup details and a brief introduction to the command syntax and available execution modules. Salt is a swiss knife, very complex, with tons of features ready to help: there are about [20 more](https://docs.saltstack.com/en/latest/ref/index.html) types of modules to be covered. The most important will be explained and exemplified soon!
+We have been introduced to the very basic setup details and a brief introduction to the command syntax and available execution modules. Salt is a swiss knife, very complex, with tons of features ready to help; there are about [20 more](https://docs.saltstack.com/en/latest/ref/index.html) types of modules and they cannot be covered in a single post. Many features means also a lot of documentation to read. In the next episodes, I will explain and exemplify to ease the learning process for the network engineers!
