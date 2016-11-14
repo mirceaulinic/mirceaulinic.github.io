@@ -4,9 +4,7 @@ title: Network orchestration with Salt and NAPALM
 subtitle: Because rendering templates is simply not enough
 ---
 
-## Introduction
-
-Automation is the new buzzword in networking today. By automation many people understand a configuration management system, i.e. keeping the configuration of their devices consistent across their networks. Which is perfectly fine if that's all you want from your devices, it is already a big step forward. But there are many use cases when you need much more than that! Therefore, in order to avoid any ambiguity, we should use a different term: orchestration - which is much more... it is what SREs have been doing for years on servers. Of course configuration management is one of the required features, but not limited to: retrieving essential information about your devices and reacting are equally important.
+Automation is the new buzzword in networking today. By automation many people understand a configuration management system, i.e. keeping the configuration of their devices consistent across their networks. Which is perfectly fine if that's all you want from your devices, it is already a big step forward. But there are many use cases when you need much more than that! Therefore, in order to avoid any ambiguity, we should use a different term: orchestration - which is... what SREs have been doing for years on servers. Of course configuration management is one of the required features, but not limited to: retrieving essential information about your devices and reacting are equally important.
 
 ## Motivation
 
@@ -50,7 +48,7 @@ Assuming the environment is setup and ready to be used (see for example [these n
 
 #### Proxy minion config
 
-Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say we call it ```edge01_bjm01.sls``` corresponding to hostname ```edge01.bjm01```. Example:
+Under the directory specified as ```file_roots``` (default is ```/etc/salt/states```) in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) create the SLS  descriptor as specified in the [napalm proxy documentation](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html), say ```edge01_bjm01.sls``` corresponding to hostname ```edge01.bjm01```. Example:
 
 ```yaml
 proxy:
@@ -72,7 +70,7 @@ base:
     - edge01_bjm01
 ```
 
-Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice to have a consistent rules to avoid mistakes!
+Which tells Salt that the minion ```edge01.bjm01``` has associated the file descriptor ```edge01_bjm01``` (without the ```.sls``` extension!). The minion ID does not need to correspond with the hostname or the filename, but it's a good practice to have a consistent rule to avoid mistakes!
 
 **After each update of the top file, the salt-master process needs to be restarted**. To do so, the process can be easier controlled using [systemctl](https://github.com/napalm-automation/napalm-salt#running-the-master-as-a-service):
 
@@ -86,9 +84,15 @@ $ sudo systemctl restart salt-master
 $ sudo systemctl start salt-proxy@edge01.bjm01
 ```
 
+For security reasons, the master will not accept every minion trying to connect and the command below is needed when the process is started for the very first time:
+
+```bash
+$ sudo salt-key -a edge01.bjm01
+```
+
 Logs can be found usually under ```/var/log/salt/master``` and ```/var/log/salt/proxy```. The level can be set in the master config file specifying the desired level as ```log_level_logfile``` (default is ```warning```). To store the logs in a different location, set the custom value for ```log_file``` - [see more](https://github.com/napalm-automation/napalm-salt/blob/master/master#L392-L431).
 
-After the proxy minion process is started, you are now able to execute:
+After the proxy minion process is started **and the key accepted** (see above), you are now able to execute:
 
 ```bash
 $ sudo salt edge01.bjm01 net.connected
@@ -130,7 +134,7 @@ edge01.bjm01:
         True
 ```
 
-Displaying the result in the default Salt specific format and color scheme. A different format (e.g. YAML) can be specified using the ```--out``` option:
+Displaying the result in the default Salt specific format and color scheme ([nested](https://docs.saltstack.com/en/latest/ref/output/all/salt.output.nested.html#module-salt.output.nested)). A different format (e.g. YAML) can be specified using the ```--out``` option:
 
 ```bash
 $ sudo salt --out=yaml edge01.bjm01 net.arp
@@ -174,7 +178,7 @@ $ sudo salt --out=json edge01.bjm01 net.arp
 }
 ```
 
-The complete list of available output formats (called _renderers_) can be found [here](https://docs.saltstack.com/en/latest/ref/renderers/#full-list-of-renderers).
+The complete list of available output formats can be found [here](https://docs.saltstack.com/en/latest/ref/output/all/index.html).
 
 Exactly in the same manner can be used for the other available modules (examples in the documentation): [BGP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#module-salt.modules.napalm_bgp), [NTP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#module-salt.modules.napalm_ntp), [SNMP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_snmp.html#module-salt.modules.napalm_snmp), [Users](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_users.html#module-salt.modules.napalm_users), [Route](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#module-salt.modules.napalm_route) etc.
 
@@ -212,7 +216,7 @@ $ sudo salt -I 'proxy:username:example' test.ping
 $ sudo salt 'edge*' -b 25% net.traceroute 8.8.8.8
 ```
 
-- [compound](https://docs.saltstack.com/en/latest/topics/targeting/compound.html) -- mixing all above plus *grains* see next section). E.g. select edge routers which are Juniper MX480 running JunOS 14.2 (any release), using ```example``` as username for authentication:
+- [compound](https://docs.saltstack.com/en/latest/topics/targeting/compound.html): mixing all above plus *grains* -- see next section). E.g. select edge routers which are Juniper MX480 running JunOS 14.2 (any release), using ```example``` as username for authentication:
 
 ```bash
 $ sudo salt -C 'edge* and G@model:MX480 and G@version:14.2* and I@proxy:username:example' test.ping
@@ -232,6 +236,7 @@ And call using:
 $ sudo salt -N winners test.ping
 $ sudo salt -N juniper-cores net.mac
 ```
+
 
 #### Grains
 
