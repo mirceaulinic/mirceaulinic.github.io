@@ -4,7 +4,7 @@ title: Network orchestration with Salt and NAPALM
 subtitle: Because rendering templates is simply not enough
 ---
 
-Automation is the new buzzword in networking today. By automation many people understand a configuration management system, i.e. keeping the configuration of their devices consistent across their networks. Which is perfectly fine if that's all you want from your devices, it is already a big step forward. But there are many use cases when you need much more than that! Therefore, in order to avoid any ambiguity, we should use a different term: orchestration - which is... what SREs have been doing for years on servers. Of course configuration management is one of the required features, but not limited to: retrieving essential information about your devices and reacting are equally important.
+Automation is the new buzzword in networking today. By automation many people understand a configuration management system, i.e. keeping the devices' configuration consistent across the network. Which is perfectly fine if that's all you want, it is already a big step forward. But there are many use cases when you need much more than that! Therefore, in order to avoid any ambiguity, we *have* to use the right term: orchestration - which is... what SREs have been doing for years on servers. Of course configuration management is one of the required features, but not limited to: retrieving essential information about your devices, reacting to events and coordination are equally important.
 
 ## Motivation
 
