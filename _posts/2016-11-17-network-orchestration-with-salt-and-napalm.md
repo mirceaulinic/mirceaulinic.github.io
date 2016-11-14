@@ -43,6 +43,8 @@ For these reasons, Salt introduced the proxy minion. The proxy is not a differen
 
 It also worths looking at the speed: the connection is established just once and kept open; anytime you need to execute a command, the session is ready to deliver the data requested almost instantly.
 
+And everything is executed in parallel - so it does not matter if you manage a single device or 1000, the response time will be the same!
+
 ## How to use?
 
 Assuming the environment is setup and ready to be used (see for example [these notes](https://github.com/napalm-automation/napalm-salt)), you are now ready to define the first device.
