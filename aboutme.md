@@ -11,8 +11,8 @@ Sometimes I give talks at conferences such as [RIPE](https://ripe72.ripe.net/pre
 
 Back in time I begun as software developer, especially for web backend. [Learning Python, 2nd edition](http://shop.oreilly.com/product/9780596002817.do) was the first serious book I read and today Python is the programming language I use the most. However, Ruby is still my favourite, although I can't say I have extensive experience.
 
-Before my university studies, I took a drastic decision over my career path and decied to make a sudden change. Although I was always fascinated about telecom, both radio and cable based transmissions, this was something totally new for me - barely I knew what a MAC address is. After several years of hard work I recuperated this drawback, and I still got tons of things to learn everyday.
+Before my university studies, I took a drastic decision over my career path and decied to make a sudden change. Although I was always fascinated about telecom, both radio and cable based transmissions, this was something totally new for me - barely I knew what a MAC address is. After several years of hard work I recuperated these drawbacks, and I still got tons of things to learn everyday.
 
-I had the chance to experience the life in Switzerland where I've been at [EPFL](http://epfl.ch/), learning about distributed computing, then France where I applied some automation methodologies in the network of a service provider called [iBrowse](http://www.ibrowse.com/) covering few countries in Europe. Latestest stop is now UK, being based in Cloudflare's London office.
+I had the chance to experience the life in Switzerland, at [EPFL](http://epfl.ch/), where I've been researching around parallel computing. Next stop was France where I applied some automation methodologies in the core of a service provider called [iBrowse](http://www.ibrowse.com/) covering few countries in Europe. Latestest country is now UK, being based in Cloudflare's London office.
 
 Besides networking I am very passionate about radio communications (especially mobile networks), mathematics and algorithms.
