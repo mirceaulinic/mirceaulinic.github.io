@@ -25,7 +25,7 @@ At Cloudflare we had certain requirements solved thanks to the following feature
 
 - Find reliably and fast relevant details (e.g. MAC addresses, IP addresses, interfaces given a circuit ID, VLAN IDs etc., looking into the ARP tables, MAC address tables, LLDP neighbors and other sources of information, from all network devices)
 - Schedule jobs to make sure the config is consistent (without running manually a command; yes, the system will do that for you!)
-- Parallel execution (because that's what computers are good at, aren't they?)
+- Parallel execution: it does not matter if you manage a single device or 1000, the response time will be the same!
 - Abstracted & vendor-agnostic configurations
 - Native cache, without requiring us to deploy and maintain complex database systems (e.g. LLDP neighbors details, which don't change very often, you can cache the data and you can access it instantly whenever needed)
 - REST API
@@ -33,7 +33,7 @@ At Cloudflare we had certain requirements solved thanks to the following feature
 - GPG encryption
 - Pull from Git or SVN
 
-We have mixed them together and NAPALM will be fully integrated in the core of Salt beginning with release ```2016.11```: available documentation can be explored starting from [the proxy module](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html). This is very good news as the setup process will be highly simplified - you only need to [install](https://docs.saltstack.com/en/latest/topics/installation/) (usually one command, e.g. for Debian: ```sudo apt-get install salt-master```) & use.
+We have mixed them together and NAPALM will be fully integrated in the core of Salt beginning with release ```2016.11```: available documentation can be explored starting from [the proxy module](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.napalm.html). This is very good news as the setup process will be highly simplified - you will only need to [install](https://docs.saltstack.com/en/latest/topics/installation/) (usually one command, e.g. for Debian: ```sudo apt-get install salt-master```) & use.
 
 #### Architecture
 
@@ -41,9 +41,7 @@ The general picture is hub and spoke with a master controlling several _minions_
 
 For these reasons, Salt introduced the proxy minion. The proxy is not a different platform, it is just another process forked per each minion representing the network device, emulating the behavior of a salt-minion. Basically it is still a hub and spoke pattern, but with virtual minions.
 
-It also worths looking at the speed: the connection is established just once and kept open; anytime you need to execute a command, the session is ready to deliver the data requested almost instantly.
-
-And everything is executed in parallel - so it does not matter if you manage a single device or 1000, the response time will be the same!
+It is also worth looking at the speed: the connection is established just once and kept open; anytime you need to execute a command, the session is ready to deliver the data requested almost instantly.
 
 ## How to use?
 
@@ -105,7 +103,7 @@ If everything is fine and the connection succeeded, will return ```True```. Obse
 
 #### Basic commands
 
-Similarly, can be executed the commands from the [NET](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#module-salt.modules.napalm_network) execution module, for example ```net.arp``` which returns the ARP table:
+Similarly, we can be execute the commands from the [NET](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#module-salt.modules.napalm_network) execution module, for example ```net.arp``` which returns the ARP table:
 
 ```bash
 $ sudo salt edge01.bjm01 net.arp
@@ -183,7 +181,7 @@ $ sudo salt --out=json edge01.bjm01 net.arp
 
 The complete list of available output formats can be found [here](https://docs.saltstack.com/en/latest/ref/output/all/index.html).
 
-Exactly in the same manner can be used for the other available modules (examples in the documentation): [BGP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#module-salt.modules.napalm_bgp), [NTP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#module-salt.modules.napalm_ntp), [SNMP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_snmp.html#module-salt.modules.napalm_snmp), [Users](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_users.html#module-salt.modules.napalm_users), [Route](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#module-salt.modules.napalm_route) etc.
+We can use this exactly in the same manner for the other available modules (examples in the documentation): [BGP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#module-salt.modules.napalm_bgp), [NTP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#module-salt.modules.napalm_ntp), [SNMP](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_snmp.html#module-salt.modules.napalm_snmp), [Users](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_users.html#module-salt.modules.napalm_users), [Route](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#module-salt.modules.napalm_route) etc.
 
 ### Targeting devices
 
@@ -240,7 +238,6 @@ $ sudo salt -N winners test.ping
 $ sudo salt -N juniper-cores net.mac
 ```
 
-
 #### Grains
 
 Moving forward, let's introduce the [grains](https://docs.saltstack.com/en/develop/ref/grains/all/salt.grains.napalm.html#module-salt.grains.napalm) selector -- they help you select devices based on their characteristics. This information is collected immediately after the connection is established. Few examples:
@@ -271,4 +268,4 @@ $ sudo salt -G 'serial:FOX*' grains.get serial
 
 ## Conclusion
 
-We have been introduced to the very basic setup details and a brief introduction to the command syntax and available execution modules. Salt is a swiss knife, very complex, with tons of features ready to help; there are about [20 more](https://docs.saltstack.com/en/latest/ref/index.html) types of modules and they cannot be covered in a single post. Many features means also a lot of documentation to read. In the next episodes, I will explain and exemplify to ease the learning process for the network engineers!
+We have been introduced to the very basic setup details and a brief introduction to the command syntax and available execution modules. Salt is a swiss knife, very complex, with tons of features ready to help; there are about [20 more](https://docs.saltstack.com/en/latest/ref/index.html) types of modules and they cannot be covered in a single post. Many features means also a lot of documentation to read. Stay tunned: in the next blog posts, I will explain and exemplify some of the key features in order to ease the learning process for network engineers!
