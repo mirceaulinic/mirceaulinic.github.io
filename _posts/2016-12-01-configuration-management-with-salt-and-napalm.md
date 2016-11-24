@@ -329,15 +329,15 @@ For example: say we need to generate configuration to have static ARP entries, b
 {% set arp_output = salt['net.arp']() -%}
 {% set arp_table = arp_output['out'] -%}
 interfaces {
-{% for arp_entry in arp_table -%}
-  {{ arp_entry['interface'] }} {
-    family inet {
-      address {{ arp_entry['ip']}} {
-        arp {{ arp_entry['ip'] }} mac {{ arp_entry['mac'] }};
+  {% for arp_entry in arp_table -%}
+    {{ arp_entry['interface'] }} {
+      family inet {
+        address {{ arp_entry['ip']}} {
+          arp {{ arp_entry['ip'] }} mac {{ arp_entry['mac'] }};
+        }
       }
     }
-  }
-{% endfor -%}
+  {% endfor -%}
 }
 ```
 
@@ -363,14 +363,14 @@ edge01.flw01:
         +      }
     loaded_config:
         interfaces {
-        ae1.1234 {
+          ae1.1234 {
             family inet {
               address 10.10.1.1 {
                 arp 10.10.1.1 mac 9C:8E:99:15:13:B3;
               }
             }
           }
-        xe-0/0/0.0 {
+          xe-0/0/0.0 {
             family inet {
               address 10.10.2.2 {
                 arp 10.10.2.2 mac 0C:86:10:F6:7C:A6;
