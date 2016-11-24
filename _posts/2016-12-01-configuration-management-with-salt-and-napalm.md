@@ -102,7 +102,7 @@ For more complex configuration changes, the static configuration can be stored i
 Say we have the following static file:
 
 ```bash
-$ cat /home/mircea/arista_cfg_servers.cfg
+$ cat /home/mircea/arista_ntp_servers.cfg
 ntp server 172.17.17.1
 ntp server 172.17.17.2
 ntp server 172.17.17.3
@@ -112,7 +112,7 @@ ntp server 172.17.17.4
 And execute:
 
 ```bash
-$ sudo salt -G 'vendor:arista' net.load_config /home/mircea/arista_cfg_servers.cfg test=True
+$ sudo salt -G 'vendor:arista' net.load_config /home/mircea/arista_ntp_servers.cfg test=True
 edge01.bjm01:
     ----------
     already_configured:
@@ -143,7 +143,7 @@ The method presented above is not quite optimal as in the configuration of a net
 ## Configuration templates
 
 Using one of the [supported templating engines](https://docs.saltstack.com/en/develop/ref/renderers/all/index.html) we can easier control the configuration and have it consistent across the network.
-In this tutorial I will be working only with Jinja templates, although opther users may prefer [cheetah](https://pythonhosted.org/Cheetah/) or [mako](http://www.makotemplates.org/) etc.
+In this tutorial I will be working only with Jinja templates, although otther users may prefer [cheetah](https://pythonhosted.org/Cheetah/) or [mako](http://www.makotemplates.org/) etc.
 
 The command used is [net.load_template](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_template). It works very similar to the previous command (by default will load merge, commit etc.) - to change this behaviours one can use again ```test```, ```replace``` arguments. Examples:
 
@@ -308,7 +308,7 @@ Other options for remote templates can be specified using ```https://``` and ```
 
 ### Advanced templating
 
-Yet another benefit of Salt is that you can use inside the template the output of all [execution modules](https://docs.saltstack.com/en/develop/ref/modules/all/index.html). As one can easily notice, there are hundreds available. You can for example extract some information very easily using the [postgres module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) from a Postgres databse and based on that generate the config etc. The possibilities are literally unlimited!
+Yet another benefit of Salt is that you can use inside the template the output of any of the available [execution modules](https://docs.saltstack.com/en/develop/ref/modules/all/index.html). As one can easily notice, there are hundreds. You can for example extract some information very easily using the [postgres module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) from a Postgres databse and based on that generate the config etc. The possibilities are literally unlimited!
 
 Inside the template, the result of the query execution is one single line:
 
@@ -380,7 +380,7 @@ edge01.flw01:
         True
 ```
 
-Again, there was not static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall).
+Again, we did not define any static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall).
 
 
 ## Conclusion
