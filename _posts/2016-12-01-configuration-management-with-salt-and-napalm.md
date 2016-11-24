@@ -73,7 +73,9 @@ The result for each device contains the following keys:
 
 Both flags ```result``` and ```already_configured``` are very useful when the output is reused in other modules (as they are just Python objects).
 
-Using the command above exactly as in the example will commit the configuration on the device. For a dry run, you can use the ```test``` argument:
+Looking at the output above, ```edge01.bjm01``` and ```edge01.pos01``` are Arista switches. ```edge01.pos01``` did not require any changes required thus the flag ```already_configured``` is set as ```True```, whilst for ```edge01.bjm01``` it is displayed the configuration diff.
+
+Executing the command exactly as presented, the configuration will be committed on the device. For a dry run, you can use the ```test``` argument:
 
 ```bash
 $ sudo salt edge01.bjm01 net.load_config text='ntp server 172.17.17.1' test=True
@@ -385,4 +387,4 @@ Again, we did not define any static data at all. The whole information was dynam
 
 ## Conclusion
 
-Inittially I had the intention to discuss today also about the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease.
+Inittially I had the intention to discuss today also about the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without reuiring to manually update data files.
