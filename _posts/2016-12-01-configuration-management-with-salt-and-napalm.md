@@ -382,7 +382,7 @@ edge01.flw01:
         True
 ```
 
-Again, we did not define any static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall).
+Again, we did not define any static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data.
 
 
 ## Conclusion
