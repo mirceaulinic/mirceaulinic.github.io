@@ -321,24 +321,21 @@ Inside the template, the result of the query execution is one single line:
 And then use the ```query_results``` as needed!
 Exacly in the same manner, we can use the network-related NAPALM modules.
 
-For example: say we need to generate configuration to have static ARP entries, based on the existing ARP table. The following short template does the job, using the [net.arp](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.arp) function:
+#### generate configuration to have static ARP entries, based on the existing ARP table
+
+The following short template does the job, using the [net.arp](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.arp) function:
 
 **/etc/salt/states/arp_example.jinja**:
 
 ```jinja
 {% set arp_output = salt['net.arp']() -%}
 {% set arp_table = arp_output['out'] -%}
-interfaces {
-  {% for arp_entry in arp_table -%}
-    {{ arp_entry['interface'] }} {
-      family inet {
-        address {{ arp_entry['ip']}} {
-          arp {{ arp_entry['ip'] }} mac {{ arp_entry['mac'] }};
-        }
-      }
-    }
-  {% endfor -%}
-}
+
+{% for arp_entry in arp_table -%}
+  {% if grains.vendor|lower == 'juniper' -%}
+  set interfaces {{ arp_entry['interface'] }} family inet address {{ arp_entry['ip'] }} arp {{ arp_entry['mac'] }} mac {{ arp_entry['mac'] }}
+  {% endif %}
+{% endfor -%}
 ```
 
 Running:
@@ -362,27 +359,53 @@ edge01.flw01:
         +          }
         +      }
     loaded_config:
-        interfaces {
-          ae1.1234 {
-            family inet {
-              address 10.10.1.1 {
-                arp 10.10.1.1 mac 9C:8E:99:15:13:B3;
-              }
-            }
-          }
-          xe-0/0/0.0 {
-            family inet {
-              address 10.10.2.2 {
-                arp 10.10.2.2 mac 0C:86:10:F6:7C:A6;
-              }
-            }
-          }
-        }
+      set interfaces ae1.1234 family inet address 10.10.1.1 arp 10.10.1.1 mac 9C:8E:99:15:13:B3
+      set interfaces xe-0/0/0.0 family inet address 10.10.2.2 arp 10.10.2.2 mac 0C:86:10:F6:7C:A6
     result:
         True
 ```
 
-Again, we did not define any static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data.
+#### Install default route if not already configured
+
+In the device pillar (see section *Proxy minion config* from the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)) append the following line:
+
+```yaml
+default_route_nh: 1.2.3.4
+```
+
+The Jinja template will use this information, as follows:
+
+**/etc/salt/states/route_example.jinja**:
+```jinja
+{% set route_output = salt['route.show']('0.0.0.0/0', 'static') -%}
+{% set default_route = route_output['out'] -%}
+
+{% if not default_route -%}
+  {% if grains.vendor|lower == 'juniper' -%}
+  set routing-options static route 0.0.0.0/0 next-hop {{ pillar.default_route_nh }}
+  {% endif %}
+{% endif -%}
+```
+
+Executing:
+
+```bash
+$ sudo salt edge01.flw01 net.load_template salt://route_example.jinja debug=True
+edge01.flw01:
+    ----------
+    already_configured:
+        False
+    comment:
+    diff:
+        [edit routing-options static route 0.0.0.0/0]
+        +    next-hop 1.2.3.4;
+    loaded_config:
+        set routing-options static route 0.0.0.0/0 next-hop 1.2.3.4
+    result:
+        True
+```
+
+Again, we did not define any static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
 
 ## Conclusion
