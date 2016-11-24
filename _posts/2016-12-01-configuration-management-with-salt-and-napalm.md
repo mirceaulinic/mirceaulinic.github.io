@@ -373,7 +373,9 @@ In the device pillar (see section *Proxy minion config* from the [previous post]
 default_route_nh: 1.2.3.4
 ```
 
-The Jinja template will use this information, as follows:
+Which defines the next-hop for the defaul route.
+
+The Jinja template will use this information, as well as the result of [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) to retrieve the operational data for the static routes to ```0.0.0.0/0```:
 
 **/etc/salt/states/route_example.jinja**:
 ```jinja
@@ -405,7 +407,7 @@ edge01.flw01:
         True
 ```
 
-Again, we did not define any static data at all. The whole information was dynamically collected as the result of ```net.arp```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
+The majority of information was dynamically collected as the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
 
 ## Conclusion
