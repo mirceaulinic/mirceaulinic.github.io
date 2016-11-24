@@ -365,6 +365,8 @@ edge01.flw01:
         True
 ```
 
+Which configures the static APR entries required.
+
 #### Install default route if not already configured
 
 In the device pillar (see section *Proxy minion config* from the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)) append the following line:
@@ -406,6 +408,8 @@ edge01.flw01:
     result:
         True
 ```
+
+Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, in case there are no default routes.
 
 The majority of information was dynamically collected as the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
