@@ -21,13 +21,13 @@ Using Salt's ability to [schedule jobs](https://docs.saltstack.com/en/2015.8/top
 
 Using the function ```load_config``` from the [net module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_config) you can load static parts of configuration on the selected devices.
 
-Example - set a NTP server on all Arista devices (they are selecting using the grains we have discussed about last time):
+Example - set a NTP server on all Arista devices (they are selecting using the grains [we have discussed about last time: &para; Grains](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)):
 
 ```bash
 salt -G 'vendor:arista' net.load_config text='ntp server 172.17.17.1'
 ```
 
-Which will return the following output for each device matched:
+Which will return the following output for every device matched:
 
 ```bash
 $ sudo salt -G 'vendor:arista' net.load_config text='ntp server 172.17.17.1'
@@ -44,7 +44,6 @@ edge01.bjm01:
         +ntp server 172.17.17.1
          ntp serve all
          !
-         sflow sample 16384
     result:
         True
 edge01.pos01:
@@ -64,16 +63,16 @@ $ sudo salt --out=raw edge01.pos01 net.load_config text='ntp server 172.17.17.1'
 {'edge01.pos01': {'comment': '', 'already_configured': True, 'result': True, 'diff': ''}}
 ```
 
-The result for each device contains the following keys:
+The output contains the following keys:
 
 * ```already_configured``` which says if there were changes to be applied.
 * ```comment``` contains human-readable explanation in case anything failed, or messages from the system.
 * ```diff``` is the configuration diff.
-* ```result``` is another flag the says if the action was executed successfully.
+* ```result``` is another flag that says if the action was executed successfully.
 
 Both flags ```result``` and ```already_configured``` are very useful when the output is reused in other modules (as they are just Python objects).
 
-Looking at the output above, ```edge01.bjm01``` and ```edge01.pos01``` are Arista switches. ```edge01.pos01``` did not require any changes required thus the flag ```already_configured``` is set as ```True```, whilst for ```edge01.bjm01``` it is displayed the configuration diff.
+Looking at the output above, ```edge01.bjm01``` and ```edge01.pos01``` are Arista switches. ```edge01.pos01``` did not require any changes required thus the flag ```already_configured``` is set as ```True```, whilst for ```edge01.bjm01``` it is displayed the configuration diff. For both ```result``` was ```True``` as the command did not raise any errors.
 
 Executing the command exactly as presented, the configuration will be committed on the device. For a dry run, you can use the ```test``` argument:
 
@@ -97,9 +96,9 @@ edge01.bjm01:
         True
 ```
 
-Which applies the config, retrieves the diff and discards - in this case the field ```comment``` will notify the user about that.
+Which applies the config, retrieves the diff and discards - in this case the field ```comment``` will notify the user about that. If you need to preserve the changes without committing, the option ```commmit=False``` has to be set.
 
-For more complex configuration changes, the static configuration can be stored in a file and call specifying the **absolute** path.
+For more configuration changes, the static configuration can be stored in a file and call specifying the **absolute** path.
 
 Say we have the following static file:
 
@@ -114,7 +113,7 @@ ntp server 172.17.17.4
 And execute:
 
 ```bash
-$ sudo salt -G 'vendor:arista' net.load_config /home/mircea/arista_ntp_servers.cfg test=True
+$ sudo salt edge01.bjm01 net.load_config /home/mircea/arista_ntp_servers.cfg test=True
 edge01.bjm01:
     ----------
     already_configured:
@@ -138,21 +137,21 @@ edge01.bjm01:
 
 Which takes ~ 1 second. Running the same command against 1000 devices, the run time will be exactly the same because [Salt is parallel](https://docs.saltstack.com/en/latest/topics/#parallel-execution).
 
-In order to replace the config, you will need to set the argument ```replace```: ```$ sudo salt edge01.bjm01 net.load_config /home/mircea/arista_complete_config.cfg replace=True```.
+In order to replace the config, you will need to set the argument ```replace```: ```$ sudo salt edge01.bjm01 net.load_config /home/mircea/edge01_bjm01.cfg replace=True```.
 
-The method presented above is not quite optimal as in the configuration of a network device there can be many variations (IP addresses etc.). For more complex computations, the following method is preferred over.
+The method presented above is not quite optimal as in the configuration of a network device there can be many variations (IP addresses etc.). For more complex computations, the following method is recommended.
 
 ## Configuration templates
 
 Using one of the [supported templating engines](https://docs.saltstack.com/en/develop/ref/renderers/all/index.html) we can easier control the configuration and have it consistent across the network.
 In this tutorial I will be working only with Jinja templates, although otther users may prefer [cheetah](https://pythonhosted.org/Cheetah/) or [mako](http://www.makotemplates.org/) etc.
 
-The command used is [net.load_template](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_template). It works very similar to the previous command (by default will load merge, commit etc.) - to change this behaviours one can use again ```test```, ```replace``` arguments. Examples:
+The command used is [net.load_template](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_template). It works very similar to the previous command (by default will load merge, commit etc.) - to change this behaviours one can use again the arguments ```test```, ```replace```, ```commit```. Examples:
 
-* load template defined in line:
+* load template defined in line -- dry-run:
 
 ```bash
-$ sudo salt -G 'vendor:arista' net.load_template set_hostname template_source='hostname {{ host_name }}' host_name='arista.lab' test=True
+$ sudo salt edge01.bjm01 net.load_template set_hostname template_source='hostname {{ host_name }}' host_name='arista.lab' test=True
 edge01.bjm01:
     ----------
     already_configured:
@@ -218,22 +217,23 @@ edge01.bjm01:
         True
 ```
 
-The examples above are very very simple, meant to provide the very first steps. Moving forward, let's define a more complex template which is vendor agnostic. We can achieve this using the grains, as they are dymanic and don't require us to write manually anything.
+The examples above are very simple, meant to provide the very first steps. Moving forward, let's define a more complex template which is vendor agnostic. We can achieve this using the grains, as they are dymanic and don't require us to manually write anything.
 
 **/home/mircea/example.jinja**
 ```jinja
-{% set router_vendor = grains.get('vendor') -%}
-{% set hostname = pillar.get('proxy', {}).get('host') -%}
+{% set router_vendor = grains.vendor -%}{# get the vendor grains #}
+{% set hostname = pillar.proxy.host -%}{# host specified in the pillar, under the proxy details #}
 {% if router_vendor|lower == 'juniper' %}
 system {
     host-name {{hostname}}.lab;
 }
 {% elif router_vendor|lower in ['cisco', 'arista'] %}
+{# both Cisco and Arista have the same syntax for hostname #}
 hostname {{hostname}}.lab
 {% endif %}
 ```
 
-And now we can run agains all devices, no matter the vendor:
+And now we can run against all devices, no matter the vendor (notice the ```*``` selector to math any minion):
 
 ```bash
 $ sudo salt '*' net.load_template /home/mircea/example.jinja
@@ -267,7 +267,7 @@ edge01.flw01:
         True
 ```
 
-Which proves that no matter the vendor, running the command above changed the hostname accordingly and displayed the diff. And we did not provde any data - Salt knows that edge01.bjm01 is an Arista and edge01.flw01 is a Juniper router! Following the model above, you can go further and define more complex templates according to your specific needs.
+Which proves that no matter the vendor, running the command above changed the hostname accordingly and displayed the diff. And we did not provde any data - Salt knows that ```edge01.bjm01``` is an Arista and ```edge01.flw01``` is a Juniper router! Following the model above, you can go further and define more complex templates according to your specific needs.
 
 Another useful option is ```debug```, displaying the config generated after the template was rendered, in the ```loaded_config``` key:
 
@@ -290,15 +290,15 @@ edge01.flw01:
         True
 ```
 
-Although that minimalist example used a template under an arbitrary path, this is not quite a good practice! In order to keep your system flexible to various environment changes (e.g. move the config files on a different server etc.), the recommended way is to define the templates under the Salt envrionment. Where? Under the directory specified as ```file_roots``` in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) - default is ```/etc/salt/states/```.
+Although that minimalist example used a template under an arbitrary path, this is not quite a good practice! In order to keep your system flexible to various environment changes (e.g. move the config files on a different server etc.), the recommended way is to define the templates under the Salt environment. Where? Under the directory specified as ```file_roots``` in the [master config file](https://github.com/napalm-automation/napalm-salt/blob/master/master) - default is ```/etc/salt/states/```.
 
-So let's consider we are placing now our previous example under the ```file_roots```, thus ```/etc/salt/states/example.jinja```. From now on we can run:
+So let's consider we placed our previous example under the ```file_roots```, thus ```/etc/salt/states/example.jinja```. From now on we can run:
 
 ```bash
 $ sudo salt edge01.flw01 net.load_template salt://example.jinja debug=True
 ```
 
-The result is the same, just that the file is specified using the ```salt://``` prefix which tells salt to look for that template under the ```file_roots```. Changing the configuration of the master or migrating to a different server will not require you to change the command format (which is a big plus when the command is scheduled!).
+The result is the same, just that the file is specified using the ```salt://``` prefix which tells Salt to look for that template under the ```file_roots```. Changing the configuration of the master or migrating to a different server will not require you to change the command format (which is a big plus when the command is scheduled!).
 
 But wait: there's more! You can also render remote templates! Let's consider the following [NAPALM template for NTP peers](https://github.com/napalm-automation/napalm-ios/blob/develop/napalm_ios/templates/set_ntp_peers.j2) on IOS. Shrinking the URL to [http://bit.ly/2gKOj20](http://bit.ly/2gKOj20) we can not use it to load a config on a IOS device using this remote template:
 
@@ -306,13 +306,13 @@ But wait: there's more! You can also render remote templates! Let's consider the
 $ sudo salt -G 'os:ios' net.load_template http://bit.ly/2gKOj20 debug=True
 ```
 
-Other options for remote templates can be specified using ```https://``` and ```ftp://```.
+Other options for remote templates can be specified using ```https://``` or ```ftp://```.
 
 ### Advanced templating
 
-Yet another benefit of Salt is that you can use inside the template the output of any of the available [execution modules](https://docs.saltstack.com/en/develop/ref/modules/all/index.html). As one can easily notice, there are hundreds. You can for example extract some information very easily using the [postgres module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) from a Postgres databse and based on that generate the config etc. The possibilities are literally unlimited!
+Yet another benefit of Salt is that you can use inside the template the output of any of the available [execution modules](https://docs.saltstack.com/en/develop/ref/modules/all/index.html). As one can easily notice, there are hundreds. You can for example extract some information very easily using the [postgres module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) from a Postgres databse and based on that generate the config etc.
 
-Inside the template, the result of the query execution is one single line:
+Inside the template, you can extract the data from the DB in one single line:
 
 ```jinja
 {% query_results = salt['postgres.psql_query']("SELECT * FROM net.ip_addresses", db_user, db_host, db_port, db_password) -%}
@@ -321,24 +321,26 @@ Inside the template, the result of the query execution is one single line:
 And then use the ```query_results``` as needed!
 Exacly in the same manner, we can use the network-related NAPALM modules.
 
-#### generate configuration to have static ARP entries, based on the existing ARP table
+#### Generate static ARP configuration, based on the existing ARP table
 
-The following short template does the job, using the [net.arp](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.arp) function:
+Say we have a very long ARP table and we need to cache it statically in the configuration of the device. The following short template does the job, using the [net.arp](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.arp) function:
 
 **/etc/salt/states/arp_example.jinja**:
 
 ```jinja
-{% set arp_output = salt['net.arp']() -%}
-{% set arp_table = arp_output['out'] -%}
+{%- set arp_output = salt['net.arp']() -%}
+{%- set arp_table = arp_output['out'] -%}
 
-{% for arp_entry in arp_table -%}
-  {% if grains.vendor|lower == 'juniper' -%}
+{%- for arp_entry in arp_table -%}
+  {%- if grains.os|lower == 'iosxr' -%} {# if the device is a Cisco IOS-XR #}
+  arp {{ arp_entry['ip'] }} {{ arp_entry['mac'] }} arpa
+  {%- elif grains.vendor|lower == 'juniper' -%} {# or if the device is a Juniper #}
   set interfaces {{ arp_entry['interface'] }} family inet address {{ arp_entry['ip'] }} arp {{ arp_entry['mac'] }} mac {{ arp_entry['mac'] }}
-  {% endif %}
-{% endfor -%}
+  {%- endif %}
+{%- endfor -%}
 ```
 
-Running:
+Running against ```edge01.flw01``` which is a Juniper device:
 
 ```bash
 $ sudo salt edge01.flw01 net.load_template salt://arp_example.jinja debug=True
@@ -359,42 +361,44 @@ edge01.flw01:
         +          }
         +      }
     loaded_config:
-      set interfaces ae1.1234 family inet address 10.10.1.1 arp 10.10.1.1 mac 9C:8E:99:15:13:B3
-      set interfaces xe-0/0/0.0 family inet address 10.10.2.2 arp 10.10.2.2 mac 0C:86:10:F6:7C:A6
+      set interfaces ae1.1234 family inet address 10.10.1.1/32 arp 10.10.1.1 mac 9c:8e:99:15:13:b3
+      set interfaces xe-0/0/0.0 family inet address 10.10.2.2/32 arp 10.10.2.2 mac 0c:86:10:f6:7c:a6
     result:
         True
 ```
 
 Which configures the static APR entries required.
 
-#### Install default route if not already configured
+#### Configure default route if not already in the table
 
-In the device pillar (see section *Proxy minion config* from the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)) append the following line:
+In the device pillar (see  &para; Proxy minion config from the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)) append the following line:
 
 ```yaml
 default_route_nh: 1.2.3.4
 ```
 
-Which defines the next-hop for the defaul route.
+Which defines the next-hop for the defaul route. In the pillar is the place to define static data.
 
-The Jinja template will use this information, as well as the result of [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) to retrieve the operational data for the static routes to ```0.0.0.0/0```:
+In the following Jinja template we'll use this information, as well as the result of [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) to retrieve the operational data for the static routes to ```0.0.0.0/0```:
 
 **/etc/salt/states/route_example.jinja**:
 ```jinja
-{% set route_output = salt['route.show']('0.0.0.0/0', 'static') -%}
-{% set default_route = route_output['out'] -%}
+{%- set route_output = salt['route.show']('0.0.0.0/0', 'static') -%}
+{%- set default_route = route_output['out'] -%}
 
-{% if not default_route -%}
-  {% if grains.vendor|lower == 'juniper' -%}
+{%- if not default_route -%} {# if no default route found in the table #}
+  {%- if grains.vendor|lower == 'juniper' -%}
   set routing-options static route 0.0.0.0/0 next-hop {{ pillar.default_route_nh }}
-  {% endif %}
-{% endif -%}
+  {%- elif grains.os|lower == 'iosxr' -%}
+  router static address-family ipv4 unicast 0.0.0.0/0 {{ pillar.default_route_nh }}
+  {%- endif %}
+{%- endif -%}
 ```
 
-Executing:
+Executing against ```edge01.flw01``` (Juniper) and ```edge01.oua01``` (Cisco IOS-XR):
 
 ```bash
-$ sudo salt edge01.flw01 net.load_template salt://route_example.jinja debug=True
+$ sudo salt -L 'edge01.flw01, edge01.oua01' net.load_template salt://route_example.jinja debug=True
 edge01.flw01:
     ----------
     already_configured:
@@ -407,13 +411,34 @@ edge01.flw01:
         set routing-options static route 0.0.0.0/0 next-hop 1.2.3.4
     result:
         True
+edge01.oua01:
+    ----------
+    already_configured:
+        False
+    comment:
+    diff:
+        ---
+        +++
+        @@ -3497,6 +3497,7 @@
+         !
+         router static
+          address-family ipv4 unicast
+        +  0.0.0.0/0 1.2.3.4
+           10.10.0.0/16 5.6.7.8
+           172.17.17.0/24 Null0 tag 100
+           192.168.0.1/32 9.10.11.12
+    loaded_config:
+        router static address-family ipv4 unicast 0.0.0.0/0 1.2.3.4
+    result:
+        True
 ```
 
-Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, in case there are no default routes.
+Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, in case there are no default static routes in the table.
 
-The majority of information was dynamically collected as the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
+We have achieved the goals using less than 10 lines templates, covering the configuration syntax of for multiple vendors; most of the data (everything except the next-hop address) was dynamically collected from the *grains* and as the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data.
+This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
 
-## Conclusion
+## TBC
 
-Inittially I had the intention to discuss today also about the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without reuiring to manually update data files.
+Inittially I had the intention introduce also the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without requiring us to manually update data files or write other external processes that collect data in order to introduce it back in the system.
