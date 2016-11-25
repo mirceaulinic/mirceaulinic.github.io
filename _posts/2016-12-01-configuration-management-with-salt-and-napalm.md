@@ -310,7 +310,7 @@ Other options for remote templates can be specified using ```https://``` or ```f
 
 ### Advanced templating
 
-Yet another benefit of Salt is that you can use inside the template the output of any of the available [execution modules](https://docs.saltstack.com/en/develop/ref/modules/all/index.html). As one can easily notice, there are hundreds. You can for example extract some information very easily using the [postgres module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) from a Postgres databse and based on that generate the config etc.
+Yet another benefit of Salt is that you can use inside the template the output of any of the available [execution modules](https://docs.saltstack.com/en/develop/ref/modules/all/index.html). As one can easily notice, there are hundreds. You can for example extract some information very easily using the [postgres module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) from a Postgres databse and based on that generate the config etc. [Read more](https://docs.saltstack.com/en/latest/topics/jinja/index.html#calling-salt-functions)
 
 Inside the template, you can extract the data from the DB in one single line:
 
@@ -339,6 +339,7 @@ Say we have a very long ARP table and we need to cache it statically in the conf
   {%- endif %}
 {%- endfor -%}
 ```
+
 
 Running against ```edge01.flw01``` which is a Juniper device:
 
@@ -383,7 +384,8 @@ In the following Jinja template we'll use this information, as well as the resul
 
 **/etc/salt/states/route_example.jinja**:
 ```jinja
-{%- set route_output = salt['route.show']('0.0.0.0/0', 'static') -%}
+{%- set route_output = salt.route.show('0.0.0.0/0', 'static') -%}
+{# notice that you can also use salt['route.show'] as well as salt.route.show #}
 {%- set default_route = route_output['out'] -%}
 
 {%- if not default_route -%} {# if no default route found in the table #}
@@ -435,9 +437,7 @@ edge01.oua01:
 
 Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, as there were no default static routes found in the table.
 
-We have achieved the goals by defining less than 10 lines long templates, covering the configuration syntax for multiple vendors. Most of the data (everything, except the next-hop address) was dynamically collected from the devices, through the *grains* and the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) or anything else.
-This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
-
+We have achieved the goals by defining less than 10 lines long templates, covering the configuration syntax for multiple vendors. Most of the data (everything, except the next-hop address) was dynamically collected from the devices, through the *grains* and the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) or anything else. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
 ## TBC
 
