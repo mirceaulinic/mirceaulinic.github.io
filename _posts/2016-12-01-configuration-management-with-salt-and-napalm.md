@@ -21,7 +21,7 @@ Using Salt's ability to [schedule jobs](https://docs.saltstack.com/en/2015.8/top
 
 Using the function ```load_config``` from the [net module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_config) you can load static parts of configuration on the selected devices.
 
-Example - set a NTP server on all Arista devices (they are selecting using the grains [we have discussed about last time: &para; Grains](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)):
+Example - set a NTP server on all Arista devices (they are selecting using the grains [we have discussed about last time: &para; *Grains*](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)):
 
 ```bash
 salt -G 'vendor:arista' net.load_config text='ntp server 172.17.17.1'
@@ -300,10 +300,10 @@ $ sudo salt edge01.flw01 net.load_template salt://example.jinja debug=True
 
 The result is the same, just that the file is specified using the ```salt://``` prefix which tells Salt to look for that template under the ```file_roots```. Changing the configuration of the master or migrating to a different server will not require you to change the command format (which is a big plus when the command is scheduled!).
 
-But wait: there's more! You can also render remote templates! Let's consider the following [NAPALM template for NTP peers](https://github.com/napalm-automation/napalm-ios/blob/develop/napalm_ios/templates/set_ntp_peers.j2) on IOS. Shrinking the URL to [http://bit.ly/2gKOj20](http://bit.ly/2gKOj20) we can not use it to load a config on a IOS device using this remote template:
+But wait: there's more! You can also render remote templates! Let's consider the following [NAPALM template for NTP peers](https://github.com/napalm-automation/napalm-ios/blob/develop/napalm_ios/templates/set_ntp_peers.j2) on IOS. Shrinking the URL to [http://bit.ly/2gKOj20](http://bit.ly/2gKOj20) we can use it now to load the config on the managed Cisco devices running IOS, using this remote template:
 
 ```bash
-$ sudo salt -G 'os:ios' net.load_template http://bit.ly/2gKOj20 debug=True
+$ sudo salt -G 'os:ios' net.load_template http://bit.ly/2gKOj20 peers=['172.17.17.1', '172.17.17.2']
 ```
 
 Other options for remote templates can be specified using ```https://``` or ```ftp://```.
@@ -371,7 +371,7 @@ Which configures the static APR entries required.
 
 #### Configure default route if not already in the table
 
-In the device pillar (see  &para; Proxy minion config from the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)) append the following line:
+In the device pillar (see  &para; *Proxy minion config* from the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/)) append the following line:
 
 ```yaml
 default_route_nh: 1.2.3.4
@@ -433,9 +433,9 @@ edge01.oua01:
         True
 ```
 
-Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, in case there are no default static routes in the table.
+Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, as there were no default static routes found in the table.
 
-We have achieved the goals using less than 10 lines templates, covering the configuration syntax of for multiple vendors; most of the data (everything except the next-hop address) was dynamically collected from the *grains* and as the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or even generate config based on [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) data.
+We have achieved the goals by defining less than 10 lines long templates, covering the configuration syntax for multiple vendors. Most of the data (everything, except the next-hop address) was dynamically collected from the devices, through the *grains* and the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) or anything else.
 This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
 
