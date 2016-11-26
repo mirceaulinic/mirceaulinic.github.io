@@ -340,7 +340,6 @@ Say we have a very long ARP table and we need to cache it statically in the conf
 {%- endfor -%}
 ```
 
-
 Running against ```edge01.flw01``` which is a Juniper device:
 
 ```bash
@@ -428,7 +427,6 @@ edge01.oua01:
         +  0.0.0.0/0 1.2.3.4
            10.10.0.0/16 5.6.7.8
            172.17.17.0/24 Null0 tag 100
-           192.168.0.1/32 9.10.11.12
     loaded_config:
         router static address-family ipv4 unicast 0.0.0.0/0 1.2.3.4
     result:
@@ -438,6 +436,8 @@ edge01.oua01:
 Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, as there were no default static routes found in the table.
 
 We have achieved the goals by defining less than 10 lines long templates, covering the configuration syntax for multiple vendors. Most of the data (everything, except the next-hop address) was dynamically collected from the devices, through the *grains* and the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) or anything else. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
+
+This is even more good news: basically you have available an army of thousands of filters waiting to be used. The difference is the syntax: instead of ```{{ 'get salted' | md5 }}```, it would require writing ```{{ salt.hashutil.md5_digest('get salted') }}``` using the [hashutil functions](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.hashutil.html#salt.modules.hashutil.md5_digest); similarly ```{{ salt.dnsutil.aaaa('www.google.com') }}``` from the [dnsutil module](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.dnsutil.html#salt.modules.dnsutil.AAAA) or ```{{ salt.timezone.get_zone() }}`` to get the [timezone](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.timezone.html#salt.modules.timezone.get_zone) etc.
 
 ## TBC
 
