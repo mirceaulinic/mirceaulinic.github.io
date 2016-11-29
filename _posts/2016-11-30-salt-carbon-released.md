@@ -4,11 +4,11 @@ title: Salt 2016.11.0 (Carbon) released
 bigimg: /img/carbon.jpg
 ---
 
-The wait is over, NAPALM is finally fully integrated in an automation framework. Beginning with 2016.11 (Carbon), all the NAPALM features are integrated in Salt - more details in the [release notes]().
+The wait is over, NAPALM is finally fully integrated in an automation framework. Beginning with 2016.11 (Carbon), all the NAPALM features are integrated in Salt - more details in the [release notes](). That means, when you install Salt you have by default the network automation features included!
 
 ## Why is this so important?
 
-This is the result of 11 months of assiduous work and contributions to both NAPALM and Salt projects. Basically after only one year the network engineers finally have something they can just use without geting lost in complex system setup, just two simple steps: 1. Install & 2. Use.
+This is the result of 11 months of assiduous work and contributions to both NAPALM and Salt projects. Basically after less than one year, the network engineers finally have something they can just use without geting lost in complex setups that require deeper software knowledge - only two simple steps required: 1. Install & 2. Use.
 
 ### How did it look like before?
 
