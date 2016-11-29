@@ -122,9 +122,8 @@ edge01.bjm01:
         Configuration discarded.
     diff:
         @@ -42,6 +42,10 @@
-         ntp server 10.10.10.1
-         ntp server 10.10.10.1
-         ntp server 10.10.10.1
+         ntp server 10.10.10.2
+         ntp server 10.10.10.3
         +ntp server 172.17.17.1
         +ntp server 172.17.17.2
         +ntp server 172.17.17.3
@@ -166,7 +165,6 @@ edge01.bjm01:
         -hostname edge01.bjm01
         +hostname arista.lab
          !
-         ntp source Loopback0
     result:
         True
 ```
@@ -189,7 +187,6 @@ edge01.bjm01:
         -hostname edge01.bjm01
         +hostname DCS-7280SR-48C6-M-R.lab
          !
-         ntp source Loopback0
     result:
         True
 ```
@@ -212,7 +209,6 @@ edge01.bjm01:
         -hostname edge01.bjm01
         +hostname edge01.bjm01.lab
          !
-         ntp source Loopback0
     result:
         True
 ```
@@ -249,9 +245,7 @@ edge01.bjm01:
          !
         -hostname edge01.bjm01
         +hostname edge01.bjm01.lab
-         ip name-server vrf default 8.8.8.8
          !
-         ntp source Loopback0
     result:
         True
 edge01.flw01:
@@ -384,7 +378,7 @@ In the following Jinja template we'll use this information, as well as the resul
 **/etc/salt/states/route_example.jinja**:
 ```jinja
 {%- set route_output = salt.route.show('0.0.0.0/0', 'static') -%}
-{# notice that you can also use salt['route.show'] as well as salt.route.show #}
+{# notice that you can use salt['route.show'] as well as salt.route.show #}
 {%- set default_route = route_output['out'] -%}
 
 {%- if not default_route -%} {# if no default route found in the table #}
@@ -425,7 +419,6 @@ edge01.oua01:
          router static
           address-family ipv4 unicast
         +  0.0.0.0/0 1.2.3.4
-           10.10.0.0/16 5.6.7.8
            172.17.17.0/24 Null0 tag 100
     loaded_config:
         router static address-family ipv4 unicast 0.0.0.0/0 1.2.3.4
@@ -437,8 +430,15 @@ Installs a static route to ```0.0.0.0/0``` having as next hop ```1.2.2.4```, as 
 
 We have achieved the goals by defining less than 10 lines long templates, covering the configuration syntax for multiple vendors. Most of the data (everything, except the next-hop address) was dynamically collected from the devices, through the *grains* and the result of ```net.arp``` or ```route.show```, as well as it could be from [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) or [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) or [redis.hgetall](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.redismod.html#salt.modules.redismod.hgetall), or [nagios](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.nagios.html#salt.modules.nagios.run) or anything else. This is a genuine example of an orchestrator: configuration data depends on the operational data and vice-versa.
 
-This is even more good news: basically you have available an army of thousands of filters waiting to be used. The difference is the syntax: instead of ```{{ 'get salted' | sha512_digest }}```, it would require writing ```{{ salt.hashutil.sha512_digest('get salted') }}``` using the [hashutil functions](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.hashutil.html#salt.modules.hashutil.sha512_digest); similarly ```{{ salt.dnsutil.aaaa('www.google.com') }}``` from the [dnsutil module](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.dnsutil.html#salt.modules.dnsutil.AAAA) or ```{{ salt.timezone.get_zone() }}`` to get the [timezone](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.timezone.html#salt.modules.timezone.get_zone) etc.
+Other examples that require very short templates:
+
+- using [postgres.psql_query](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) populate a table in a database with the current network interfaces details (retrieved using [net.interfaces](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.interfaces))
+- using [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) remove from the BGP config neighbors in ``Active`` state
+- using [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) remove unsynchronised NTP peers
+- using [net.environment](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.environment) push high temperature [notifications in Slack](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.slack_notify.html#salt.modules.slack_notify.post_message)
+
+This is even more good news: basically you have available an arsenal of thousands of filters waiting to be used. The difference is the syntax: instead of ```{{ 'get salted' | sha512_digest }}```, it would require writing ```{{ salt.hashutil.sha512_digest('get salted') }}``` using the [hashutil functions](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.hashutil.html#salt.modules.hashutil.sha512_digest); similarly ```{{ salt.dnsutil.AAAA('www.google.com') }}``` from the [dnsutil module](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.dnsutil.html#salt.modules.dnsutil.AAAA) or ```{{ salt.timezone.get_zone() }}``` to get the [timezone](https://docs.saltstack.com/en/2015.8/ref/modules/all/salt.modules.timezone.html#salt.modules.timezone.get_zone) etc.
 
 ## TBC
 
-Inittially I had the intention introduce also the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without requiring us to manually update data files or write other external processes that collect data in order to introduce it back in the system.
+Inittially I had the intention introduce also the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without requiring us to manually update data files or write other external processes that collect data in order to introduce it back in the system. Some of the examples presented can be achieved in a more elegant way using [engines](https://docs.saltstack.com/en/latest/topics/engines/index.html) and [reactors](https://docs.saltstack.com/en/latest/topics/reactor/), but those are more advanced topics to be covered later.
