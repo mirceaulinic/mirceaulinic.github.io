@@ -4,7 +4,7 @@ title: Salt 2016.11.0 (Carbon) released
 bigimg: /img/carbon.jpg
 ---
 
-The wait is over, NAPALM is finally fully integrated in an automation framework. Beginning with 2016.11 (Carbon), all the NAPALM features are integrated in Salt - more details in the [release notes](). That means, when you install Salt you have by default the network automation features included!
+The wait is over, NAPALM is finally fully integrated in an automation framework. Beginning with 2016.11 (Carbon), all the NAPALM features are integrated in the core of Salt - more details in the [release notes](). That means, when you install Salt you have by default the network automation features included!
 
 ## Why is this so important?
 
@@ -20,7 +20,7 @@ NAPALM eveloved a lot over the last months: at the beginning of the year there w
 
 #### Salt
 
-Despite of years of experience working with this Salt and several thousands of serves managed, historically this product did not offer any kind of capabilities for network devices. But beginning with [2015.8](https://docs.saltstack.com/en/latest/topics/releases/2015.8.0.html#proxy-minion-enhancements) they have introduced the [proxy minion feature](https://docs.saltstack.com/en/latest/topics/proxyminion/index.html). The first pull request to introduce NAPALM was firstly introduced [at the end of February](https://github.com/saltstack/salt/pull/31431).
+Despite of years of experience working with this Salt and several thousands of serves managed, historically this product did not offer any capability for network devices. But from  [2015.8](https://docs.saltstack.com/en/latest/topics/releases/2015.8.0.html#proxy-minion-enhancements) on, SaltStack developers have introduced the [proxy minion feature](https://docs.saltstack.com/en/latest/topics/proxyminion/index.html). The first pull request to introduce NAPALM was [at the end of February](https://github.com/saltstack/salt/pull/31431).
 
 ## Installation
 
