@@ -5,7 +5,7 @@ subtitle: Part2: Configuration management
 bigimg: /img/saltnet.jpg
 ---
 
-In the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/) we have been introduced to the very basic command syntax and features. As previously said, Salt is much more than a configuration management system - it is a [data-drivern software](https://docs.saltstack.com/en/latest/topics/) built on a dynamic communication bus. Given the number of possibilites provided (now also for network devices), this post will be entirely dedicated configuration management.
+In the [previous post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/) we have been introduced to the very basic command syntax and features. As previously said, Salt is much more than a configuration management system - it is a [data-drivern software](https://docs.saltstack.com/en/latest/topics/) built on a dynamic communication bus. Given the number of possibilites provided (now also for network devices), this post will be entirely dedicated to configuration management.
 
 # Configuration management
 
@@ -432,7 +432,7 @@ We have achieved the goals by defining less than 10 lines long templates, coveri
 
 Other examples that require very short templates:
 
-- using [postgres.psql_query](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) populate a table in a database with the current network interfaces details (retrieved using [net.interfaces](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.interfaces))
+- using [postgres.psql_query](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.postgres.html#salt.modules.postgres.psql_query) populate a table in a Postgres database with the network interfaces details (retrieved using [net.interfaces](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.interfaces))
 - using [bgp.neighbors](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_bgp.html#salt.modules.napalm_bgp.neighbors) remove from the BGP config neighbors in ``Active`` state
 - using [ntp.stats](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_ntp.html#salt.modules.napalm_ntp.stats) remove unsynchronised NTP peers
 - using [net.environment](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.environment) push high temperature [notifications in Slack](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.slack_notify.html#salt.modules.slack_notify.post_message)
@@ -441,4 +441,4 @@ This is even more good news: basically you have available an arsenal of thousand
 
 ## TBC
 
-Inittially I had the intention introduce also the [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html) but it turns out I should leave it for the next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without requiring us to manually update data files or write other external processes that collect data in order to introduce it back in the system. Some of the examples presented can be achieved in a more elegant way using [engines](https://docs.saltstack.com/en/latest/topics/engines/index.html) and [reactors](https://docs.saltstack.com/en/latest/topics/reactor/), but those are more advanced topics to be covered later.
+Initially I had the intention to introduce [states](https://docs.saltstack.com/en/develop/ref/states/all/index.html), but I think we should leave this for next time. We have seen how everything comes glued together in Salt and how the information from different processes can be used in order to generate configurations with ease, without requiring us to manually update data files or write other external processes that collect data in order to introduce it back in the system. Some of the examples presented can be achieved in a more elegant way using [engines](https://docs.saltstack.com/en/latest/topics/engines/index.html) and [reactors](https://docs.saltstack.com/en/latest/topics/reactor/), but those are more advanced topics to be covered in the future.
