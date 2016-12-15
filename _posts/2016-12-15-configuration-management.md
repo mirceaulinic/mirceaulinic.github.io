@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Configuration management
-subtitle: "Network orchestration with Salt and NAPALM: Part 2"
+subtitle: Network orchestration with Salt and NAPALM - Part 2
 bigimg: /img/panel.jpg
 ---
 
