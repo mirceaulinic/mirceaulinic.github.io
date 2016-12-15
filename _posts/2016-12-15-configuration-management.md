@@ -215,20 +215,22 @@ edge01.bjm01:
 
 The examples above are very simple, meant to provide the very first steps. Moving forward, let's define a more complex template which is vendor agnostic. We can achieve this using the grains, as they are dymanic and don't require us to manually write anything.
 
-**/home/mircea/example.jinja**
 
+**/home/mircea/example.jinja**
+{% raw %}
 ```jinja
-{%- set router_vendor = grains.vendor -%}{# get the vendor grains #}
-{%- set hostname = pillar.proxy.host -%}{# host specified in the pillar, under the proxy details #}
-{%- if router_vendor|lower == 'juniper' -%}
+{% set router_vendor = grains.vendor -%}{# get the vendor grains #}
+{% set hostname = pillar.proxy.host -%}{# host specified in the pillar, under the proxy details #}
+{% if router_vendor|lower == 'juniper' %}
 system {
     host-name {{hostname}}.lab;
 }
-{%- elif router_vendor|lower in ['cisco', 'arista'] -%}
+{% elif router_vendor|lower in ['cisco', 'arista'] %}
 {# both Cisco and Arista have the same syntax for hostname #}
 hostname {{hostname}}.lab
-{%- endif -%}
+{% endif %}
 ```
+{% endraw %}
 
 And now we can run against all devices, no matter the vendor (notice the ```*``` selector to math any minion):
 
@@ -309,9 +311,11 @@ Yet another benefit of Salt is that you can use inside the template the output o
 
 Inside the template, you can extract the data from the DB in one single line:
 
+{% raw %}
 ```jinja
-{%- query_results = salt['postgres.psql_query']("SELECT * FROM net.ip_addresses", db_user, db_host, db_port, db_password) -%}
+{% query_results = salt['postgres.psql_query']("SELECT * FROM net.ip_addresses", db_user, db_host, db_port, db_password) -%}
 ```
+{% endraw %}
 
 And then use the ```query_results``` as needed!
 Exacly in the same manner, we can use the network-related NAPALM modules.
@@ -322,6 +326,7 @@ Say we have a very long ARP table and we need to cache it statically in the conf
 
 **/etc/salt/states/arp_example.jinja**:
 
+{% raw %}
 ```jinja
 {%- set arp_output = salt['net.arp']() -%}
 {%- set arp_table = arp_output['out'] -%}
@@ -331,9 +336,10 @@ Say we have a very long ARP table and we need to cache it statically in the conf
   arp {{ arp_entry['ip'] }} {{ arp_entry['mac'] }} arpa
   {%- elif grains.vendor|lower == 'juniper' -%} {# or if the device is a Juniper #}
   set interfaces {{ arp_entry['interface'] }} family inet address {{ arp_entry['ip'] }} arp {{ arp_entry['mac'] }} mac {{ arp_entry['mac'] }}
-  {%- endif -%}
+  {%- endif %}
 {%- endfor -%}
 ```
+{% endraw %}
 
 Running against ```edge01.flw01``` which is a Juniper device:
 
@@ -377,6 +383,8 @@ Which defines the next-hop for the defaul route. In the pillar is the place to d
 In the following Jinja template we'll use this information, as well as the result of [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) to retrieve the operational data for the static routes to ```0.0.0.0/0```:
 
 **/etc/salt/states/route_example.jinja**:
+
+{% raw %}
 ```jinja
 {%- set route_output = salt.route.show('0.0.0.0/0', 'static') -%}
 {# notice that you can use salt['route.show'] as well as salt.route.show #}
@@ -387,9 +395,10 @@ In the following Jinja template we'll use this information, as well as the resul
   set routing-options static route 0.0.0.0/0 next-hop {{ pillar.default_route_nh }}
   {%- elif grains.os|lower == 'iosxr' -%}
   router static address-family ipv4 unicast 0.0.0.0/0 {{ pillar.default_route_nh }}
-  {%- endif -%}
+  {%- endif %}
 {%- endif -%}
 ```
+{% endraw %}
 
 Executing against ```edge01.flw01``` (Juniper) and ```edge01.oua01``` (Cisco IOS-XR):
 
