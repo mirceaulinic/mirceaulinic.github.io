@@ -143,12 +143,13 @@ The method presented above is not quite optimal as in the configuration of a net
 ## Configuration templates
 
 Using one of the [supported templating engines](https://docs.saltstack.com/en/develop/ref/renderers/all/index.html) we can easier control the configuration and have it consistent across the network.
-In this tutorial I will be working only with Jinja templates, although otther users may prefer [cheetah](https://pythonhosted.org/Cheetah/) or [mako](http://www.makotemplates.org/) etc.
+In this tutorial I will be working only with Jinja templates, although other users would rather prefer [cheetah](https://pythonhosted.org/Cheetah/) or [mako](http://www.makotemplates.org/) etc.
 
 The command used is [net.load_template](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_template). It works very similar to the previous command (by default will load merge, commit etc.) - to change this behaviours one can use again the arguments ```test```, ```replace```, ```commit```. Examples:
 
 * load template defined in line -- dry-run:
 
+{% raw %}
 ```bash
 $ sudo salt edge01.bjm01 net.load_template set_hostname template_source='hostname {{ host_name }}' host_name='arista.lab' test=True
 edge01.bjm01:
@@ -168,9 +169,11 @@ edge01.bjm01:
     result:
         True
 ```
+{% endraw %}
 
 * load template making use of the grains - will set the hostname based on router model:
 
+{% raw %}
 ```bash
 $ sudo salt edge01.bjm01 net.load_template set_hostname template_source='hostname {{ grains.model }}.lab' test=True
 edge01.bjm01:
@@ -190,9 +193,11 @@ edge01.bjm01:
     result:
         True
 ```
+{% endraw %}
 
 * using data from the pillar - will append ```.lab``` at the end of the exising hostname:
 
+{% raw %}
 ```bash
 $ sudo salt edge01.bjm01 net.load_template set_hostname template_source='hostname {{ pillar.proxy.host }}.lab' test=True
 edge01.bjm01:
@@ -212,6 +217,7 @@ edge01.bjm01:
     result:
         True
 ```
+{% endraw %}
 
 The examples above are very simple, meant to provide the very first steps. Moving forward, let's define a more complex template which is vendor agnostic. We can achieve this using the grains, as they are dymanic and don't require us to manually write anything.
 
@@ -368,7 +374,7 @@ edge01.flw01:
         True
 ```
 
-Which configures the static APR entries required.
+And configures the static APR entries, as required.
 
 #### Configure default route if not already in the table
 
@@ -378,7 +384,7 @@ In the device pillar (see  &para; *Proxy minion config* from the [first post](ht
 default_route_nh: 1.2.3.4
 ```
 
-Which defines the next-hop for the defaul route. In the pillar is the place to define static data.
+Which defines the next-hop for the default route. The pillar is the right place to define static data.
 
 In the following Jinja template we'll use this information, as well as the result of [route.show](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_route.html#salt.modules.napalm_route.show) to retrieve the operational data for the static routes to ```0.0.0.0/0```:
 
