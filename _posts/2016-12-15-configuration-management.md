@@ -216,6 +216,7 @@ edge01.bjm01:
 The examples above are very simple, meant to provide the very first steps. Moving forward, let's define a more complex template which is vendor agnostic. We can achieve this using the grains, as they are dymanic and don't require us to manually write anything.
 
 **/home/mircea/example.jinja**
+
 ```jinja
 {% set router_vendor = grains.vendor -%}{# get the vendor grains #}
 {% set hostname = pillar.proxy.host -%}{# host specified in the pillar, under the proxy details #}
