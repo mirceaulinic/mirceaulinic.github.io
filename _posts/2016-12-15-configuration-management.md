@@ -2,10 +2,9 @@
 layout: post
 title: Configuration management
 subtitle: Network orchestration with Salt and NAPALM: Part 2
-bigimg: /img/panel.jpg
 ---
 
-In the [first post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/) we have been introduced to the very basic command syntax and features. As previously said, Salt is much more than a configuration management system - it is a [data-driven software](https://docs.saltstack.com/en/latest/topics/) built on a dynamic communication bus. Given the number of possibilities provided (now also for network devices), this post will be entirely dedicated to configuration management.
+In [first post](https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/) we have been introduced to the very basic command syntax and features. As previously said, Salt is much more than a configuration management system - it is a [data-driven software](https://docs.saltstack.com/en/latest/topics/) built on a dynamic communication bus. Given the number of possibilities provided (now also for network devices), this post will be entirely dedicated to configuration management.
 
 # Configuration management
 
