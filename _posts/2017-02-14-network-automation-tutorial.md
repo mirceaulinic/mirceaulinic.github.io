@@ -14,10 +14,10 @@ Following the steps presented in this tutorial, one should be able to start from
 
 I tried to emphasize:
 
-- We are in a point when the network engineers are not required anymore to learn Python or another programming language, in order to step into this world. However, this should not be misunderstood: I do support learning. My belief is that the initial steps should be easier, so everyone can begin automating. On the longer term, once the systems work for us, I encourage learning and contributing back to the community
+- We are in a point when the network engineers are not required anymore to learn Python or another programming language, in order to step into this world. However, this should not be misunderstood: I do support learning. My belief is that the initial steps should be easier, so everyone can begin automating. On the longer term, once the systems work for us and we have more spare time, I definitely encourage learning and contributing back to the community
 - SaltStack can be used for both configuration management and orchestration
 - Network automation embedded in Salt, no external modules needed
 - Scalability
 - Ease of setup
 
-I have also touched the surface of several topics that I will expand more in the future.
+I have also touched the surface of several topics that I will expand more in the future, such as: states, reactors, beacons etc.
