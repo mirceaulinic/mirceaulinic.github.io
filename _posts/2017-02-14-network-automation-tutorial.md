@@ -6,7 +6,7 @@ subtitle: Up and running in 60 minutes
 
 Last week I have presented at [NANOG](https://www.nanog.org/about/home) a tutorial about [Network Automation at scale: up and running in 60 minutes](http://nanog.org/meetings/abstract?id=3031). The slides are available below:
 
-<iframe src="https://drive.google.com/file/d/0B0v5YpNF4wFSVFBFdWVTeENSS28/preview" width="100%" height="500%"></iframe>
+<iframe src="https://drive.google.com/file/d/0B0v5YpNF4wFSVFBFdWVTeENSS28/preview" width="100%" height="420"></iframe>
 
 The video has been published on [YouTube](https://www.youtube.com/watch?v=99jHvkVM0Dk).
 
