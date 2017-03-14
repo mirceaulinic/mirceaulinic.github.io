@@ -20,12 +20,12 @@ The greatest advantage of splitting the library into multiple ancestors is that 
 You are still able to install everything, by doing: `pip install napalm`. But given that the number of drivers supported is increasing, so does the number of sub-libraries; therefore this is not quite a good practice!
 Another point I would like to make is using the [Recursive Upgrade option](https://pip.pypa.io/en/stable/user_guide/#only-if-needed-recursive-upgrade). In the NAPALM community we have agreed to release very often minor releases, providing bug fixes, so doing `pip install -u <package_name>` would probably help you in many circumstances.
 
-Unfortunately NAPALM is not available as system packages. This is a major downside, as many of the underlying libraries have different platform dependencies. For example, to be able to use `napalm-junos` on a Debian, as [junos-eznc](https://github.com/Juniper/py-junos-eznc) is the main underlying library, you will need to install several packages: python-cffi, python-dev, libxslt1-dev, libssl-dev, libffi-dev etc. For more complete details, refer to [NAPALM installation dependencies](http://napalm.readthedocs.io/en/latest/installation.html#dependencies). The existing document does not cover all possible operating systems, so pull requests are greately appreciated!
+Unfortunately NAPALM is not available as system packages. This is a major downside, as many of the underlying libraries have different platform dependencies. For example, to be able to use `napalm-junos` on a Debian, as [junos-eznc](https://github.com/Juniper/py-junos-eznc) is the main underlying library, you will need to install several packages: python-cffi, python-dev, libxslt1-dev, libssl-dev, libffi-dev etc. For more complete details, refer to [NAPALM installation dependencies](http://napalm.readthedocs.io/en/latest/installation/#dependencies). The existing document does not cover all possible operating systems, so pull requests are greately appreciated!
 
 Install SaltStack
 -----------------
 
-In order to install the latest SaltStack release, the reference document can be found at: [http://napalm.readthedocs.io/en/latest/installation/#dependencies)
+In order to install the latest SaltStack release, the reference document can be found at: [https://docs.saltstack.com/en/latest/topics/installation/](https://docs.saltstack.com/en/latest/topics/installation/)
 
 Below I will present the require steps to install on [Debian Jessie](https://docs.saltstack.com/en/latest/topics/installation/debian.html):
 
