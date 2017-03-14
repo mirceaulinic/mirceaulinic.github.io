@@ -3,7 +3,7 @@ layout: post
 title: Installing SaltStack and NAPALM
 ---
 
-During the live session of the NANOG tutorial, I have expanded on the installation side. However, among the feedback received from the readers that have been following the slides, people suggested that I should have included more details. This is why today I am going to provide more information for these topics: how to install the tools a network engineer requires to start automating.
+During the live session of the [NANOG tutorial](https://mirceaulinic.net/2017-02-14-network-automation-tutorial/), I have expanded on the installation side. However, among the feedback received from the readers that have been following the slides, people suggested that I should have included more details. This is why today I am going to provide more information for these topics: how to install the tools a network engineer requires to start automating.
 
 Install NAPALM
 --------------
@@ -25,7 +25,8 @@ Unfortunately NAPALM is not available as system packages. This is a major downsi
 Install SaltStack
 -----------------
 
-In order to install the latest SaltStack release, the reference document can be found at: https://docs.saltstack.com/en/latest/topics/installation/
+In order to install the latest SaltStack release, the reference document can be found at: [https://docs.saltstack.com/en/latest/topics/installation/](https://docs.saltstack.com/en/latest/topics/installation/)
+
 Below I will present the require steps to install on [Debian Jessie](https://docs.saltstack.com/en/latest/topics/installation/debian.html):
 
 - Add Jessie backports to apt sources: `sudo echo 'deb http://httpredir.debian.org/debian jessie-backports main' >> /etc/apt/sources.list`
@@ -35,7 +36,6 @@ Below I will present the require steps to install on [Debian Jessie](https://doc
 - install the salt-master package: `sudo apt-get install salt-master`
 - install salt-minion which includes also the salt-proxy: `sudo apt-get instal salt-minion`
 
-Note
-====
+### Note
 
 In the example above I have used the official SaltStack repository. The Debian repo is equally good, but usually the packages for new releases are avaialble with a delay of several delays.
