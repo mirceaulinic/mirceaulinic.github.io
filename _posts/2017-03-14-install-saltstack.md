@@ -25,7 +25,7 @@ Unfortunately NAPALM is not available as system packages. This is a major downsi
 Install SaltStack
 -----------------
 
-In order to install the latest SaltStack release, the reference document can be found at: [https://docs.saltstack.com/en/latest/topics/installation/](https://docs.saltstack.com/en/latest/topics/installation/)
+In order to install the latest SaltStack release, the reference document can be found at: [http://napalm.readthedocs.io/en/latest/installation/#dependencies)
 
 Below I will present the require steps to install on [Debian Jessie](https://docs.saltstack.com/en/latest/topics/installation/debian.html):
 
