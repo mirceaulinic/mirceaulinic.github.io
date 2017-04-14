@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Cisco IOS-XR: the buggy XML API
+title: "Cisco IOS-XR: the buggy XML API"
 subtitle: And how Cisco does not give a damn
 ---
 
