@@ -14,13 +14,13 @@ HipChat setup
 1. Create a dedicated user, although you can even use your personal account
 2. From the admin panel: ```Edit Profile``` -> ```API Access``` scroll to the ```Create new token``` section. Assign a label and select the scopes:
 
-![Create HipChat token](../img/hipchat_token_create.png)
+<img src="../img/hipchat_token_create.png" width="500" />
 
 This will generate a new HipChat token, which is a 40 characters long string.
 
 Under the API Access page, a new line should appear, looking like:
 
-![HipChat token example](../img/hipchat_token_example.png)
+<img src="../img/hipchat_token_example.png" width="900" height="65" />
 
 In this example, ```TD8IUisiNZuhmyumRGhh3S5AJ7SdEFXvRanITgNk``` is the generated token and what I will use in the configuration below.
 
@@ -170,7 +170,7 @@ engines:
 
 And we can simply type: ```! ping_google_from_vmx``` and it returns in HipChat:
 
-![HipChat ping example](../img/hipchat_ping_output.png)
+<img src="../img/hipchat_ping_output.png" width="598" height="107" />
 
 Which uploads a file with the result of the execution:
 
