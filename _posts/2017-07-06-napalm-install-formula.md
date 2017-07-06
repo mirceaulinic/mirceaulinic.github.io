@@ -4,7 +4,7 @@ title: Installing NAPALM using Salt
 subtitle: The easy way
 ---
 
-In one of my previous posts, I have presented [how to install NAPALM and Salt](https://mirceaulinic.net/2017-03-14-install-saltstack/). While Salt can be installed directly from the [SaltStack Repo](https://repo.saltstack.com/), very easy, using [Salt Bootstrap](https://docs.saltstack.com/en/latest/topics/tutorials/salt_bootstrap.html), NAPALM required more steps and there are a few [system dependencies](http://napalm.readthedocs.io/en/latest/installation/index.html#dependencies) you may need to consider. For Salt users there's an easier way to get everything installed using one simple command.
+In one of my previous posts, I have presented [how to install NAPALM and Salt](https://mirceaulinic.net/2017-03-14-install-saltstack/). While Salt can be installed directly from the [SaltStack Repo](https://repo.saltstack.com/), very easy, using [Salt Bootstrap](https://docs.saltstack.com/en/latest/topics/tutorials/salt_bootstrap.html), NAPALM requires more steps and there are a few [system dependencies](http://napalm.readthedocs.io/en/latest/installation/index.html#dependencies) you may need to consider. For Salt users there's an easier way to get everything installed using one simple command.
 
 Salt Forumlas
 -------------
