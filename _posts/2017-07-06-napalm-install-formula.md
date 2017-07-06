@@ -248,7 +248,7 @@ Total run time:  13.486 s
 
 The state execution correctly setup the environment for NAPALM and upgraded the system dependencies to the latest releases.
 
-From here on, if we need to install another NAPALM driver, but we are unsure about its dependencies, we can simply append it in the pillar, e.g.:
+From here on, if we need to install another NAPALM driver, but we are unsure about its dependencies, we can simply append it to the install list, e.g.:
 
 ```yaml
 napalm:
