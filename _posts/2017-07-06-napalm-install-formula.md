@@ -334,6 +334,21 @@ $ sudo salt -N proxy-minions-servers state.sls napalm_install
 
 Where ``proxy-minions-servers`` is a [node group](https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html) defined on the master, selecting the servers running the proxy processes.
 
+Ensure you are running the latest versions
+------------------------------------------
+
+Using the [Salt schedule](https://docs.saltstack.com/en/latest/topics/jobs/) subsystem, we can ensure the environment is always up to date, by scheduling the state to be executed at specific intervals. For example, the following minion configuration schedules the ``napalm_install`` state to be executed every Monday, at 10AM:
+
+```yaml
+schedule:
+  napalm_env:
+    function: state.sls
+    arg:
+      - napalm_install
+    when:
+      - Monday 10:00am
+```
+
 Conclusions
 -----------
 
