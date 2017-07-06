@@ -326,6 +326,14 @@ Total states run:     6
 Total run time:   9.196 s
 ```
 
+If you are running a large scale network and your proxy minions are distributed across multiple servers, the dependencies installation becomes very stright forward:
+
+```bash
+$ sudo salt -N proxy-minions-servers state.sls napalm_install
+```
+
+Where ``proxy-minions-servers`` is a [node group](https://docs.saltstack.com/en/latest/topics/targeting/nodegroups.html) defined on the master, selecting the servers running the proxy processes.
+
 Conclusions
 -----------
 
