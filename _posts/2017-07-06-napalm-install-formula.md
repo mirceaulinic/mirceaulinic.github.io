@@ -25,19 +25,19 @@ Configure and start the ``salt-minion``
 
 The regular minion is very simple to be started, less complicated than the proxy:
 
-1. Specify the host of the Salt master in the minion configuration file (typically under ``/etc/salt/minion`` or ``/srv/minion``), under the configuration field ``master``. In this example, my minion is using the ``salt-master`` running on the same host (in my lab I run the proxy minions on the same physical machine as the master):
+- Specify the host of the Salt master in the minion configuration file (typically ``/etc/salt/minion`` or ``/srv/minion``), under the configuration field ``master``. In this example, my minion connects to the Salt master running on the same host (in my lab, I run the proxy minions on the same physical machine as the master):
 
 ```yaml
 master: localhost
 ```
 
-2. Start the minion process:
+- Start the minion process:
 
 ```bash
 $ sudo systemctl start salt-minion
 ```
 
-3. Check the unaccepted keys:
+- Check the unaccepted keys:
 
 ```bash
 $ sudo salt-key -L
@@ -61,7 +61,7 @@ In the following examples, ``ip-172-31-11-15`` is the minion ID of the Salt mini
 Configure the ``napalm-install-formula``
 ----------------------------------------
 
-1. The pillar has the following structure:
+- The pillar has the following structure:
 
 ``/etc/salt/pillar/napalm.sls``
 ```yaml
@@ -73,7 +73,7 @@ napalm:
 
 Where we can list the NAPALM drivers we need. To install the complete library, with all the possible drivers, you can simply list ``napalm``.
 
-2. Map the ``napalm.sls`` pillar defined above to the Salt regular minion, idendified by its ID:
+- Map the ``napalm.sls`` pillar defined above to the Salt regular minion, idendified by its ID:
 
 ``/etc/salt/pillar/top.sls``
 ```yaml
@@ -82,7 +82,7 @@ base:
     - napalm
 ```
 
-3. Refresh pillar on the local minion:
+- Refresh pillar on the local minion:
 
 ```bash
 $ sudo salt-call saltutil.refresh_pillar
@@ -90,9 +90,9 @@ local:
     True
 ```
 
-When executing from the master, the equivalent command is: ``$ sudo salt 'ip-172-31-11-15' saltutil.refresh_pillar``.
+The previous command is executed from the Salt minion server. When executing from the master side, the equivalent command is: ``$ sudo salt 'ip-172-31-11-15' saltutil.refresh_pillar``.
 
-4. Check that the minion has the right data:
+- Check that the minion has the right data:
 
 ```yaml
 $ sudo salt-call pillar.get napalm:install
@@ -101,9 +101,9 @@ local:
     - napalm-iosxr
 ```
 
-5. If you have installed the ``napalm-install-formula`` correctly, you should be able to execute: ```$ sudo salt-call state.show_sls napalm_install```. Otherwise, make sure you have the [map.jinja](https://github.com/saltstack-formulas/napalm-install-formula/blob/master/napalm_install/map.jinja) and [init.sls](https://github.com/saltstack-formulas/napalm-install-formula/blob/master/napalm_install/init.sls) in a directory called ``napalm_install``, under one of the paths listed as [``file_roots``](https://docs.saltstack.com/en/latest/ref/configuration/master.html#file-roots) in the master configuration.
+- If you have installed the ``napalm-install-formula`` correctly, you should be able to execute: ```$ sudo salt-call state.show_sls napalm_install```. Otherwise, make sure you have the [map.jinja](https://github.com/saltstack-formulas/napalm-install-formula/blob/master/napalm_install/map.jinja) and [init.sls](https://github.com/saltstack-formulas/napalm-install-formula/blob/master/napalm_install/init.sls) in a directory called ``napalm_install``, under one of the paths listed as [``file_roots``](https://docs.saltstack.com/en/latest/ref/configuration/master.html#file-roots) in the master configuration.
 
-6. Execute a dry run and check the output (this step is not mandatory, but it is a good practice):
+- Execute a dry run and check the output (this step is not mandatory, but it is a good practice):
 
 ```bash
 $ sudo salt-call state.sls napalm_install test=True
