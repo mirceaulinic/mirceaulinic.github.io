@@ -6,12 +6,12 @@ subtitle: The easy way
 
 In one of my previous posts, I have presented [how to install NAPALM and Salt](https://mirceaulinic.net/2017-03-14-install-saltstack/). While Salt can be installed directly from the [SaltStack Repo](https://repo.saltstack.com/), very easy, using [Salt Bootstrap](https://docs.saltstack.com/en/latest/topics/tutorials/salt_bootstrap.html), NAPALM requires more steps and there are a few [system dependencies](http://napalm.readthedocs.io/en/latest/installation/index.html#dependencies) you may need to consider. For Salt users there's an easier way to get everything installed using one simple command.
 
-Salt Forumlas
+Salt Formulas
 -------------
 
 Formulas are pre-written Salt States, provided by the Salt community. There are plenty of formulas available unde the [SaltStack Formulas GitHub organization](https://github.com/saltstack-formulas). Their installation is easy, well explained in detail here: [https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#installation](https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#installation). Basically all you need to do is write your pillar as specified in the formula; each formula has also an ``pillar.example`` file to help with a structure example for the pillar.
 
-For NAPALM users, there's a new Salt forumla: [napalm-install-formula](https://github.com/saltstack-formulas/napalm-install-formula). Using this formula, we can install the system packages very easily, in addition to the ``PyPi`` requirements for the NAPALM drivers. This is also a great way to keep your environment updated, by executing a command as simple as ``salt-call state.sls napalm_install`` (I will explain below).
+For NAPALM users, there's a new Salt formula: [napalm-install-formula](https://github.com/saltstack-formulas/napalm-install-formula). Using this formula, we can install the system packages very easily, in addition to the ``PyPi`` requirements for the NAPALM drivers. This is also a great way to keep your environment updated, by executing a command as simple as ``salt-call state.sls napalm_install`` (I will explain below).
 
 Regular minions and proxy minions
 ---------------------------------
