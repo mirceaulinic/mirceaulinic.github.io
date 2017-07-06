@@ -9,7 +9,7 @@ In one of my previous posts, I have presented [how to install NAPALM and Salt](h
 Salt Formulas
 -------------
 
-Formulas are pre-written Salt States, provided by the Salt community. There are plenty of formulas available unde the [SaltStack Formulas GitHub organization](https://github.com/saltstack-formulas). Their installation is easy, well explained in detail here: [https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#installation](https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#installation). Basically all you need to do is write your pillar as specified in the formula; each formula has also an ``pillar.example`` file to help with a structure example for the pillar.
+Formulas are pre-written Salt States, provided by the Salt community. There are plenty of formulas available unde the [SaltStack Formulas GitHub organization](https://github.com/saltstack-formulas). Their installation is easy, well explained in detail here: [https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html](https://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html#installation). Basically all you need to do is write your pillar as specified in the formula; each formula has also a ``pillar.example`` file to help with a structure example for the pillar.
 
 For NAPALM users, there's a new Salt formula: [napalm-install-formula](https://github.com/saltstack-formulas/napalm-install-formula). Using this formula, we can install the system packages very easily, in addition to the ``PyPi`` requirements for the NAPALM drivers. This is also a great way to keep your environment updated, by executing a command as simple as ``salt-call state.sls napalm_install`` (I will explain below).
 
@@ -18,7 +18,7 @@ Regular minions and proxy minions
 
 The major difference between regular minions and proxy minions is that the latter are just one process (per network device managed), able to run from everywhere, as long as they are able to contact the Salt master. To use the ``napalm-install-formula``, you need to run the ``salt-minion`` on the same machine where you have the proxy minion(s), connected eventually to the same Salt master. This does not bring an extra dependency, the ``salt-proxy`` binary is anyway included in the ``salt-minion`` package; in other words, to be able to run proxy minions, you have already installed the ``salt-minion``, but it might not be used.
 
-We will need to start the Salt minion, as this is the process managing our server, while the proxy minion manages our network gear.
+We will need to start the Salt minion, as this is the process managing our server, while the proxy minions manage our network devices.
 
 Configure and start the ``salt-minion``
 ---------------------------------------
@@ -248,7 +248,7 @@ Total run time:  13.486 s
 
 The state execution correctly setup the environment for NAPALM and upgraded the system dependencies to the latest releases.
 
-From here on, if we need to install another NAPALM driver, but we are unsure about its dependencies, we can simply list it in the pillar, e.g.:
+From here on, if we need to install another NAPALM driver, but we are unsure about its dependencies, we can simply append it in the pillar, e.g.:
 
 ```yaml
 napalm:
