@@ -2,6 +2,7 @@
 layout: post
 title: Event-driven network automation
 subtitle: Using napalm-logs and Salt
+bigimg: /img/engine.jpg
 ---
 
 One of the most common misconceptions is that network automation is *only* about
