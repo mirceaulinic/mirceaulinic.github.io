@@ -303,6 +303,8 @@ or using one of the following URI selectors: ``http://`` / ``https://``,
 ``ftp://``, ``s3://``, ``swift://``.
 
 ``/etc/salt/templates/shut_interface.jinja``
+
+{% raw %}
 ```jinja
 {%- if grains.os == 'iosxr' %}
 interface {{ interface_name }}
@@ -311,6 +313,7 @@ interface {{ interface_name }}
 deactivate interface {{ interface_name }};
 {%- endif %}
 ```
+{% endraw %}
 
 The variable ``interface_name`` is sent to the template by the reactor SLS (see
 under ``kwarg``).
