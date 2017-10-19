@@ -20,7 +20,7 @@ network automation methodologies. With this, I don't refer only to configuration
 also to those boring email notifications you need to type manually when a BGP
 neighbor has been down for several days, when an interface is flapping, or checking
 with the fiber provider why the optics level is still under the threshold: all
-of these can be easily automated.
+of them (and many others) can be easily automated.
 
 Another frequent misconception is that Salt is (just) a configuration management
 tool. It is that too, but among others (including cloud provisioning,
