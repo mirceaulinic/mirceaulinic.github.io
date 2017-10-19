@@ -13,13 +13,13 @@ external events that we are aware of, but we still continue doing things
 *manually*. And by manually I mean any sort of command that you execute on the
 CLI - either directly on the device, or via a configuration management tool.
 Make no mistake: while having a configuration management tool ensures
-consistency and brings plenty of benefits, considerable percentage of the tasks
-executed daily (or hourly) can be *fully automated*, via event-driven network
-automation. And this is not only about configuration changes, but also the
-boring email notifications you need to type manually when a BGP neighbor has
-been down for several days, an interface is flapping, or checking with the
-fiber provider why the optics level is not correct: all of these can be easily
-automated.
+consistency and brings plenty of benefits, but considerable percentage of the
+tasks you execute daily (or hourly) can be *fully automated*, via event-driven
+network automation. With this, I don't refer only to configuration changes, but
+also the boring email notifications you need to type manually when a BGP
+neighbor has been down for several days, an interface is flapping, or checking
+with the fiber provider why the optics level is still under the threshold: all
+of these can be easily automated.
 
 Another frequent misconception is that Salt is (just) a configuration management
 tool. It is that too, but among others (including cloud provisioning,
@@ -29,63 +29,62 @@ framework - and, in my opinion, it is the most complete.
 Sources of events
 -----------------
 
-Each network has its particularities and requirements, so I speak only about
-internal events. And there are several sources of information, some have been
-there for years, just that we didn't exploit their entire potential just yet.
-My message is: there are several ways your network is trying to communicate with
-you, and it sends you millions of messages every hour; don't ignore it!
+There are several sources of information in every network, some have been there
+for years, but we didn't exploit their entire potential just yet.
 
 # SNMP Traps
 
-The SNMP traps represent one of the most commonly used source of events. But
-they have been mainly used as notifications, when they can be used very well to
-feed an event-driven framework, and trigger completely automated actions.
+The SNMP traps represent one of the most commonly used source of events. Just
+that they have been mainly used as notifications, while they can be used very
+well to feed an event-driven framework, and trigger completely automated actions.
 Unfortunately, we can still identify the following pattern: a notification comes
 in, then the network engineer either applies manually a configuration change on
 the CLI of the network device, or - more recently - executes a command (from a
 server or the local computer) that pushes the desired configuration; then,
-eventually types an email, and it's the same email every single time, only the
-interface name if different. I hope you see what's wrong here: this entire
+eventually writes an email, and it's the same email every single time, only the
+interface name being different. I hope you see what's wrong here: this entire
 process can be fully automated as well.
 
 # Syslog
 
 Syslog messages have been as well present for so many years - that's no news!
 While the SNMP traps are used, at least, as notifications, syslog messages go
-very often directly into the bin: please take a moment and ask yourself three
-questions: 1) Do you store the syslog messages anywhere? 2) Do you know where is
-that server? 3) Do you use them anyhow (excluding TAC cases)?
+very often directly into the bin. Please take a moment and ask yourself three
+questions: 1) Do you store the syslog messages anywhere? 2) If you do, do you
+know where is that server and how to retrieve the messages? 3) Do you use them
+anyhow (excluding TAC cases)?
 
-And there's plenty of useful information in these syslog messages: they can tell
+There's plenty of useful information in these syslog messages: they can tell
 you that an interface is flapping, the optics level is below the threshold,
-your device is not NTP synchronised anymore, chassis alarams, or when one of
+your device is not NTP synchronised anymore, chassis alarms, or when one of
 your BGP neighbors is leaking their entire routing table to you, and many
-others that might be critical for your infrastructure.
+others that can be critical for your infrastructure.
 
 # Streaming Telemetry
 
-Streming telemetry is the new black; as in opposite to SNMP where you need to
-retrieve data every so often, the device sends notifications when it has
-anything to communicate. I am a big fan, as besides this methodology that is
-more efficient, you don't receive snippets of text, but rather structured
-documents. The structure of these documents is standardised as well, in the
-OpenConfig and IETF YANG models. The main drawback currently is that vendors
-such as Juniper or Cisco support it only on very new software distributions,
-e.g., at least Junos 15.1 (as usually, depending on the platform), or IOS-XR
-6.1.1 or higher. I am confident this is going to get better in time however!
+Streaming telemetry is the new black; as in opposite to SNMP which requires you
+to fetch data every so often, the device sends notifications when it has
+anything to communicate. Besides this methodology that is more efficient, you
+don't receive snippets of text, but rather structured documents. The structure
+of these documents is standardised as well, in the
+[OpenConfig](http://www.openconfig.net/) and IETF YANG
+models. The main drawback currently is that vendors such as Juniper or Cisco
+support it only on very new software distributions, e.g., you need at least
+Junos 15.1 (as usually, depending on the platform), or IOS-XR 6.1.1 or higher.
+I am confident this is going to get better in time however!
 
-Gabriele Gerbino had a very nice blog post on Streaming Telemetry that I
-recommend you to read.
+Gabriele Gerbino wrote a very nice [blog post on Streaming Telemetry](projectme10.wordpress.com/2016/11/14/telemetry-streaming-on-cisco-ios-xr-and-nxos/)
+that I recommend you to read.
 
 Using napalm-logs for syslog messages
 -------------------------------------
 
 Syslog messages are simple chunks of text that represent a notification, having
-different levels of severity. But here intervenes the eternal problem of
+different levels of severity. But here arises the eternal problem of
 the networking community: the structure of the syslog messages is not
 cross-platform.
 
-Below there is a syslog message from a Junos device notifying that an interface
+Below is a syslog message from a Junos device notifying that an interface
 is down:
 
 ```text
@@ -100,20 +99,21 @@ The same notification from a Cisco IOS-XR would be:
 %PKT_INFRA-LINK-3-UPDOWN : Interface TenGigE0/2/0/4, changed state to Down
 ```
 
-This is why my colleague Luke Overed and I started working on a library to
+This is why my colleague Luke Overend and I started working on a library to
 normalise the syslog messages, in a vendor-agnostic way. And we soon learnt that
 the most suitable structures have been already defined in the OpenConfig and
 IETF YANG models.
 
-I have expanded more on this topic in a
+I have elaborated more on this topic in a
 [NAPALM Automation blog post](https://napalm-automation.net/napalm-logs-released/).
 
 The syslog messages can be directed straight from the device to the napalm-logs
 process via UDP, or TCP, or via brokers or other systems such as Apache Kafka,
-ZeroMQ etc. The structured data is then binary serialised, encrypted and signed
-before being published over various channels including ZeroMQ, Kafka, or RabbitMQ.
+ZeroMQ etc. The resulting structured data is binary serialised, encrypted and
+signed before being published over various channels including ZeroMQ, Kafka,
+or RabbitMQ.
 
-For example, napalm-logs would the syslog messages above are mapped into the
+For example, napalm-logs would map the text syslog messages above into the
 [openconfig-interfaces](ops.openconfig.net/branches/master/openconfig-interfaces.html)
 YANG model:
 
@@ -141,24 +141,24 @@ YANG model:
 }
 ```
 
-And this strucure is exactly the same if you receive the notification from
+And the structure is exactly the same when receiving the notification from
 a Junos device, IOS-XR or any other platform!
 
 One of the most important details to remember is that napalm-logs continuously
 listens to syslog messages as test, and continuously publishing structured
 documents, where multiple clients can connect. The clients can be event-driven
-frameworks such as Salt or StackStorm, or simply clients written in any
-programming language the user prefers.
+frameworks such as Salt or StackStorm, or simple scripts written in any
+programming language you prefer.
 
 Importing syslog notifications into the Salt event bus
 ------------------------------------------------------
 
-As mentioned in the previous paragrah, Salt can be a client for napalm-logs,
+As mentioned in the previous paragraph, Salt can be a client for napalm-logs,
 importing the structured documents into the event bus. In the Nitrogen release
-(2017.7), we have integrated a Salt engine,
+(2017.7), we have integrated an Engine,
 [napalm-syslog](https://docs.saltstack.com/en/latest/ref/engines/all/salt.engines.napalm_syslog.html),
 for this exact purpose. It is very easy to configure, you mainly need to tell
-what is the IP address and port where Salt should be listening to the documents
+what is the IP address and port where Salt should be listening to the messages
 from napalm-logs. You can read more details under
 [*The napalm-syslog Salt engine*](https://napalm-automation.net/napalm-logs-released/)
 from the same NAPALM Automation blog post.
@@ -192,7 +192,7 @@ napalm/syslog/iosxr/INTERFACE_DOWN/gw2.acy1 {
 }
 ```
 
-The body of the event (what's between ``{`` ... ``}`` is called *data*).
+The body of the event is called *data*.
 
 Fully automated jobs
 --------------------
@@ -213,7 +213,7 @@ reactor:
     - salt://reactor/if_down_send_mail.sls
 ```
 
-The reactor tries to match the event tags agains the
+The reactor tries to match the event tags against the
 ``napalm/syslog/*/INTERFACE_DOWN/*`` expression; under each *namespace*, we can
 have either the exact string expected, or shell globbing. In this case, for
 instance, ``*`` will match anything: the first one corresponds to the network
@@ -250,7 +250,7 @@ the absolute path ``/etc/salt/reactor/if_down_shutdown.sls``,
 the ``salt://`` URI is that you can move the entire environment without any
 configuration change (except ``file_roots`` on the Master).
 
-Let's have a look at each of these files:
+Let's have a look at each of these SLS files:
 
 ``/etc/salt/reactor/if_down_shutdown.sls``
 ```yaml
@@ -262,23 +262,26 @@ shutdown_interface:
         interface_name: {{ data.yang_message.interfaces.interface.keys()[0] }}
 ```
 
-``shutdown_interface`` is just a human understandable name (it can be anything);
-``local`` is the
+- ``shutdown_interface`` is just a human understandable name (it can be anything);
+
+- ``local`` is the
 [reactor type](https://docs.saltstack.com/en/latest/topics/reactor/#types-of-reactions)
 that will tell Salt to invoke an execution function --
 [``net.load_template``](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_network.html#salt.modules.napalm_network.load_template) in this case.
-``data`` is the event *data*, the body of the event, so ``data.host`` will give
-the information from the ``host`` field of the message. Being an SLS file,
-Salt will firstly render the Jinja, then will interpret the resulting YAML,
-e.g., when the field ``host`` is ``gw2.acy1``, the line ``- tgt: {{ data.host }}``
+
+- ``data`` is the event *data*, the body of the event, so ``data.host`` will give
+the information from the ``host`` field of the message.
+
+When interpreting the Reactor SLS, Salt will firstly render the Jinja, e.g.,
+when the field ``host`` is ``gw2.acy1``, the line ``- tgt: {{ data.host }}``
 becomes ``- tgt: gw2.acy1``, which tells Salt to execute ``net.load_template``
 on the Minion having the ID ``gw2.acy1``. (This assumes the Minion ID is the
-host of the device, but the logic can be as complex as suitable for the
-business case). Under ``kwarg``, we specify the arguments used to execute
-``net.load_template``: ``template_name`` specifies the template source,
-while ``interface_name`` is the variable sent to the
-``salt://templates/shut_interface.jinja`` Jinja template. To simplify the way
-to look at this SLS file, here's the result after rendering the Jinja part:
+host of the device, but the logic can be as complex as suitable for the business
+case). Under ``kwarg``, we specify the arguments used to execute
+``net.load_template``: ``template_name`` specifies the template source, while
+``interface_name`` is the variable sent to the
+``salt://templates/shut_interface.jinja`` Jinja template. To make this easier to
+understand, here's the resulting YAML after Salt renders the SLS using Jinja:
 
 ```yaml
 shutdown_interface:
@@ -290,30 +293,13 @@ shutdown_interface:
 ```
 
 Basically, the CLI equivalent of this reactor SLS is:
-``salt 'gw2.acy1' net.load_template salt://templates/shut_interface.jinja interface_name=TenGigE0/2/0/4``.
+``$ sudo salt 'gw2.acy1' net.load_template salt://templates/shut_interface.jinja interface_name=TenGigE0/2/0/4``.
 
-To understand the Reactor System, I highly recommend reading
-[this document](https://docs.saltstack.com/en/latest/topics/reactor/) thoroughly.
-
-``/etc/salt/reactor/if_down_send_mail.sls``
-```yaml
-{%- set if_name = data.yang_message.interfaces.interface.keys()[0] %}
-
-send_email:
-  local.smtp.send_msg:
-    - tgt: {{ data.host }}
-    - arg:
-        - mircea@example.com
-        - Interface down notification
-    - kwarg:
-        subject: Interface {{ if_name }} is down
-```
-
-For completitude, I will provide a very minimalist example for the
+For completeness, I will provide a very minimalist example for the
 ``salt://templates/shut_interface.jinja`` template. Similarly, the template
 can be specified using absolute path, or from the Salt filesystem via ``salt://``,
-or using one of the following URI selectors: ``http://`` / ``https://``, ``ftp://``,
-``s3://``, ``swift://``.
+or using one of the following URI selectors: ``http://`` / ``https://``,
+``ftp://``, ``s3://``, ``swift://``.
 
 ``/etc/salt/templates/shut_interface.jinja``
 ```jinja
@@ -329,23 +315,58 @@ The variable ``interface_name`` is sent to the template by the reactor SLS (see
 under ``kwarg``).
 
 You can learn how to write smart, cross-vendor Jinja templates reading
-[this tutorial](https://docs.saltstack.com/en/develop/topics/network_automation/index.html#napalm),
-or from the [Network Programmability and Automation](http://shop.oreilly.com/product/0636920042082.do),
-where I have been invited to write a chapter about Salt.
+[this tutorial](https://docs.saltstack.com/en/develop/topics/network_automation/index.html#napalm), or from the
+[Network Programmability and Automation](http://shop.oreilly.com/product/0636920042082.do),
+where I have been invited to write a chapter about Salt. Similarly, I expanded
+a little on templating configuration management in Salt, in a
+[previous post](https://mirceaulinic.net/2016-12-15-configuration-management/).
 
-What about the SNMP Traps and Streaming Telemetry
+The second Reactor SLS invoked when an interface down notification occurs is
+``salt://reactor/if_down_send_mail.sls``:
+
+``/etc/salt/reactor/if_down_send_mail.sls``
+```yaml
+{%- set if_name = data.yang_message.interfaces.interface.keys()[0] %}
+
+send_email:
+  local.smtp.send_msg:
+    - tgt: {{ data.host }}
+    - arg:
+        - mircea@example.com
+        - Interface down notification email body.
+    - kwarg:
+        subject: Interface {{ if_name }} is down
+```
+
+For a better understanding of the Reactor System, I highly recommend reading
+[this document](https://docs.saltstack.com/en/latest/topics/reactor/) thoroughly.
+
+After configuring these files, we can watch how Salt automatically disables the
+interface, and sends out an email.
+
+This is already a pretty ambitious goal, but, as one can easily notice, we can
+achieve this very easily, in about 20-30 lines of configuration. But, as usually,
+you need to know where and what to configure, which becomes a matter of reading
+lots of good documentation.
+
+What about SNMP Traps and Streaming Telemetry
 ------------------------------------------------
 
-Streamign telemetry is in general straightforward and we only need to import
-the data into the Salt bus. SNMP traps are very often collected into an
-alert manager, e.g., Prometheus, which, in general support webhooks that can be
-exploited to inject events into the Salt bus. I will expand on these two topics
-later.
-
+Streaming telemetry is in general straightforward and we only need to import
+the data into the Salt bus. SNMP traps are generally collected into an
+alert manager, e.g., [Prometheus](https://prometheus.io/), which, in general
+support webhooks that can be used to inject events into the Salt bus. I will
+expand on these two topics later.
 
 Conclusions
 -----------
 
-[watch the video](https://www.youtube.com/watch?v=aQFbSovedIE) (my talk begins
-at [43:00](https://www.youtube.com/watch?v=aQFbSovedIE&feature=youtu.be&t=2580)),
-and the slides are available at https://pc.nanog.org/static/published/meetings/NANOG71/1441/20171002_Ulinic_Network_Automation_Past__v1.pdf, the event-driven part starting at slide #32.
+Reading this post, I want you to remember that network automation is not just
+about configuration management; every single boring task of your daily job can
+be automated. My message is: there are several ways your network is trying to
+communicate with you, and it sends you millions of messages every hour; don't
+ignore it!
+
+Using napalm-logs you can process and automate many internal notifications,
+in a uniform and vendor agnostic way. Injecting them into the Salt event bus,
+you can very easily implement the event-driven automation in your network!
