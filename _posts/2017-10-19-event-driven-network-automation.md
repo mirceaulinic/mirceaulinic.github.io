@@ -13,12 +13,12 @@ environments are generally much more dynamic: there are *many* internal and
 external events that we are aware of, but we still continue doing things
 *manually*. And by manually I mean any sort of command that you execute on the
 CLI - either directly on the device, or via a configuration management tool.
-Make no mistake: while having a configuration management tool ensures
-consistency and brings plenty of benefits, but considerable percentage of the
-tasks you execute daily (or hourly) can be *fully automated*, via event-driven
-network automation. With this, I don't refer only to configuration changes, but
-also the boring email notifications you need to type manually when a BGP
-neighbor has been down for several days, an interface is flapping, or checking
+Make no mistake: having a configuration management tool ensures
+consistency and brings plenty of benefits, but a considerable percentage of the
+tasks you execute daily (or hourly) can be *fully automated*, by implementing the event-driven
+network automation methodologies. With this, I don't refer only to configuration changes, but
+also to those boring email notifications you need to type manually when a BGP
+neighbor has been down for several days, when an interface is flapping, or checking
 with the fiber provider why the optics level is still under the threshold: all
 of these can be easily automated.
 
