@@ -329,6 +329,8 @@ The second Reactor SLS invoked when an interface down notification occurs is
 ``salt://reactor/if_down_send_mail.sls``:
 
 ``/etc/salt/reactor/if_down_send_mail.sls``
+
+{% raw %}
 ```yaml
 {%- set if_name = data.yang_message.interfaces.interface.keys()[0] %}
 
@@ -341,6 +343,7 @@ send_email:
     - kwarg:
         subject: Interface {{ if_name }} is down
 ```
+{% endraw %}
 
 For a better understanding of the Reactor System, I highly recommend reading
 [this document](https://docs.saltstack.com/en/latest/topics/reactor/) thoroughly.
