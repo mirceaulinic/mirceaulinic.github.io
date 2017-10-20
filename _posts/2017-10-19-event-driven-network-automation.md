@@ -254,7 +254,7 @@ configuration change (except ``file_roots`` on the Master).
 Let's have a look at each of these SLS files:
 
 ``/etc/salt/reactor/if_down_shutdown.sls``
-{%- raw %}
+{% raw %}
 ```yaml
 shutdown_interface:
   local.net.load_template:
@@ -263,7 +263,7 @@ shutdown_interface:
         template_name: salt://templates/shut_interface.jinja
         interface_name: {{ data.yang_message.interfaces.interface.keys()[0] }}
 ```
-{%- endraw %}
+{% endraw %}
 
 - ``shutdown_interface`` is just a human understandable name (it can be anything);
 
@@ -305,7 +305,7 @@ or using one of the following URI selectors: ``http://`` / ``https://``,
 ``ftp://``, ``s3://``, ``swift://``.
 
 ``/etc/salt/templates/shut_interface.jinja``
-{%- raw %}
+{% raw %}
 ```jinja
 {%- if grains.os == 'iosxr' %}
 interface {{ interface_name }}
@@ -314,7 +314,7 @@ interface {{ interface_name }}
 deactivate interface {{ interface_name }};
 {%- endif %}
 ```
-{%- endraw %}
+{% endraw %}
 
 The variable ``interface_name`` is sent to the template by the reactor SLS (see
 under ``kwarg``).
@@ -330,7 +330,7 @@ The second Reactor SLS invoked when an interface down notification occurs is
 ``salt://reactor/if_down_send_mail.sls``:
 
 ``/etc/salt/reactor/if_down_send_mail.sls``
-{%- raw %}
+{% raw %}
 ```yaml
 {%- set if_name = data.yang_message.interfaces.interface.keys()[0] %}
 
@@ -343,7 +343,7 @@ send_email:
     - kwarg:
         subject: Interface {{ if_name }} is down
 ```
-{%- endraw %}
+{% endraw %}
 
 For a better understanding of the Reactor System, I highly recommend reading
 [this document](https://docs.saltstack.com/en/latest/topics/reactor/) thoroughly.
