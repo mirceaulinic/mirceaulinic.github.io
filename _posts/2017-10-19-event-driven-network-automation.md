@@ -254,6 +254,7 @@ configuration change (except ``file_roots`` on the Master).
 Let's have a look at each of these SLS files:
 
 ``/etc/salt/reactor/if_down_shutdown.sls``
+{% raw %}
 ```yaml
 shutdown_interface:
   local.net.load_template:
@@ -262,6 +263,7 @@ shutdown_interface:
         template_name: salt://templates/shut_interface.jinja
         interface_name: {{ data.yang_message.interfaces.interface.keys()[0] }}
 ```
+{% endraw %}
 
 - ``shutdown_interface`` is just a human understandable name (it can be anything);
 
@@ -274,7 +276,7 @@ that will tell Salt to invoke an execution function --
 the information from the ``host`` field of the message.
 
 When interpreting the Reactor SLS, Salt will firstly render the Jinja, e.g.,
-when the field ``host`` is ``gw2.acy1``, the line ``- tgt: {{ data.host }}``
+when the field ``host`` is ``gw2.acy1``, the line {% raw %}``- tgt: {{ data.host }}``{% endraw %}
 becomes ``- tgt: gw2.acy1``, which tells Salt to execute ``net.load_template``
 on the Minion having the ID ``gw2.acy1``. (This assumes the Minion ID is the
 host of the device, but the logic can be as complex as suitable for the business
@@ -303,7 +305,6 @@ or using one of the following URI selectors: ``http://`` / ``https://``,
 ``ftp://``, ``s3://``, ``swift://``.
 
 ``/etc/salt/templates/shut_interface.jinja``
-
 {% raw %}
 ```jinja
 {%- if grains.os == 'iosxr' %}
