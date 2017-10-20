@@ -100,10 +100,10 @@ The same notification from a Cisco IOS-XR would be:
 %PKT_INFRA-LINK-3-UPDOWN : Interface TenGigE0/2/0/4, changed state to Down
 ```
 
-This is why my colleague Luke Overend and I started working on a library to
-normalise the syslog messages, in a vendor-agnostic way. And we soon learnt that
-the most suitable structures have been already defined in the OpenConfig and
-IETF YANG models.
+This is why my colleague [Luke Overend](https://www.linkedin.com/in/loverend/)
+and I started working on a library to normalise the syslog messages, in a
+vendor-agnostic way. And we soon learnt that the most suitable structures have
+been already defined in the OpenConfig and IETF YANG models.
 
 I have elaborated more on this topic in a
 [NAPALM Automation blog post](https://napalm-automation.net/napalm-logs-released/).
