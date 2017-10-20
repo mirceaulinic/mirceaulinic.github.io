@@ -4,9 +4,9 @@ title: Network automation at scale
 subtitle: Up and running in 60 minutes
 ---
 
-Last week I have presented at [NANOG](https://www.nanog.org/about/home) a tutorial about [Network Automation at scale: up and running in 60 minutes](http://nanog.org/meetings/abstract?id=3031). The slides are available below:
+Last week I have presented at [NANOG](https://www.nanog.org/about/home) a tutorial about [Network Automation at scale: up and running in 60 minutes](http://nanog.org/meetings/abstract?id=3031). The slides are available below ([PDF version](https://www.nanog.org/sites/default/files/1_Ulinic_Network_Automation_At_v1.pdf)):
 
-<iframe src="https://drive.google.com/file/d/0B0v5YpNF4wFSVFBFdWVTeENSS28/preview" width="100%" height="420"></iframe>
+<script async class="speakerdeck-embed" data-id="1bacc787a0344346a1e2e260ebd1b29d" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 The video has been published on [YouTube](https://www.youtube.com/watch?v=99jHvkVM0Dk).
 
