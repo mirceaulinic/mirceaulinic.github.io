@@ -74,7 +74,7 @@ support it only on very new software distributions, e.g., you need at least
 Junos 15.1 (as usually, depending on the platform), or IOS-XR 6.1.1 or higher.
 I am confident this is going to get better in time however!
 
-Gabriele Gerbino wrote a very nice [blog post on Streaming Telemetry](projectme10.wordpress.com/2016/11/14/telemetry-streaming-on-cisco-ios-xr-and-nxos/)
+Gabriele Gerbino wrote a very nice [blog post on Streaming Telemetry](https://projectme10.wordpress.com/2016/11/14/telemetry-streaming-on-cisco-ios-xr-and-nxos/)
 that I recommend you to read.
 
 Using napalm-logs for syslog messages
