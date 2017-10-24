@@ -322,7 +322,7 @@ under ``kwarg``).
 You can learn how to write smart, cross-vendor Jinja templates reading
 [this tutorial](https://docs.saltstack.com/en/develop/topics/network_automation/index.html#napalm), or from the
 [Network Programmability and Automation](http://shop.oreilly.com/product/0636920042082.do),
-where I have been invited to write a chapter about Salt. Similarly, I expanded
+where Jason Edelman invited me to write a chapter about Salt. Similarly, I expanded
 a little on templating configuration management in Salt, in a
 [previous post](https://mirceaulinic.net/2016-12-15-configuration-management/).
 
