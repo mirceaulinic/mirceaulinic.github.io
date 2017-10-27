@@ -4,7 +4,7 @@ title: Email List
 subtitle: Event-driven network automation and orchestration
 ---
 
-Starting with January 2018, I will be running a free event-driven network
+Starting from January 2018, I will be running a free event-driven network
 automation and orchestration course. You only need to subscribe using the form
 below, and you'll receive it directly into your inbox.
 
