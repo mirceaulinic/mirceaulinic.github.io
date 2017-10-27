@@ -1,6 +1,7 @@
 ---
 layout: page
-title: Event-driven network automation email list
+title: Email List
+subtitle: Event-driven network automation email list
 ---
 
 Starting with January 2018, I will be running a free event-driven network
