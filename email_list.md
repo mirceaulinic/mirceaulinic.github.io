@@ -6,7 +6,7 @@ subtitle: Event-driven network automation and orchestration
 
 Starting from January 2018, I will be running a free event-driven network
 automation and orchestration course. You only need to subscribe using the form
-below, and you'll receive it directly into your inbox.
+below, and you'll receive the course directly into your inbox.
 
 <!-- Begin MailChimp Signup Form -->
 <link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
