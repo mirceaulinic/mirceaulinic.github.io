@@ -86,6 +86,7 @@ constraint is that you need a function name ``run`` that returns the data you
 need. For instance, the equivalent SLS for the examples above would be the
 following:
 
+``/etc/salt/pillar/ip_addresses_py.sls``
 ```python
 #!py
 
@@ -98,8 +99,13 @@ def run():
 And this is as simple as it looks like: we are writing pure Python that can be
 used, for example, as input data for our system. So let's do that: save this
 content to ``/etc/salt/pillar/ip_addresses_py.sls`` and referencing this file
-in the ``top.sls`` file, in such a way that any Minion can read the contents:
+in the Pillar top file (``/etc/salt/pillar/top.sls`` - as configured on the
+Master, in the [pillar_roots](https://docs.saltstack.com/en/latest/ref/configuration/master.html#pillar-roots)),
+in such a way that any Minion can read the contents (due to the ``*`` - see
+[the top file documentation](https://docs.saltstack.com/en/latest/ref/states/top.html)
+for a more details):
 
+``/etc/salt/pillar/top.sls``
 ```yaml
 base:
   '*':
@@ -122,8 +128,58 @@ minion1:
   - 10.10.10.4
 ```
 
+But wait: I defined the Pillar top file as default SLS, purely YAML. Even
+though in this trivial example it is overkill, there are good production cases
+when the top file can be equally made as dynamic as needed, hence we have the
+possibility to dynamically bind Pillars to Minions (or the SLS States, for the
+State top file):
+
+``/etc/salt/pillar/top.sls``
+```python
+#!py
+
+def run():
+    return {
+        'base': {
+            '*': [ 'ip_addresses_py' ]
+        }
+    }
+```
+
 And with this we have confirmed that we are able to introduce data into the
-system using just Python.
+system using *only* Python. Although the examples I provided so far are trivial,
+they can be extended to more complex implementations, as much as required to
+solve the problem.
+
+An example that I always like to give is loading Pillar data from external
+systems, say from an HTTP API accessible at https://example.com/api.json (that
+provides data formatted as JSON):
+
+``/etc/salt/pillar/example.sls``
+```python
+#!py
+
+import salt.utils.http
+
+def run():
+    ret = salt.utils.http.query('https://example.com/api.json', decode=True)
+    return ret['dict']
+```
+
+With this 5 liner SLS using the Python renderer we can directly introduce data
+into Salt. Of course, there are security and other considerations you need to
+evaluate before an implementation like that. Besides that - when dealing with
+very complex problems you'll need to look at the problem from another angle
+and you should always consider using the [External Pillar](https://docs.saltstack.com/en/latest/topics/development/external_pillars.html)
+or [External Tops](https://docs.saltstack.com/en/latest/topics/master_tops/)
+systems, as they are another nice way to deal with input data. Moreover, they
+offer the flexibility to be loaded before or after the regular Pillars (using
+the [``ext_pillar_first`` Master configuration
+option](https://docs.saltstack.com/en/latest/ref/configuration/master.html#ext-pillar-first).
+There isn't a general recommendation: each particular case must be analysed
+individually. And writing an extension module in your own environment for the
+External Pillar subsystem is [very
+easy](https://docs.saltstack.com/en/latest/ref/configuration/master.html#ext-pillar-first).
 
 Writing executing modules
 -------------------------
