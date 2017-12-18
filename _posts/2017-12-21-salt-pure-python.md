@@ -7,13 +7,13 @@ bigimg: /img/python.jpg
 
 One of the (many) things I like about Salt is that it doesn't have an
 obscure language of its own: as I always like to say, to start automating
-everything you need to know is YAML and Jinja, 3 rules each. For example,
-when you need a simple iteration you don't need to check the documentation
-and see "what's that specific instruction that iterates through a list", but
-just a straight and simple Jinja loop, i.e., ``{%- for element in list %}``.
-However, there are particular cases where Jinja itself is not enough, or
-it simply can become too complex. When I need to deal with a complex task,
-I sometimes feel that "I'd better write this in Python than Jinja".
+all you need to know is YAML and Jinja, 3 rules each. For example, when you need
+a simple iteration you don't need to check the documentation and see _"what's
+that specific instruction that iterates through a list"_, but just a simple and
+straight Jinja loop, i.e., ``{%- for element in list %}``.
+However, there are particular cases where Jinja itself is not enough either, or
+it simply can become too complex and unreadable. When I need to deal with a
+complex task, I sometimes feel that "I'd better write this in Python than Jinja".
 
 As we all know already, Salt is an extremely flexible framework, due to its
 simple internal architecture: a dense core that allows pluggable interfaces
@@ -81,7 +81,7 @@ and name the Renderers you'd like to use, separated by pipe (``|``).
 With these said, the default header is ``#!jinja|yaml``.
 
 The shebang required to select the Python renderer is ``!#py``. The only
-constraint is that you need a function name ``run`` that returns the data you
+constraint is that you need a function named ``run`` that returns the data you
 need. For instance, the equivalent SLS for the examples above would be the
 following:
 
@@ -209,18 +209,100 @@ def run():
     }
 ```
 
-Yet again, this doesn't particularly bring more benefits compared to its default
-behaviour, but it was a good occasion to see introduce ``__salt__`` dunder that
-is the hash with all the execution functions available.
+Again, in this particular example, the Python Renderer doesn't bring more
+benefits compared to its default behaviour, but it was a good occasion to see
+introduce the ``__salt__`` dunder which is the hash with all the execution
+functions available.
 Writing Python Formulas proves very useful when our states require very complex
 decisions.
 
-I prefer (and recommend) however moving the complexity into an execution function,
-as detailed in the next section.
+I prefer (and recommend) however moving the complexity into an execution
+function, as detailed in the _Writing Executing Modules_ section.
+
+## Python templates
+
+Yes, you read that right, and it is not overzealous. Again, there are cases
+when Jinja or another templating engine are not enough. For example, I use this
+when I need to generate text containing unicode characters, as Jinja is really
+bad at doing that, or overly complicated, while in Python it is as simple as
+adding ``# -*- coding: utf-8 -*-`` at the top of the file.
+
+If you think about it, at the end of the day, a template engine only returns a
+chunk of plain text given a set of input variables. Achieving that using Python
+is close to trivial. There is another element specific to the Salt ``py``
+Renderer you need to be aware of: where to find the input variables. Salt
+injects a global variable named ``context`` that is a dictionary containing the
+variables you send to the template.
+
+Consider the following template (the extension doesn't actually
+matter, but it's good to keep it consistent so you and your text editor know
+the file format):
+
+``/etc/salt/templates/example.py``
+```python
+#!py
+
+def run():
+    length = context['ntp_peers_size']
+    lines = []
+    for i in range(length):
+        lines.append('set system ntp peer 10.10.10.{}'.format(i))
+    return '\n'.join(lines)
+```
+
+And this Python template can be used, as any other, we just need to tell Salt
+to generate the text via the ``py`` engine. We can verify and load the generated
+content, from the CLI, using the ``net.load_template`` execution function
+``minion1`` is a Juniper network device):
+
+```bash
+$ sudo salt 'minion1' net.load_template salt://templates/example.py \
+debug=True test=True template_engine=py ntp_peers_size=2
+minion1:
+    ----------
+    already_configured:
+        False
+    comment:
+        Configuration discarded.
+    diff:
+        [edit system ntp]
+        +    peer 10.10.10.0;
+        +    peer 10.10.10.1;
+    loaded_config:
+        set system ntp peer 10.10.10.0
+        set system ntp peer 10.10.10.1
+    result:
+        True
+```
+
+Or via the State system:
+
+``/etc/salt/states/example.sls``
+```yaml
+/tmp/ntp_peers.cfg:
+  file.managed:
+    - source: salt://templates/example.py
+    - template: py
+    - context:
+        ntp_peers_size: 2
+```
+
+When executing the ``example.sls`` Formula, it will generate the ``/tmp/ntp_peers.cfg``
+text file, processing the ``salt://templates/example.py`` template (remember
+that ``salt://`` points to the location of the Salt fileserver, which is
+``/etc/salt`` in this case, as configured via ``file_roots``) through
+the ``py`` interface. Executing ``$ sudo salt 'minion1' state.sls example``, it
+will result the following content:
+
+```bash
+$ cat /tmp/ntp_peers.cfg
+set system ntp peer 10.10.10.0
+set system ntp peer 10.10.10.1
+```
 
 # Writing Executing Modules
 
-It is not a secret that the Execution Modules are the most flexible subsystems
+It is not a secret that the Execution Modules are the most flexible subsystem
 in Salt, as they allow you to reuse code, thanks to the fact that they are
 available in various other subsystems, including: Renderers (and, implicitly,
 templates), State modules, Engines, Returners, Beacons, and so on. Basically
@@ -247,6 +329,18 @@ def generate(length=5):
     return ['10.10.10.{}'.format(i) for i in range(length)]
 ```
 
+.. tip::
+
+  There is a massive arsenal of helper functions that you can re-use. They are
+  found in the [``utils``](https://github.com/saltstack/salt/tree/develop/salt/utils)
+  directory. Take a few moments to skip this directory and its files. Don't
+  worry, from experience I can tell that it will take you months or years to
+  know where to look, in order to avoid reinventing wheels. Been there, done
+  that, got the "wheel reinventor" t-shirt. :-)
+
+  Moreover, remember that you can invoke execution functions from other execution
+  function, as you described below.
+
 To let Salt know that there is another Execution Module to load, you must
 run ``saltutil.sync_modules``, and simply execute the newly defined function
 (the syntax being ``<module name>.<function name>``; in our case the module
@@ -255,21 +349,31 @@ function is ``generate``):
 
 ```bash
 $ sudo salt 'minion1' saltutil.sync_modules
-# TODO
+minion1:
+    - modules.ip_addresses
 $ sudo salt 'minion1' ip_addresses.generate
-# TODO
+minion1:
+    - 10.10.10.0
+    - 10.10.10.1
+    - 10.10.10.2
+    - 10.10.10.3
+    - 10.10.10.4
 $ sudo salt 'minion1' ip_addresses.generate length=1
+minion1:
+    - 10.10.10.0
 ```
 
-Note in the last example the key-value argument passed to the ``generate``
-function, which preserves the name as we defined in the Python module.
+Note in the last example the key-value argument ``length`` is passed from the
+CLI to the ``generate`` function, with the name preserved as we defined in the
+Python module.
 
 .. note::
 
-    By default the Execution Module name is simply the name of the Python file.
-    To provide a different name, you can use the ``__virtualname__`` dunder.
+    By default, the name of the Execution Module is simply the name of the
+    Python module (file).
+    To use a different name instead, you can use the ``__virtualname__`` dunder.
     This is a beautiful way to overload the name depending on special
-    circumstances, which is a capability that other systems don't have.
+    circumstances, which is a unique capability of Salt.
     For more details, please refer to [this page](https://docs.saltstack.com/en/latest/ref/modules/#virtualname).
 
 So we have a new function defined for our own environment. This can be invoked
@@ -375,19 +479,29 @@ config file, e.g.,:
 ip_addresses_base: 192.168.1
 ```
 
+.. note::
+
+    Before defining your own configuration option, check that it's not already
+    defined, to avoid eventual conflicts:
+    [configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html).
+
 Conclusions
 -----------
 
 As always in Salt there is no "best rule": Salt is very flexible and your
 environment dictates what makes the most sense for you. Not only that Salt
-exposes to you the power of Python, but it also behaves like Python and provides
-you the means to tackle any problem in various ways, no hard constraints. This
-is why you must always evaluate and decide what approach is the most suitable
-for you.
-My recommendation is to move the complexity into the Execution Modules; yes,
-write many in your own environment (and it would be also very nice for the
-community to open source what is not heavily tied your business logic). Do
-break the complex Jinja templates into very simple templates. Keep the SLS
-files extemely simple. When an SLS (or a logical section of an SLS) is longer
-than 5-10 lines, you should start asking questions and find ways to optimize
-and make your code more reusable.
+exposes to you the power of Python, but it also behaves like Python from this
+perspective and provides you the means to tackle any problem in various ways:
+there are no hard constraints. This is why you must *always* evaluate and decide
+what approach is the most suitable for you.
+My recommendation is to try to move the complexity into the Execution Modules;
+yes, write many extension modules in your own environment (and it would also be
+very nice for the community to open source what is not heavily tied your
+business logic). Simplify your complex Jinja templates by using execution
+functions. Write many helpers for your team. Keep the SLS files extremely
+simple. When an SLS (or a logical section of an SLS), or a template is longer
+than 5-10 lines, you should start asking questions and find ways to optimize and
+make your code more reusable. Though, when you cannot break the complexity
+apart, or it doesn't necessarily make sense to be moved elsewhere, you are again
+covered, and you can avoid complex YAML/Jinja by leveraging the power of the
+regular Python Renderer (as an aside, it is my favourite interface).
