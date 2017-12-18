@@ -366,8 +366,9 @@ def generate(length=5);
 In the second approach, the ``__opts__`` dunder is the dictionary having the
 Minion configuration options (read from the configuration file --
 ``/etc/salt/minion`` for regular Minions, or ``/etc/salt/proxy`` for Proxy
-Minions), merged with the Pillar and Grains data. A change required in our
-system, would imply simply adjusting the (Proxy) Minion config file, e.g.,:
+Minions), merged with the Pillar and Grains data. To propagate a change in our
+system - as described above, would only imply adjusting the (Proxy) Minion
+config file, e.g.,:
 
 ``/etc/salt/minion`` (excerpt)
 ```yaml
