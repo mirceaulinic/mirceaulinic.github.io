@@ -243,7 +243,7 @@ the file format):
 #!py
 
 def run():
-    length = context['ntp_peers_size']
+    length = context['ntp_peers_count']
     lines = []
     for i in range(length):
         lines.append('set system ntp peer 10.10.10.{}'.format(i))
@@ -257,7 +257,7 @@ content, from the CLI, using the ``net.load_template`` execution function
 
 ```bash
 $ sudo salt 'minion1' net.load_template salt://templates/example.py \
-debug=True test=True template_engine=py ntp_peers_size=2
+debug=True test=True template_engine=py ntp_peers_count=2
 minion1:
     ----------
     already_configured:
@@ -284,7 +284,7 @@ Or via the State system:
     - source: salt://templates/example.py
     - template: py
     - context:
-        ntp_peers_size: 2
+        ntp_peers_count: 2
 ```
 
 When executing the ``example.sls`` Formula, it will generate the ``/tmp/ntp_peers.cfg``
