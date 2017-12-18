@@ -131,7 +131,7 @@ minion1:
 But wait: I defined the Pillar top file as default SLS, purely YAML. Even
 though in this trivial example it is overkill, there are good production cases
 when the top file can be equally made as dynamic as needed, hence we have the
-possibility to dynamically bind Pillars to Minions (or the SLS States, for the
+possibility to dynamically bind Pillars to Minions (or Formulas, for the
 State top file):
 
 ``/etc/salt/pillar/top.sls``
