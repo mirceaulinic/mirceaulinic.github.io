@@ -355,7 +355,7 @@ def generate(base='10.10.10', length=5):
 - IP Network as config option:
 
 ``/etc/salt/_modules/ip_addresses.py``
-``python
+```python
 def generate(length=5);
     base = __opts__.get('ip_addresses_base', '10.10.10')
     return [
