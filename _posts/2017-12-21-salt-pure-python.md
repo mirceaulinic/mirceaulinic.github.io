@@ -220,8 +220,8 @@ as detailed in the next section.
 
 # Writing Executing Modules
 
-It is no secret that the Execution Modules are the most flexible subsystems in
-Salt, as they allow you to reuse code, thanks to the fact that they are
+It is not a secret that the Execution Modules are the most flexible subsystems
+in Salt, as they allow you to reuse code, thanks to the fact that they are
 available in various other subsystems, including: Renderers (and, implicitly,
 templates), State modules, Engines, Returners, Beacons, and so on. Basically
 once you wrote an Execution Module it is available immediately in the named
@@ -306,7 +306,87 @@ ip_addresses: {{ salt.ip_addresses.generate() }}
 
 Invoking Execution Modules inside Formulas works in the exact same way.
 
+## Invoking Execution Modules from other Salt modules
+
+In general, we can use the ``__salt__`` dunder to execute a function from a
+different Salt module. For example, we can define the following Execution
+Module which will invoke the ``ip_address.generate`` function:
+
+``/etc/salt/_modules/ixp_interfaces.py``
+```python
+def addresses(extension):
+    default_addresses = __salt__['ip_addresses.generate'](length=100)
+    extension_addresses = [
+        '172.17.17.{}'.format(i) for i in range(extension)
+    ]
+    default_addresses.extend(extension_addresses)
+    return default_addresses
+```
+
+Note that in the example above, the ``extension`` argument is no longer a
+key-value and we will always need to pass a value when executing this function:
+
+```bash
+$ sudo salt 'minion1' ixp_interfaces.addresses 20
+# Output omitted: a list of 120 IP Addresses
+```
+
+In a similar way, we can reuse the code from ``ip_addresses.generate`` in other
+subsystems, such as Beacons, Engines, Runners, or Pillars etc.
+
+Another bonus of doing this is that you can control easier various parameters.
+For example, in the way we designed the ``generate`` function, it returns IP
+addresses from the ``10.10.10.0`` network; let's suppose that at some point we
+decide to generate addresses from the ``172.17.19.0`` network, we only have a
+single place to make the adjustment. Moving forward, if this is very likely to
+change frequently we can move the base into another key-value argument, or
+in a configuration option:
+
+- IP Network as kwarg:
+
+``/etc/salt/_modules/ip_addresses.py``
+```python
+def generate(base='10.10.10', length=5):
+    return [
+        '{base}.{i}'.format(base=base, i=i) for i in range(length)
+    ]
+```
+
+- IP Network as config option:
+
+``/etc/salt/_modules/ip_addresses.py``
+``python
+def generate(length=5);
+    base = __opts__.get('ip_addresses_base', '10.10.10')
+    return [
+        '{base}.{i}'.format(base=base, i=i) for i in range(length)
+    ]
+```
+
+In the second approach, the ``__opts__`` dunder is the dictionary having the
+Minion configuration options (read from the configuration file --
+``/etc/salt/minion`` for regular Minions, or ``/etc/salt/proxy`` for Proxy
+Minions), merged with the Pillar and Grains data. A change required in our
+system, would imply simply adjusting the (Proxy) Minion config file, e.g.,:
+
+``/etc/salt/minion`` (excerpt)
+```yaml
+ip_addresses_base: 192.168.1
+```
+
 Conclusions
 -----------
 
-
+As always in Salt there is no "best rule": Salt is very flexible and your
+environment dictates what makes the most sense for you. Not only that Salt
+exposes to you the power of Python, but it also behaves like Python and provides
+you the means to tackle any problem in various ways, no hard constraints. This
+is why you must always evaluate and decide what approach is the most suitable
+for you.
+My recommendation is to move the complexity into the Execution Modules; yes,
+write many in your own environment (and it would be also very nice for the
+community to open source what is not heavily tied your business logic). Do
+break the complex Jinja templates into very simple templates. Keep the SLS
+files extemely simple. When an SLS (or a logical section of an SLS) is longer
+than 5-10 lines, you should start asking questions and find ways to optimize
+and make your code more reusable.
