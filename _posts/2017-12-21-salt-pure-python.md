@@ -13,9 +13,10 @@ that specific instruction that iterates through a list"_, but just a simple and
 straight Jinja loop, i.e., ``{%- for element in list %}``.
 However, there are particular cases where Jinja itself is not enough either, or
 it simply can become too complex and unreadable. When I need to deal with a
-complex task, I sometimes feel that "I'd better write this in Python than Jinja".
+complex task, I sometimes feel that _"I'd better write this in Python than
+Jinja (or a combination of both)"_.
 
-As we all know already, Salt is an extremely flexible framework, due to its
+As we know already, Salt is an extremely flexible framework, due to its
 simple internal architecture: a dense core that allows pluggable interfaces
 to be added. For instance, if you look at the [official repository on
 GitHub](https://github.com/saltstack/salt/tree/develop/salt), you will notice
@@ -27,14 +28,14 @@ as Salt has grown in capabilities.
 # The pure Python Renderer
 
 One of these pluggable interfaces is called *Renderer*: this is a subsystem
-that allows the low level input-output. For Salt it doesn't matter if your
-file is structured as YAML, or JSON, or TOML etc. - the data is represented
-as Python object: you're working with data, not with chunks of text!
+that facilitates the low level input-output interaction. For Salt it doesn't
+matter if your file is structured as YAML, or JSON, or TOML etc. - the data is
+represented as Python object: you're working with data, not with chunks of text!
 
-Thanks to this intelligent approach, adding a pure Python renderer (a few years
-back - 6 years now) was certainly the most natural thing to do. This is why
-you are today able to write - without exaggeration - everything in pure Python.
-But don't just take my word, please bear with me and I will prove.
+Thanks to this intelligent approach, adding a pure Python renderer (about 6
+years ago) was certainly the most natural thing to do. This is why you are able
+today to write - without exaggeration - everything in pure Python.
+But don't just take my word, bear with me and I will prove.
 
 ## Python Pillars
 
@@ -250,10 +251,10 @@ def run():
     return '\n'.join(lines)
 ```
 
-And this Python template can be used, as any other, we just need to tell Salt
+This Python template can be used as any other: we only need to tell Salt
 to generate the text via the ``py`` engine. We can verify and load the generated
 content, from the CLI, using the ``net.load_template`` execution function
-``minion1`` is a Juniper network device):
+(``minion1`` is a Juniper network device):
 
 ```bash
 $ sudo salt 'minion1' net.load_template salt://templates/example.py \
@@ -470,7 +471,7 @@ def generate(length=5);
 In the second approach, the ``__opts__`` dunder is the dictionary having the
 Minion configuration options (read from the configuration file --
 ``/etc/salt/minion`` for regular Minions, or ``/etc/salt/proxy`` for Proxy
-Minions), merged with the Pillar and Grains data. To propagate a change in our
+Minions), merged with the Pillar and Grains data. To propagate a change in your
 system - as described above, would only imply adjusting the (Proxy) Minion
 config file, e.g.,:
 
@@ -491,11 +492,11 @@ Conclusions
 As always in Salt there is no "best rule": Salt is very flexible and your
 environment dictates what makes the most sense for you. Not only that Salt
 exposes to you the power of Python, but it also behaves like Python from this
-perspective and provides you the means to tackle any problem in various ways:
-there are no hard constraints. This is why you must *always* evaluate and decide
+perspective and provides you the means to tackle any problem in several ways;
+there are no hard constraints. This is why you *always* must evaluate and decide
 what approach is the most suitable for you.
-My recommendation is to try to move the complexity into the Execution Modules;
-yes, write many extension modules in your own environment (and it would also be
+My recommendation is to try to move the complexity into the Execution Modules.
+Yes, write many extension modules in your own environment (and it would also be
 very nice for the community to open source what is not heavily tied your
 business logic). Simplify your complex Jinja templates by using execution
 functions. Write many helpers for your team. Keep the SLS files extremely
