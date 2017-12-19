@@ -16,7 +16,7 @@ it simply can become too complex and unreadable. When I need to deal with a
 complex task, I sometimes feel that _"I'd better write this in Python than
 Jinja (or a combination of both)"_.
 
-As we know already, Salt is an extremely flexible framework, due to its
+As we know already, Salt is a very flexible framework, due to its
 simple internal architecture: a dense core that allows pluggable interfaces
 to be added. For instance, if you look at the [official repository on
 GitHub](https://github.com/saltstack/salt/tree/develop/salt), you will notice
