@@ -154,7 +154,7 @@ they can be extended to more complex implementations, as much as required to
 solve the problem.
 
 An example that I always like to give is loading Pillar data from external
-systems, say from an HTTP API accessible at https://example.com/api.json (that
+systems, say from an HTTP API accessible at _https://example.com/api.json_ (that
 provides data formatted as JSON):
 
 ``/etc/salt/pillar/example.sls``
@@ -168,7 +168,7 @@ def run():
     return ret['dict']
 ```
 
-With this 5 liner SLS using the Python renderer we can directly introduce data
+With this 5 liner SLS using the Python renderer, we can directly introduce data
 into Salt from a remote endpoint. Of course, there are security and other
 considerations you need to evaluate before an implementation like that. Besides
 that - when dealing with very complex problems you'll need to look at the
@@ -181,7 +181,7 @@ the [``ext_pillar_first`` Master configuration
 option](https://docs.saltstack.com/en/latest/ref/configuration/master.html#ext-pillar-first)).
 There isn't a general recommendation: each particular case must be analysed
 individually. Writing an extension module in your own environment for the
-External Pillar subsystem is [very
+External Pillar subsystem is also [very
 easy](https://docs.saltstack.com/en/latest/ref/configuration/master.html#ext-pillar-first).
 
 ## Python SLS Formulas
@@ -237,9 +237,9 @@ chunk of plain text given a set of input variables. Achieving that using Python
 is close to trivial. There is another element specific to the Salt ``py``
 Renderer you need to be aware of: where to find the input variables. Salt
 injects a global variable named ``context`` that is a dictionary containing the
-variables you send to the template.
+variables you are sending to the template.
 
-Consider the following template (the extension doesn't actually
+Consider the following template (the file extension doesn't actually
 matter, but it's good to keep it consistent so you and your text editor know
 the file format):
 
@@ -334,6 +334,8 @@ def generate(length=5):
     return ['10.10.10.{}'.format(i) for i in range(length)]
 ```
 
+###### Tip
+
 > There is a massive arsenal of helper functions that you can re-use. They are
 > found in the [``utils``](https://github.com/saltstack/salt/tree/develop/salt/utils)
 > directory. Take a few moments to skim through this directory and its files. Don't
@@ -369,6 +371,8 @@ minion1:
 Note in the last example the key-value argument ``length`` is passed from the
 CLI to the ``generate`` function, with the name preserved as we defined in the
 Python module.
+
+###### Note
 
 > By default, the name of the Execution Module is simply the name of the
 > Python module (file).
@@ -483,6 +487,8 @@ config file, e.g.,:
 {% highlight yaml %}
 ip_addresses_base: 192.168.1
 {% endhighlight %}
+
+###### Note
 
 > Before defining your own configuration option, check that it's not already
 > defined, to avoid eventual conflicts:
