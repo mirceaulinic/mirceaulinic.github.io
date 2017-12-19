@@ -334,7 +334,7 @@ def generate(length=5):
     return ['10.10.10.{}'.format(i) for i in range(length)]
 ```
 
-###### Tip
+##### Tip
 
 > There is a massive arsenal of helper functions that you can re-use. They are
 > found in the [``utils``](https://github.com/saltstack/salt/tree/develop/salt/utils)
@@ -372,7 +372,7 @@ Note in the last example the key-value argument ``length`` is passed from the
 CLI to the ``generate`` function, with the name preserved as we defined in the
 Python module.
 
-###### Note
+##### Note
 
 > By default, the name of the Execution Module is simply the name of the
 > Python module (file).
@@ -488,7 +488,7 @@ config file, e.g.,:
 ip_addresses_base: 192.168.1
 {% endhighlight %}
 
-###### Note
+##### Note
 
 > Before defining your own configuration option, check that it's not already
 > defined, to avoid eventual conflicts:
