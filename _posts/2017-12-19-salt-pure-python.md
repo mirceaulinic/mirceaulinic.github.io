@@ -470,7 +470,7 @@ def generate(length=5);
     return [
         '{base}.{i}'.format(base=base, i=i) for i in range(length)
     ]
-{% endhightlight %}
+{% endhighlight %}
 
 In the second approach, the ``__opts__`` dunder is the dictionary having the
 Minion configuration options (read from the configuration file --
