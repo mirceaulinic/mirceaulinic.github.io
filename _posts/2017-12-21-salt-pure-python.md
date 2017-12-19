@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Slaying Salt using pure Python
-subtitle: The overlooked side of Salt and few best practices
+title: Python development for infrastructure management using Salt
+subtitle: The overlooked side of Salt and some best practices
 bigimg: /img/python.jpg
 ---
 
@@ -490,14 +490,14 @@ Conclusions
 -----------
 
 As always in Salt there is no "best rule": Salt is very flexible and your
-environment dictates what makes the most sense for you. Not only that Salt
+environment dictates what makes the most sense to you. Not only that Salt
 exposes to you the power of Python, but it also behaves like Python from this
 perspective and provides you the means to tackle any problem in several ways;
 there are no hard constraints. This is why you *always* must evaluate and decide
 what approach is the most suitable for you.
 My recommendation is to try to move the complexity into the Execution Modules.
 Yes, write many extension modules in your own environment (and it would also be
-very nice for the community to open source what is not heavily tied your
+very nice for the community to open source what is not heavily tied to your
 business logic). Simplify your complex Jinja templates by using execution
 functions. Write many helpers for your team. Keep the SLS files extremely
 simple. When an SLS (or a logical section of an SLS), or a template is longer
