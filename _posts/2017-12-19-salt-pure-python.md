@@ -340,8 +340,9 @@ def generate(length=5):
 > worry, from experience I can tell that it will take you months or years to
 > know where to look, in order to avoid reinventing wheels. Been there, done
 > that, got the "wheel reinventor" t-shirt. :-)
+>
 > Moreover, remember that you can invoke execution functions from other execution
-> function, as you described below.
+> function, as described below.
 
 To let Salt know that there is another Execution Module to load, you must
 run ``saltutil.sync_modules``, and simply execute the newly defined function
@@ -463,7 +464,7 @@ def generate(base='10.10.10', length=5):
 - IP Network as config option:
 
 ``/etc/salt/_modules/ip_addresses.py``
-{% highlight python linenos %}
+{% highlight python %}
 def generate(length=5);
     base = __opts__.get('ip_addresses_base', '10.10.10')
     return [
