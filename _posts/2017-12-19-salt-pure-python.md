@@ -334,17 +334,15 @@ def generate(length=5):
     return ['10.10.10.{}'.format(i) for i in range(length)]
 ```
 
-.. tip::
+> There is a massive arsenal of helper functions that you can re-use. They are
+> found in the [``utils``](https://github.com/saltstack/salt/tree/develop/salt/utils)
+> directory. Take a few moments to skip this directory and its files. Don't
+> worry, from experience I can tell that it will take you months or years to
+> know where to look, in order to avoid reinventing wheels. Been there, done
+> that, got the "wheel reinventor" t-shirt. :-)
 
-  There is a massive arsenal of helper functions that you can re-use. They are
-  found in the [``utils``](https://github.com/saltstack/salt/tree/develop/salt/utils)
-  directory. Take a few moments to skip this directory and its files. Don't
-  worry, from experience I can tell that it will take you months or years to
-  know where to look, in order to avoid reinventing wheels. Been there, done
-  that, got the "wheel reinventor" t-shirt. :-)
-
-  Moreover, remember that you can invoke execution functions from other execution
-  function, as you described below.
+> Moreover, remember that you can invoke execution functions from other execution
+> function, as you described below.
 
 To let Salt know that there is another Execution Module to load, you must
 run ``saltutil.sync_modules``, and simply execute the newly defined function
@@ -372,14 +370,12 @@ Note in the last example the key-value argument ``length`` is passed from the
 CLI to the ``generate`` function, with the name preserved as we defined in the
 Python module.
 
-.. note::
-
-    By default, the name of the Execution Module is simply the name of the
-    Python module (file).
-    To use a different name instead, you can use the ``__virtualname__`` dunder.
-    This is a beautiful way to overload the name depending on special
-    circumstances, which is a unique capability of Salt.
-    For more details, please refer to [this page](https://docs.saltstack.com/en/latest/ref/modules/#virtualname).
+> By default, the name of the Execution Module is simply the name of the
+> Python module (file).
+> To use a different name instead, you can use the ``__virtualname__`` dunder.
+> This is a beautiful way to overload the name depending on special
+> circumstances, which is a unique capability of Salt.
+> For more details, please refer to [this page](https://docs.saltstack.com/en/latest/ref/modules/#virtualname).
 
 So we have a new function defined for our own environment. This can be invoked
 from the command line, as we've seen, but also available in different areas,
@@ -468,13 +464,13 @@ def generate(base='10.10.10', length=5):
 - IP Network as config option:
 
 ``/etc/salt/_modules/ip_addresses.py``
-```python
+{% highlight python lineos %}
 def generate(length=5);
     base = __opts__.get('ip_addresses_base', '10.10.10')
     return [
         '{base}.{i}'.format(base=base, i=i) for i in range(length)
     ]
-```
+{% endhightlight %}
 
 In the second approach, the ``__opts__`` dunder is the dictionary having the
 Minion configuration options (read from the configuration file --
@@ -484,15 +480,13 @@ system - as described above, would only imply adjusting the (Proxy) Minion
 config file, e.g.,:
 
 ``/etc/salt/minion`` (excerpt)
-```yaml
+{% highlight yaml %}
 ip_addresses_base: 192.168.1
-```
+{% endhighlight %}
 
-.. note::
-
-    Before defining your own configuration option, check that it's not already
-    defined, to avoid eventual conflicts:
-    [configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html).
+> Before defining your own configuration option, check that it's not already
+> defined, to avoid eventual conflicts:
+> [configuring the Salt Minion](https://docs.saltstack.com/en/latest/ref/configuration/minion.html).
 
 Conclusions
 -----------
@@ -503,6 +497,7 @@ exposes to you the power of Python, but it also behaves like Python from this
 perspective and provides you the means to tackle any problem in several ways;
 there are no hard constraints. This is why you *always* must evaluate and decide
 what approach is the most suitable for you.
+
 My recommendation is to try to move the complexity into the Execution Modules.
 Yes, write many extension modules in your own environment (and it would also be
 very nice for the community to open source what is not heavily tied to your
