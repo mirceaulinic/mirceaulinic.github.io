@@ -336,10 +336,10 @@ def generate(length=5):
 
 > There is a massive arsenal of helper functions that you can re-use. They are
 > found in the [``utils``](https://github.com/saltstack/salt/tree/develop/salt/utils)
-> directory. Take a few moments to skip this directory and its files. Don't
+> directory. Take a few moments to skim through this directory and its files. Don't
 > worry, from experience I can tell that it will take you months or years to
-> know where to look, in order to avoid reinventing wheels. Been there, done
-> that, got the "wheel reinventor" t-shirt. :-)
+> know where to look for the exact function you need, in order to avoid reinventing wheels.
+> Been there, done that, got the "wheel reinventor" t-shirt. :-)
 >
 > Moreover, remember that you can invoke execution functions from other execution
 > function, as described below.
