@@ -10,7 +10,7 @@ obscure language of its own: as I always like to say, to start automating
 all you need to know is YAML and Jinja, 3 rules each. For example, when you need
 a simple iteration you don't need to check the documentation and see _"what's
 that specific instruction that iterates through a list"_, but just a simple and
-straight Jinja loop, i.e., ``{%- for element in list %}``.
+straight Jinja loop, i.e., {% raw %}``{%- for element in list %}``{% endraw %}.
 However, there are particular cases where Jinja itself is not enough either, or
 it simply can become too complex and unreadable. When I need to deal with a
 complex task, I sometimes feel that _"I'd better write this in Python than
@@ -59,12 +59,14 @@ each and every one manually? As previously said, SLS is by default a smart
 combination of YAML and Jinja, so you can rewrite the equivalent SLS, as
 follows:
 
+{% raw %}
 ```jinja
 ip_addresses:
 {%- for i in range(5) %}
   - 10.10.10.{{ i }}
 {%- endfor %}
 ```
+{% endraw %}
 
 Even though in this particular example one could argue that it doesn't shrink
 the size massively, it certainly does when dealing with a huge amount of data!
@@ -187,12 +189,14 @@ easy](https://docs.saltstack.com/en/latest/ref/configuration/master.html#ext-pil
 In a similar way we can write our SLS Formulas purely in Python. For example,
 the following State SLS (taken from the [napalm-ntp-formula](https://github.com/saltstack-formulas/napalm-ntp-formula)):
 
+{% raw %}
 ```yaml
 oc_ntp_netconfig:
   netconfig.managed:
     - template_name: salt://ntp/templates/init.jinja
     - {{ salt.pillar.get('openconfig-system') }}
 ```
+{% endraw %}
 
 Can be rewritten, using the ``py`` Renderer:
 
@@ -386,11 +390,13 @@ as follows.
 The new ``ip_addresses.generate`` execution function can be called from any
 of the templating languages supported by Salt, for example Jinja:
 
+{% raw %}
 ```jinja
 {%- for addr in salt.ip_addresses.generate(length=3) %}
 IP Address {{ addr }}
 {%- endfor %}
 ```
+{% endraw %}
 
 The template above would be rendered as:
 
@@ -405,9 +411,11 @@ IP Address 10.10.10.2
 Using the ``ip_addresses.generate`` function we can rewrite the
 ``/etc/salt/pillar/ip_addresses.sls`` Pillar from the examples above as:
 
+{% raw %}
 ```yaml
 ip_addresses: {{ salt.ip_addresses.generate() }}
 ```
+{% endraw %}
 
 Invoking Execution Modules inside Formulas works in the exact same way.
 
