@@ -2,7 +2,7 @@
 layout: post
 title: Python development for infrastructure management using Salt
 subtitle: The overlooked side of Salt and some best practices
-bigimg: /img/python.jpg
+bigimg: /img/flexwing.jpg
 ---
 
 One of the (many) things I like about Salt is that it doesn't have an
