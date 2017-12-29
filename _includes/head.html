@@ -128,4 +128,46 @@
     ]
   }
   </script>
+
+  <script type="application/ld+json">
+  {
+    "@context":"http://schema.org",
+    "@type":"Book",
+    "name" : "Network Automation at Scale",
+    "author": {
+      "@type":"Person",
+      "name":"Mircea Ulinic, Seth House"
+    },
+    "url" : "https://www.cloudflare.com/network-automation-at-scale-ebook/",
+    "workExample" : [{
+      "@type": "Book",
+      "isbn": "9781491992494",
+      "bookEdition": "1st Edition",
+      "bookFormat": "http://schema.org/Hardcover",
+      "potentialAction":{
+      "@type":"ReadAction",
+      "target":
+        {
+          "@type":"EntryPoint",
+          "urlTemplate":"https://www.cloudflare.com/network-automation-at-scale-ebook/",
+          "actionPlatform":[
+            "http://schema.org/DesktopWebPlatform",
+            "http://schema.org/IOSPlatform",
+            "http://schema.org/AndroidPlatform"
+          ]
+        },
+        "expectsAcceptanceOf":{
+          "@type":"Offer",
+          "Price":0.00,
+          "priceCurrency":"USD",
+          "eligibleRegion" : {
+            "@type":"Country",
+            "name":"US"
+          },
+          "availability": "http://schema.org/InStock"
+        }
+      }
+    }]
+  }
+  </script>
 </head>
