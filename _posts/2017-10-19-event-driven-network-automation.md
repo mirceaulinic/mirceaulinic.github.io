@@ -5,6 +5,36 @@ subtitle: Using napalm-logs and Salt
 bigimg: /img/engine.jpg
 ---
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mirceaulinic.net/2017-10-19-event-driven-network-automation/"
+  },
+  "headline": "Event-driven network automation using napalm-logs and Salt",
+  "image": [
+    "https://mirceaulinic.net/img/engine.jpg"
+   ],
+  "datePublished": "2017-10-19T08:10:00+00:00",
+  "dateModified": "2017-10-19T08:10:00+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "Mircea Ulinic"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Mircea Ulinic",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mirceaulinic.net/img/avatar-icon.png"
+    }
+  },
+  "description": "Event-driven network automation using napalm-logs and Salt"
+}
+</script>
+
 One of the most common misconceptions is that network automation is *only* about
 configuration management. While this is indeed a very important milestone, it
 is not the ultimate achievement you want for your network. We inherit most of
