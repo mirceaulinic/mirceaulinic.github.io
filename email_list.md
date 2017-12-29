@@ -4,6 +4,20 @@ title: Email List
 subtitle: Event-driven network automation and orchestration
 ---
 
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Course",
+  "name": "Event-driven network automation and orchestration",
+  "description": "Event-driven network automation and orchestration course",
+  "provider": {
+    "@type": "Organization",
+    "name": "Mircea Ulinic",
+    "sameAs": "https://mirceaulinic.net/"
+  }
+}
+</script>
+
 Starting from January 2018, I will be running a free event-driven network
 automation and orchestration course. You only need to subscribe using the form
 below, and you'll receive the course directly into your inbox.
