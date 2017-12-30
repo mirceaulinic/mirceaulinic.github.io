@@ -1,0 +1,10 @@
+https://mirceaulinic.net/2017-12-19-salt-pure-python/
+https://mirceaulinic.net/2017-10-19-event-driven-network-automation/
+https://mirceaulinic.net/2017-07-06-napalm-install-formula/
+https://mirceaulinic.net/2017-05-24-salt-napalm-chatops/
+https://mirceaulinic.net/2017-04-14-cisco-xr-xml-agent-fun/
+https://mirceaulinic.net/2017-03-14-install-saltstack/
+https://mirceaulinic.net/2017-02-14-network-automation-tutorial/
+https://mirceaulinic.net/2016-12-15-configuration-management/
+https://mirceaulinic.net/2016-11-30-salt-carbon-released/
+https://mirceaulinic.net/2016-11-17-network-orchestration-with-salt-and-napalm/
