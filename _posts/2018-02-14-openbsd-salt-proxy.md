@@ -162,5 +162,5 @@ Conclusions
 
 I am still a novice when it comes to OpenBSD, I have plenty to learn, but it
 looks like the transition will be much smoother than I expected. I am already
-looking forward to the handover, and, hey, I will no longer be running
-[systemd](https://twitter.com/systemdsucks). :-)
+looking forward to the handover, and - most importantly - I will no longer be
+using [systemd](https://twitter.com/systemdsucks). :-)
