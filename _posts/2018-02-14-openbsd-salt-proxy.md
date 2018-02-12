@@ -6,8 +6,13 @@ subtitle: The beginning of the OpenBSD era
 
 As I have previously attempted several times in the past, I am (finally) very
 close to switch to OpenBSD, a more stable and reliable operating system that I
-like. Before starting to make the actual change on my work machine I thought
-about testing some of the tools I'm currently using and know what to expect.
+like. Before starting to make the actual change on my work machine, I started
+testing some of the tools I'm currently using and understand what are the
+expectations.
+In general I didn't encounter many issues, or when I did, I found the answers
+in the documentation (which is really great), or various forums. I didn't find
+however any questions regarding Proxy Minions on OpenBSD which is why I thought
+it might be helpful to share my experience.
 
 Installation and Startup
 ========================
@@ -129,9 +134,18 @@ local:
     True
 ```
 
+And the ``test`` Proxy Minion is then up (after accepting the key, i.e,,
+``salt-key -a test``):
+
+```bash
+# salt test system.get_system_time
+test:
+    09:37:11 PM
+```
+
 Extending the same to a (very) large number of Proxy Minions, you can easily
-manage the rc files and start the services using a state executed on the regular
-Minion:
+manage the rc files and start the services using a Salt State executed on the
+regular Minion:
 
 1. Using the [``file.managed``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.file.html#salt.states.file.managed)
    State function to generate the contents of the rc file for each Proxy, with its
