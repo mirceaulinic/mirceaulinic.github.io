@@ -7,8 +7,9 @@ subtitle: The beginning of the OpenBSD era
 As I have previously attempted several times in the past, I am (finally) very
 close to switch to OpenBSD, a more stable and reliable operating system that I
 like. Before starting to make the actual change on both personal and work
-computer, I started testing some of the tools I'm currently using and understand
+computer, I started testing some of the tools I'm currently using, and understand
 what are the expectations.
+
 In general I didn't encounter issues, or when I did, I found the answers
 in the documentation (which is really great), or various forums. I didn't find
 however any questions regarding Proxy Minions on OpenBSD which is why I thought
