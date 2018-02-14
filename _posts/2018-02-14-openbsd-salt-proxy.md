@@ -107,7 +107,8 @@ in cases like that:
 > # rcctl start snmpd6
 > ```
 
-Our needs are very similar in this case, so I did the following:
+Our needs are very similar in this case, so I did the following in order to
+configure the service for the Proxy having the Minion ID ``dummy``:
 
 ```bash
 # ln -s /etc/rc.d/salt_proxy /etc/rc.d/salt_proxy_dummy
