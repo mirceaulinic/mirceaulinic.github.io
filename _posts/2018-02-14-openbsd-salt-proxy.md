@@ -78,17 +78,20 @@ salt-proxy: error: salt-proxy requires --proxyid
 ```
 
 With these said, we need to send somehow the ``proxyid`` argument. Reading the
-``rcctl(8)`` manual, it explains what to do in cases like that:
+[``rcctl(8)`` manual](https://man.openbsd.org/rcctl), it explains what to do
+in cases like that:
 
 > The recommended way to run a second copy of a given daemon for a different
 > purpose is to create a symbolic link to its rc.d(8) control script:
 
-> # ln -s /etc/rc.d/snmpd /etc/rc.d/snmpd6 
-> # rcctl set snmpd6 status on 
-> # rcctl set snmpd6 flags -D addr=2001:db8::1234 
-> # rcctl start snmpd6
+```bash
+# ln -s /etc/rc.d/snmpd /etc/rc.d/snmpd6 
+# rcctl set snmpd6 status on 
+# rcctl set snmpd6 flags -D addr=2001:db8::1234 
+# rcctl start snmpd6
+```
 
-Our needs are very similar in this case, so I did the same:
+Our needs are very similar in this case, so I did the following:
 
 ```bash
 # ln -s /etc/rc.d/salt_proxy /etc/rc.d/salt_proxy_dummy
