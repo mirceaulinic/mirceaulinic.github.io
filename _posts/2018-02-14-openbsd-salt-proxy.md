@@ -57,8 +57,23 @@ Nothing different so far.
 Starting up the Proxy Minions
 =============================
 
-The Salt package for OpenBSD comes with the rc file for salt-proxy as well:
-``/etc/rc.d/salt_proxy``.
+The Salt package for OpenBSD comes with the rc file for salt-proxy as well,
+``/etc/rc.d/salt_proxy``:
+
+```bash
+#!/bin/sh
+#
+# $OpenBSD: salt_proxy.rc,v 1.1 2015/11/14 08:30:07 ajacoutot Exp $
+
+daemon="/usr/local/bin/salt-proxy -d"
+
+. /etc/rc.d/rc.subr
+
+pexp="/usr/local/bin/python2.7 ${daemon}${daemon_flags:+ ${daemon_flags}}"
+rc_reload=NO
+
+rc_cmd $1
+```
 
 While typically you run a single regular Minion on a given machine, it is very
 like that there are multiple Proxy processes. Additionally, the default Salt rc
@@ -121,7 +136,7 @@ I have managed to startup a Proxy Minion, but what about many? Executing the
 three commands above for each and every device is tedious and cannot scale very
 well. I thus have figured the following way:
 
-1. Have a separate rc file per Proxy, each having the daemon instruction
+1) Have a separate rc file per Proxy, each having the daemon instruction
    explicitly specifying its Minion ID:
 
 ``/etc/rc.d/salt_proxy_test`` (excerpt):
@@ -130,7 +145,7 @@ well. I thus have figured the following way:
 daemon="/usr/local/bin/salt-proxy -d --proxyid test"
 ```
 
-2. Start the service (using the regular Minion that controls the machine where
+2) Start the service (using the regular Minion that controls the machine where
    the Proxy processes are running):
 
 ```bash
@@ -152,10 +167,10 @@ Extending the same to a (very) large number of Proxy Minions, you can easily
 manage the rc files and start the services using a Salt State executed on the
 regular Minion:
 
-1. Using the [``file.managed``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.file.html#salt.states.file.managed)
+1) Using the [``file.managed``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.file.html#salt.states.file.managed)
    State function to generate the contents of the rc file for each Proxy, with its
    own Minion ID.
-2. Using the [``service.running``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.service.html#salt.states.service.running)
+2) Using the [``service.running``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.service.html#salt.states.service.running)
    State function start the service.
 
 These two steps would suffice to start an arbitrary number of Proxy Minions, and
