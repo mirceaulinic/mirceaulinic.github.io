@@ -100,8 +100,8 @@ in cases like that:
 > The recommended way to run a second copy of a given daemon for a different
 > purpose is to create a symbolic link to its rc.d(8) control script:
 
-> ln -s /etc/rc.d/snmpd /etc/rc.d/snmpd6 
 > ```bash
+> # ln -s /etc/rc.d/snmpd /etc/rc.d/snmpd6
 > # rcctl set snmpd6 status on 
 > # rcctl set snmpd6 flags -D addr=2001:db8::1234 
 > # rcctl start snmpd6
