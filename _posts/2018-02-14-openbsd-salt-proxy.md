@@ -101,12 +101,11 @@ in cases like that:
 > purpose is to create a symbolic link to its rc.d(8) control script:
 
 > ln -s /etc/rc.d/snmpd /etc/rc.d/snmpd6 
-
-> rcctl set snmpd6 status on 
-
-> rcctl set snmpd6 flags -D addr=2001:db8::1234 
-
-> rcctl start snmpd6
+> ```bash
+> # rcctl set snmpd6 status on 
+> # rcctl set snmpd6 flags -D addr=2001:db8::1234 
+> # rcctl start snmpd6
+> ```
 
 Our needs are very similar in this case, so I did the following:
 
@@ -136,41 +135,41 @@ I have managed to startup a Proxy Minion, but what about many? Executing the
 three commands above for each and every device is tedious and cannot scale very
 well. I thus have figured the following way:
 
-1) Have a separate rc file per Proxy, each having the daemon instruction
+1. Have a separate rc file per Proxy, each having the daemon instruction
    explicitly specifying its Minion ID:
 
-``/etc/rc.d/salt_proxy_test`` (excerpt):
+   ``/etc/rc.d/salt_proxy_test`` (excerpt):
+   
+   ```bash
+   daemon="/usr/local/bin/salt-proxy -d --proxyid test"
+   ```
 
-```bash
-daemon="/usr/local/bin/salt-proxy -d --proxyid test"
-```
-
-2) Start the service (using the regular Minion that controls the machine where
+2. Start the service (using the regular Minion that controls the machine where
    the Proxy processes are running):
 
-```bash
-# salt-call service.start salt_proxy_test
-local:
-    True
-```
-
-And the ``test`` Proxy Minion is then up (after accepting the key, i.e,,
-``salt-key -a test``):
-
-```bash
-# salt test system.get_system_time
-test:
-    09:37:11 PM
-```
+   ```bash
+   # salt-call service.start salt_proxy_test
+   local:
+       True
+   ```
+  
+   And the ``test`` Proxy Minion is then up (after accepting the key, i.e,,
+   ``salt-key -a test``):
+   
+   ```bash
+   # salt test system.get_system_time
+   test:
+       09:37:11 PM
+   ```
 
 Extending the same to a (very) large number of Proxy Minions, you can easily
 manage the rc files and start the services using a Salt State executed on the
 regular Minion:
 
-1) Using the [``file.managed``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.file.html#salt.states.file.managed)
+1. Using the [``file.managed``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.file.html#salt.states.file.managed)
    State function to generate the contents of the rc file for each Proxy, with its
    own Minion ID.
-2) Using the [``service.running``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.service.html#salt.states.service.running)
+2. Using the [``service.running``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.service.html#salt.states.service.running)
    State function start the service.
 
 These two steps would suffice to start an arbitrary number of Proxy Minions, and
