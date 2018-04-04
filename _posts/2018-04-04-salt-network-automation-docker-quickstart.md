@@ -105,7 +105,7 @@ services:
 
 Executing the Docker Compose file above (e.g., ``docker-compose up -d``), it
 will start two containers, and it will mount the volumes for the Pillar, States,
-and the extension modules directories. The Proxy Minion container requires the
+and the master/proxy configuration file. The Proxy Minion container requires the
 ``PROXYID`` environment variable, so the easiest way to send it to the container
 in the case would be thorugh a Makefile:
 
@@ -139,8 +139,8 @@ one for the ``dummy`` Proxy, as configured in the docker-compose file (service
 ``salt-master`` and ``salt-proxy``, respectively). As defined into the
 [``dummy_pillar.sls`` Pillar SLS 
 file](https://github.com/mirceaulinic/salt-netdev-docker/blob/master/pillar/dummy_pillar.sls),
-the ``dummy`` Proxy will use the [``dummy``](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.dummy.html)
-Proxy module - especially designed for testing.
+the ``dummy`` Proxy will use the [``dummy`` Proxy module](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.dummy.html)
+- specially designed for testing.
 
 We can notice that the containers are up and running:
 
