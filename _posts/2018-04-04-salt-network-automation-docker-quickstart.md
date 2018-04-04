@@ -134,6 +134,14 @@ Creating salt-proxy-dummy
 Creating salt-master ... done
 ```
 
+Executing the command above, it will start a container for the Master and another
+one for the ``dummy`` Proxy, as configured in the docker-compose file (service
+``salt-master`` and ``salt-proxy``, respectively). As defined into the
+[``dummy_pillar.sls`` Pillar SLS 
+file](https://github.com/mirceaulinic/salt-netdev-docker/blob/master/pillar/dummy_pillar.sls),
+the ``dummy`` Proxy will use the [``dummy``](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.dummy.html)
+Proxy module - especially designed for testing.
+
 We can notice that the containers are up and running:
 
 ```bash
