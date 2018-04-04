@@ -22,8 +22,8 @@ The Salt Master container
 -------------------------
 
 It is a good practice to ensure that there is no version mismatch between the
-Master and the Minions connected. So I built an image which you can just use
-and spawn a new container. The image is available at 
+Master and the Minions connected. So I built an image which you can use
+and start a container for the Salt Master. The image is available at 
 [mirceaulinic/salt-master](https://hub.docker.com/r/mirceaulinic/salt-master/)
 and can be used straight away:
 
