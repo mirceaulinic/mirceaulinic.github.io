@@ -183,8 +183,9 @@ devices from elsewhere, you may want to read the
 and eventually configure other network(s) depending on your own use case.
 
 Additionally, remember to update the Pillar Top file (found under
-``pillar/top.sls``) before starting a container for a Proxy Minion with another
-ID than ``dummy``, as well as the appropriate Pillar SLS file(s).
+[``pillar/top.sls``](https://github.com/mirceaulinic/salt-netdev-docker/blob/master/pillar/top.sls))
+before starting a container for a Proxy Minion with another ID than ``dummy``,
+as well as the appropriate Pillar SLS file(s).
 
 I put these together hoping to ease the first steps when getting started with
 Salt. While my playground may equally be used in a production environment (up to
