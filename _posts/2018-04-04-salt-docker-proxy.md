@@ -42,6 +42,7 @@ To get into the container for the Salt Master you can execute:
 $ docker exec -it salt-master bash
 root@76cdde4d645d:/etc/salt#
 ```
+
 The Salt Proxy Minion containers
 --------------------------------
 
