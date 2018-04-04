@@ -140,7 +140,7 @@ one for the ``dummy`` Proxy, as configured in the docker-compose file (service
 [``dummy_pillar.sls`` Pillar SLS 
 file](https://github.com/mirceaulinic/salt-netdev-docker/blob/master/pillar/dummy_pillar.sls),
 the ``dummy`` Proxy will use the [``dummy`` Proxy module](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.dummy.html)
-- specially designed for testing.
+, specially designed for testing.
 
 We can notice that the containers are up and running:
 
