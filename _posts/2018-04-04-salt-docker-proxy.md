@@ -182,7 +182,7 @@ devices from elsewhere, you may want to read the
 [Docker Compose Networking documentation](https://docs.docker.com/compose/networking/)
 and eventually configure other network(s) depending on your own use case.
 
-Similarly, remember to update the Pillar Top file (found under
+Additionally, remember to update the Pillar Top file (found under
 ``pillar/top.sls``) before starting a container for a Proxy Minion with another
 ID than ``dummy``, as well as the appropriate Pillar SLS file(s).
 
@@ -191,6 +191,6 @@ Salt. While my playground may equally be used in a production environment (up to
 an extent), I definitely enourage you to consider disabling the 
 [``open_mode``](https://docs.saltstack.com/en/latest/ref/configuration/master.html#open-mode)
 before doing so, as well as other security aspects. As always, you are welcome
-[hit me up on Twitter](twitter.com/mirceaulinic), or on the
+[hit me up on Twitter](https://twitter.com/mirceaulinic), or on the
 [networktocode](https://networktocode.slack.com) and
 [SaltStack Community](https://saltstackcommunity.slack.com) Slack channels.
