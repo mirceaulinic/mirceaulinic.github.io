@@ -173,7 +173,7 @@ directory, mounted to the container:
 [https://github.com/mirceaulinic/salt-netdev-docker/blob/master/states/test.sls](https://github.com/mirceaulinic/salt-netdev-docker/blob/master/states/test.sls)
 (as defined in the Docker Compose file).
 
-One important thing to keep in mind is that Docker Compose by default will
+One important detail to keep in mind is that Docker Compose by default will
 create a dedicated network for the project (the project name defaulting to the
 directory name). In this case, as the directory name is ``salt-netdev-docker``
 (if cloned from my repo), the network will be named ``saltnetdevdocker_default``
