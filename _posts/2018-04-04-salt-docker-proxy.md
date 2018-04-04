@@ -57,7 +57,7 @@ $ docker run -d --name proxy-device1 -e PROXYID=device1 -e LOG_LEVEL=debug -it m
 ```
 
 The command above, when executed, will start a container with the name
-``proxy-device1` using the image ``mirceaulinic/salt-proxy:2017.7.5`` to which
+``proxy-device1`` using the image ``mirceaulinic/salt-proxy:2017.7.5`` to which
 we send the environment variables ``PROXYID``, which is the ID of the Proxy
 Minion running in this Docker container (which many be different than the name
 of the container itself), and ``LEVEL_LOG`` - optional - is the logging level.
