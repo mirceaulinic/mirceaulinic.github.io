@@ -186,7 +186,11 @@ and eventually configure other network(s) depending on your own use case.
 Additionally, remember to update the Pillar Top file (found under
 [``pillar/top.sls``](https://github.com/mirceaulinic/salt-netdev-docker/blob/master/pillar/top.sls))
 before starting a container for a Proxy Minion with another ID than ``dummy``,
-as well as the appropriate Pillar SLS file(s).
+as well as the appropriate Pillar SLS file(s). The dependencies for NAPALM are
+already installed into the ``salt-proxy`` image, so you should be able to start
+a [NAPALM](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.napalm.html)
+as well as a [Junos](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.junos.html)
+Proxy Minion.
 
 I put these together hoping to ease the first steps when getting started with
 Salt. While my playground may equally be used in a production environment (up to
