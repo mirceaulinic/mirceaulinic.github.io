@@ -126,7 +126,7 @@ Inside the ``salt-netdev-docker`` we only need to execute the Makefile, passing
 the ``PROXYID`` variable with the ID of the Minion we want to start:
 
 ```bash
-$ make PROXYID=dummy start
+$ make PROXYID=dummy
 docker-compose up -d
 Creating salt-proxy-dummy ...
 Creating salt-master ...
