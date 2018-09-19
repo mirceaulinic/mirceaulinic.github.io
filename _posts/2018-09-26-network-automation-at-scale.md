@@ -9,7 +9,7 @@ scale deployment - either servers or network devices, but not limited to.
 While on a server one can install the regular Minion directly, and there are
 already many well known success stories in the industry, unfortunately, we don't
 have the same flexibility on traditional network gear, as the network operating
-systems are generally extremely limited (to the end user).
+systems are generally extremely limited (to the end user) and closed.
 
 For this reasoning, we have the Salt Proxy Minion, which is a process capable
 to run anywhere, as long as: 1. it is able to contact the Master, and 2. it
@@ -35,13 +35,13 @@ book published at O'Reilly.
 
 In the examples below, I will assume that you have a source of truth (either a
 database which you can use to ingest data into Salt via the External Pillar, or
-simply a SLS Pillar as a plain file, etc.). In other words, I will
+simply a SLS Pillar as plain file YAML / JSON / etc.). In other words, I will
 assume that under the ``devices`` (can be any other name, of course) Pillar
 key you have the data for the list of (network) devices to be managed.
 
 Similarly, to fully understand the examples, make sure you have understood how
-the location of the files suggested relates to the ``file_roots`` option on the
-Master config. All the examples assume that you can have, at least, the path
+the location of the files suggested relates to the ``file_roots`` option in the
+Master config. All the examples assume that you can have, at least, the directory
 ``/etc/salt/states`` listed as one of the file roots in the ``base``
 environment, e.g.,
 
@@ -53,7 +53,7 @@ file_roots:
 ```
 
 This option is important for the Salt fileserver to access the files, including
-the States I will be using.
+the States I will be using as examples.
 
 A Partial Solution
 ==================
@@ -69,7 +69,7 @@ find yet a multiprocessing solution (SSH-based Proxies are still limited to
 multithreading - the root cause goes somewhere into a library named Paramiko,
 and the subject is too broad to explore it right now). This is the price paid
 to receive the blessing of the event-driven automation, PCI compliance for free,
-a very flexible and powerful templating language and so on.
+a very flexible and powerful templating language and many others.
 
 Anyway, either 60MB or 80MB of memory is not that much, and RAM is incredibly
 cheap nowdays. For example, if your network has 100 nodes, you only need 8GB of
