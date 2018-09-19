@@ -12,7 +12,7 @@ have the same flexibility on traditional network gear, as the network operating
 systems are generally extremely limited (to the end user).
 
 For this reasoning, we have the Salt Proxy Minion, which is a process capable
-to run anywhere, as long as: i. it is able to contact the Master, and ii. it
+to run anywhere, as long as: 1. it is able to contact the Master, and 2. it
 can connect to the remote network device. One Proxy Minion per device. The theory
 sounds good so far.
 
@@ -22,7 +22,7 @@ The challenge
 As mentioned above, and it is good to remember that for one device managed, you
 need to start up a Proxy Minion process. The reader will immediately notice that
 for 1000s or network devices you need to start and maintain 1000s of processes.
-And is not particularly trivial... when you do this manually. :-)
+And this not particularly trivial... when you do it manually. :-)
 But, as you'll see below, with the right approach, it can be reduced very easily
 to a 10 liner Jinja and YAML with very little effort.
 
@@ -38,6 +38,22 @@ database which you can use to ingest data into Salt via the External Pillar, or
 simply a SLS Pillar as a plain file, etc.). In other words, I will
 assume that under the ``devices`` (can be any other name, of course) Pillar
 key you have the data for the list of (network) devices to be managed.
+
+Similarly, to fully understand the examples, make sure you have understood how
+the location of the files suggested relates to the ``file_roots`` option on the
+Master config. All the examples assume that you can have, at least, the path
+``/etc/salt/states`` listed as one of the file roots in the ``base``
+environment, e.g.,
+
+```yaml
+file_roots:
+  base:
+    - /etc/salt
+    - /etc/salt/states
+```
+
+This option is important for the Salt fileserver to access the files, including
+the States I will be using.
 
 A Partial Solution
 ==================
@@ -57,23 +73,26 @@ a very flexible and powerful templating language and so on.
 
 Anyway, either 60MB or 80MB of memory is not that much, and RAM is incredibly
 cheap nowdays. For example, if your network has 100 nodes, you only need 8GB of
-RAM, which - I assume any decent server should have (as a matter of fact, my
+RAM, which - I assume any decent server should have. As a matter of fact, my
 old MacBook has 16GB RAM which could easily be used to automate a small to
-medium sized network, and I do know global networks much smaller than that, i.e.,
-my personal computer would suffice to manage their entire infrastructure).
+medium sized network, and I do know global networks much smaller than that; in
+other words, my personal computer would suffice to manage their entire
+infrastructure. :-)
 
 Ingredients
 -----------
 
 1. The regular Minion to be installed and running on the server where the
-   processes will be running.
+   Proxy processes will be running.
 2. (Derived from 1) Executing ``salt-call pillar.get devices`` on the regular
-   Minion provides the list of devices to be managed.
+   Minion provides the list of devices to be managed. Again, this is up to you
+   in what form, or from where to load this data (i.e., Pillar SLS file(s) or
+   External Pillar, e.g., CSV file, SQL database, HTTP API etc.)
 3. The 
    [``service.running``](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.service.html#salt.states.service.running)
-   State function.
+   State function -- check the documentation.
 
-Leveraging the power of the SLS, the state is as simple as:
+Leveraging the power of the SLS, the State is as simple as:
 
 ```sls
 {%- for device in pillar.devices %}
@@ -127,7 +146,7 @@ devices:
 Therefore, the ``my-server`` Minion will have the following data available:
 
 ```bash
-# salt 'my-server' pillar.get devices
+$ salt 'my-server' pillar.get devices
 my-server:
     - netdev1
     - netdev2
@@ -137,7 +156,7 @@ Executing ``salt-call state.apply start_proxies`` on the regular Minion, or
 from the Master, to invoke the ``start_proxies`` State earlier defined:
 
 ```bash
-salt 'my-server' state.apply start_proxies
+$ salt 'my-server' state.apply start_proxies
 my-server:
 ----------
           ID: salt-proxy@netdev1
@@ -176,16 +195,17 @@ Distributed Proxies
 
 While running all the Proxies on a single server can work fine, it does have
 the obvious limitation that you can't run 1000s of processes on the same box,
-for a variety of reasons: not enough memory, single point of failure, ports,
-and so on.
+for a variety of reasons: not enough memory, single point of failure, limited
+number of available ports, and so on.
 
-The approach above can be used to distribute the Proxies on multiple servers
-(not just one), by inserting an additional check into the ``start_proxies.sls``
-State. This depends very much on your environmental constraints, the type of
+The same approach as above can be used to distribute the Proxies on multiple
+servers (not just one), by either inserting an additional check into the
+``start_proxies.sls`` State, or play with the Pillar data distributed to each
+Minion. This depends very much on your environmental constraints, the type of
 the network, density of devices, the type of connection, and many other angles.
 There is no general solution, it _really_ depends on you to figure out what's
-the most suitable way for your network(s) to distribute the Proxy processes on
-what machines and where.
+the most suitable way for your network(s) and how to distribute the Proxy
+processes on what machines and where.
 
 I will however provide a couple of very quick examples. It pretty much boils
 down to what Minions (servers) you spread the Pillar data.
@@ -195,8 +215,8 @@ A static, probably easier to follow approach
 
 Consider we have two servers, and we want to have the Proxies distributed as
 follows: ``netdev1``, ``netdev2``, and ``netdev3`` running on ``server1``, while
-``netdev4`` and ``netdev5`` on ``server2``. In that case, we could have the Top
-file below:
+``netdev4`` and ``netdev5`` on ``server2``. In that case, we could have the
+Pillar Top file below:
 
 ```yaml
 base:
@@ -231,8 +251,8 @@ similar output as previously.
 A more dynamic example
 ----------------------
 
-While the above is sufficient to understand the concept is certainly not the way
-to go. First of all, you might want a smarter way to have the Pillar available
+While the above is sufficient to understand the concept, I wouldn't say it the
+way to go. First of all, you might want a smarter way to have the Pillar available
 everywhere than a static Top file. Secondly, the Pillar file itself doesn't scale
 when it's static. A good solution is having a single Pillar SLS (surely, an
 [External Pillar](https://docs.saltstack.com/en/latest/topics/development/external_pillars.html)
@@ -248,17 +268,23 @@ base:
     - proxies_on_servers
 ```
 
-That configuration in the Pillar Top file instructs Salt to make the data
-rendered for the ``proxies_on_servers`` file and make it available to any Minion
-whose ID starts with ``server``.
+That configuration in the Pillar Top file instructs Salt to render the
+``proxies_on_servers.sls`` file and make it available to any Minion whose ID
+starts with ``server``.
+
+Consider the following Pillar SLS file:
 
 ``/etc/salt/pillar/proxies_on_servers.sls``
 ```sls
 {%- set proxy_count = 100 %}
 {%- set server_id = opts.id.replace('server', '') | int %}
+{#
+    get the ID of the server from the Minion ID
+    server_id is therefore an integer
+#}
 {%- set proxy_start = (server_id - 1) * proxy_count %}
 devices:
-{%- for proxy_id in range(proxy_count) %}
+{%- for proxy_id in range(1, proxy_count+1) %}
   - netdev{{ proxy_start + proxy_id }}
 {%- endfor %}
 ```
@@ -268,6 +294,31 @@ State. It is very custom for the particular case I exemplified earlier, the ID
 of the server (the ``server_id`` variable) being extracted from the Minion ID
 (``opts.id``). The ``for`` loop constructs the list of devices, given an
 arbitrary maximum number of Proxy Minions we start per server, e.g., 100.
+
+Using the logic above, the Pillar data for ``server1`` becomes a list of devices
+from 1 to 100, while the Pillar data for ``server2`` is the list of devices
+from 101 to 200, and so on:
+
+```bash
+# salt server1 pillar.get devices
+server1:
+     - netdev1
+     - netdev2
+     ... snip ...
+     - netdev99
+     - netdev100
+#
+# salt server2 pillar.get devices
+server2:
+    - netdev101
+    - netdev101
+    ... snip ...
+    - netdev199
+    - netdev200
+```
+
+As mentioned above, the State SLS doesn't need to change, as the automation
+logic is the same, decoupled from data.
 
 Containers
 ==========
@@ -297,29 +348,43 @@ example I used the Docker image I mentioned in one of my previous
 [posts](https://mirceaulinic.net/2018-04-04-salt-network-automation-docker-quickstart/),
 [mirceaulinic/salt-proxy](https://hub.docker.com/r/mirceaulinic/salt-proxy/). As
 the image I built expects the ``PROXYID`` environment variable, the state
-configures it with the name of the network device (Proxy Minion ID).
+configures it with the name of the network device (Proxy Minion ID). The file
+``/etc/salt/proxy`` is mounted to the same path inside the container.
 
 All of the above assume that the targeted servers have all the dependencies for
 the [``docker_container`` State module](https://docs.saltstack.com/en/latest/ref/states/all/salt.states.docker_container.html)
 properly installed.
 
+You can probably implement the same using other flavours of containers, e.g.,
+LXD, or other virtualisation systems.
+
 Kubernetes
 ==========
 
-In the previous paragraph Salt would be the 
+In-line with the previous paragraphs, Simon [TODO] wrote a very nice blog post
+explaining how to manage your network using Kuberetes to orchestrate Proxy
+Minions as Docker containers. Kubernetes is similarly built for large scale
+applications, and there are plenty of good resources and blog posts on how to
+achieve that.
 
 Cloud
 =====
 
 No servers? No problem! I heard of several large organisations that have their
-entire automation platform moved into the cloud. Salt has very good support to
-help you manage cloud hosts from a variety of providers, including: Amazon AWS,
-DigitalOcean, Linode, Azure, HP Cloud, Google Compute Engine, etc.
+entire automation platform moved into the cloud. I am not going to discuss
+whether this is a good idea, as it can be very subjective, and sometimes may
+even be a great idea!
+
+Salt has very good support to help you manage cloud hosts from a variety of
+providers, including: Amazon AWS, Digital Ocean, Linode, Azure, HP Cloud,
+Google Compute Engine, etc.
 
 The configuration is very easy; to have the right background, you can start
 reading from [https://docs.saltstack.com/en/latest/topics/cloud/](https://docs.saltstack.com/en/latest/topics/cloud/).
+
 In this particular case I will be using [Linode](https://www.linode.com/) as my
 provider of choice - check the [Salt Cloud documentation for Linode](https://docs.saltstack.com/en/latest/topics/cloud/linode.html).
+
 I have added the following configuration:
 
 ``/etc/salt/cloud``
@@ -344,8 +409,8 @@ linode_minion1:
   location: London, England, UK
 ```
 
-I have picked the smallest possible linode (Nanode 1GB) that would suffice to be
-able to manage several network devices.
+I have picked the smallest possible linode (Nanode 1GB) that would suffice to
+manage several network devices.
 
 Executing: ``salt-cloud -p linode_minion1 server1`` would bring up the new VM.
 When executing the command from the Salt Master, the key of ``server1`` will
@@ -361,11 +426,16 @@ base:
     - start_proxies
 ```
 
+Having ``start_proxies.sls`` referenced in the State Top file means that the
+State defined earlier is part of the Highstate.
+
 With this simple setup you can start up and manage multiple network devices
 without having to worry about maintaining your own infrastructure. This can be
 easily scaled to hundreds / thousands VMs managed by the Salt Cloud by moving
 the Cloud Profiles (i.e., the configuration from ``/etc/salt/cloud.profiles.d/``)
-into the Pillar of a Salt Minion (see [https://docs.saltstack.com/en/latest/topics/cloud/config.html#pillar-configuration](https://docs.saltstack.com/en/latest/topics/cloud/config.html#pillar-configuration)) and the [``cloud`` ](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.cloud.html)
+into the Pillar of a Salt Minion (see
+[https://docs.saltstack.com/en/latest/topics/cloud/config.html#pillar-configuration](https://docs.saltstack.com/en/latest/topics/cloud/config.html#pillar-configuration))
+and the [``cloud`` ](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.cloud.html)
 Execution Module which can be used to spin as many instances as needed.
 
 Which one is the best
@@ -377,4 +447,5 @@ engineers might have though about other (better) implementations. Which one is
 the best? It depends: this is multi-dimensional problem that doesn't have one
 single good answer - you have to evaluate which suits the best your needs, and
 fulfils the requirements. If you have another approach and you are happy to share
-it with the community, please do write about it, or contact me to discuss!
+it with the community, please do write about it, or contact me to discuss and I
+would gladly add it here.
