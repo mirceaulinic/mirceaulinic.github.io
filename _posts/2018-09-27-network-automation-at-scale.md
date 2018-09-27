@@ -102,7 +102,7 @@ Startup the Proxy for {{ device }}:
     - name: salt-proxy@{{ device }}
 {%- endfor %}
 ```
-{% envraw %}
+{% endraw %}
 
 Save this into an SLS file, say ``/etc/salt/states/start_proxies.sls``, then all
 the Proxies can be started by simply executing
