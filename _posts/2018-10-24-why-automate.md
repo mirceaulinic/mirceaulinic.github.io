@@ -207,6 +207,35 @@ Besides, you can actually start moving in before being 100% ready! ;-)
 
 Please be patient, invest time, hire more and 
 
+Waiting for the "best" tool to be built
+=======================================
+
+Are you waiting for them to build themselves? Knock-knock, this is not
+science-fiction, this is real life here. WE build the tools, and by _we_ I'm
+including you too.
+
+Besides: there's no such thing as "best" tool - there are simply tools good
+to solve a particular set of challenges, and others that perfectly resolve a
+different set of challenges - and they may eventually overlap (or maybe not).
+This is not a discussion about the tools, the most important is for automation
+to happen!
+
+(_Note_: I have initially worded the phrase above as "the most important is for
+automation to happen, in whatever way", but I wasn't happy with this: no, not
+in any form, it's important to get things right, and, in your own interest and
+sanity don't reinvent the wheel. My recommendation is to use a widely adopted
+framework. Personally, I have a bias towards Salt, as it's by far the most
+complete and flexible I've worked with, but use whatever makes your
+environment happy, and reduces your boring workload.)
+
+ *None* of the existing tools would ever fit perfectly and entirely your own
+environment and solve all your needs over night. I'm sorry if that's surprising
+you, but that's not the case today, and it will never be: you will have to
+extend their capabilities and adapt them to your own needs; eventually,
+whenever possible, it would very nice to give back to the community and open
+source bits of your work. This is the way that is proven to produce the quickest
+results for yourself, and help driving the community efforts at the same time.
+
 Invest in people
 ================
 
