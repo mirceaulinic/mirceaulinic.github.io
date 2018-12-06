@@ -5,10 +5,10 @@ title: Do we really need network automation?
 
 In my mind, especially after seeing how automation massively helped one of the
 largest global networks (Cloudflare - my current employer), I simply cannot
-conceive that a network can run reliably without a form of automation. Yet there
-still are plenty of examples of network running (often with major outages)
-without anything at all, and reluctant to start adopting automation
-methodologies.
+conceive that a network can run reliably without a form of automation.
+However, there still are plenty of examples of networks running (often with
+major outages) without any automation at all, yet reluctant to start adopting
+automation methodologies.
 
 I have debated the subject at many conferences and meetups, and I heard a
 variety of weak arguments against automation, or a form of anxiety caused by
@@ -83,7 +83,34 @@ investment, it probably means that the network plays a critical role within the
 organisation. With this in mind, it is probably safe to assume that the
 reliability and the performances of this company highly depend on the network.
 In other words, the better your infrastructure, and implicitly the network, the
-better regarded is the company and 
+better regarded is your company going to be, and the customers are certainly
+going to notice that. I can give an example from the company I am currently
+working for, Cloudflare: before I joined, customers, for good reasons, were
+always complaining about the quality of service and frequently experiencing
+service degradation. Even though this was due to external causes (in particular,
+extremely poor performance of the transit providers), customers don't care about
+that: they pay you to offer them good services, otherwise they'll go to your
+competitors, whatever would be your reasons. In our case, the reasoning was the
+low speed of reaction and the scale to manually perform configuration changes
+when having to deal with external factors.
+Building an automation logic that intelligently reroutes the traffic, and 
+applies various other configuration changes as the business logic requires,
+immediately after the external factors are detected. This is something that
+humans aren't able to perform  manually, especially when the configuration
+changes have to be applied in tens of places simultaneously. In fact, we've seen
+the results very quickly, and the number of customers on-boarded took off, while
+the amount of support tickets due to network issues just dropped.
+
+*Disclaimer*: I am not speaking in the name of my employer; similarly, I have
+not been told / paid / whatever to write these: I'm trying to use this as an
+example out of my own experience: to me, it was an incredible experience and
+opportunity to have this impact and give a helping hand with this.
+
+The more reliable and flexible network we build, the more customers are going 
+to trust your company, and your company is going to trust the network. Currently
+that's not that case with most networks: in fact, when something goes wrong, the
+famous "it's always the network" tends to be accurate. We need to do better than
+this, we can do better than this, we have all the resources to do so.
 
 Everyone needs to learn to code
 ===============================
@@ -175,7 +202,7 @@ of other factors. But one thing is for sure: they will both co-exist, and
 enable us to focus on the most important issues, that the machine is unable to
 deal with, allowing engineers to practice engineer work.
 
-Another fundamental false assumption is that jobs in the networking space would
+Another fundamentally false assumption is that jobs in the networking space would
 eventually evolve in such a way that only experts in both networking and
 software simultaneously would have their place. With the risk of being terribly
 brutal, I find this assumption ridiculous. Out of experience, it's incredibly
@@ -189,23 +216,25 @@ side - at the end of the day, it's an investment in your own skills, and
 widening your view, and who knows when you might actually give a helping hand
 and pleasantly surprise your colleagues. :-)
 
-Another argument is the continuous grow of the Internet and demand: TODO!!!
-more work, more jobs etc.
-
-I hope it's pretty clear that in fact we will require many more jobs in the
-networking space: while for 
+Another argument is the continuous growth of the Internet - with all these
+mobile apps and services connected through the Internet it is not surprise that
+the traffic levels are increasing much faster than ever before. I'm not telling
+you a secret with this, you probably know these details very well already; I'm
+taking this chance to emphasise our role in this machinery TODO.
 
 Quick results
 =============
 
-I will start with an example from the real world: when starting a new
-construction, do you expect to move in your house or apartment complex
-immediately after starting the building process? The same goes with automation:
-think about it as a construction site - you may not see the results and the
-benefits immediately, but when it's done, it's cosy to sit inside than outside.
-Besides, you can actually start moving in before being 100% ready! ;-)
+I will start with an example from the real world: when starting to build a new
+house, do you expect to move in immediately after starting the building it? The
+same goes with automation: think about it as a construction site - you may not
+see the results and the benefits immediately, but when it's done, it's so much
+better to sit inside than outside. Besides, you can actually start moving in
+before being 100% ready! ;-)
 
-Please be patient, invest time, hire more and 
+Please be patient, invest time, hire more people that have experience with
+writing software - even though they may not have much experience in the
+networking space, they'll learn.
 
 Waiting for the "best" tool to be built
 =======================================
@@ -214,9 +243,9 @@ Are you waiting for them to build themselves? Knock-knock, this is not
 science-fiction, this is real life here. WE build the tools, and by _we_ I'm
 including you too.
 
-Besides: there's no such thing as "best" tool - there are simply tools good
-to solve a particular set of challenges, and others that perfectly resolve a
-different set of challenges - and they may eventually overlap (or maybe not).
+Besides: there's no such thing as "best" tool - there are simply tools that are
+good to solve a particular set of challenges, and others that perfectly resolve
+a different set of challenges - and they may eventually overlap (or maybe not).
 This is not a discussion about the tools, the most important is for automation
 to happen!
 
@@ -225,8 +254,8 @@ automation to happen, in whatever way", but I wasn't happy with this: no, not
 in any form, it's important to get things right, and, in your own interest and
 sanity don't reinvent the wheel. My recommendation is to use a widely adopted
 framework. Personally, I have a bias towards Salt, as it's by far the most
-complete and flexible I've worked with, but use whatever makes your
-environment happy, and reduces your boring workload.)
+complete and flexible I've worked with, but you should use whatever makes your
+environment happy, i.e., solves *all* your requirements.)
 
  *None* of the existing tools would ever fit perfectly and entirely your own
 environment and solve all your needs over night. I'm sorry if that's surprising
@@ -235,9 +264,9 @@ extend their capabilities and adapt them to your own needs; eventually,
 whenever possible, it would very nice to give back to the community and open
 source bits of your work. This is the way that is proven to produce the quickest
 results for yourself, and help driving the community efforts at the same time.
-
-Invest in people
-================
-
-Nevertheless it's all about people. Yes, the technology and the tooling involved
-in the process are definitely important 
+Have a meeting with your team and evaluate your needs; put together a list of
+requirements, then investigate which automation framework would suit your needs
+best. But spend time with that, analyse carefully, and always listen to your
+network. It doesn't matter that I'm a Salt fan, it doesn't matter if your best
+friend is an Ansible fan: all it matters is which one suits you the best, and,
+as I already said, the automation to happen!
