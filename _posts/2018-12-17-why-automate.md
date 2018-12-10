@@ -104,7 +104,10 @@ the amount of support tickets due to network issues just dropped.
 *Disclaimer*: I am not speaking in the name of my employer; similarly, I have
 not been told / paid / whatever to write these: I'm trying to use this as an
 example out of my own experience: to me, it was an incredible experience and
-opportunity to have this impact and give a helping hand with this.
+opportunity to give a helping hand with this, and seeing the results and the
+positive impact on the business, as in terms of revenue, customer satisfaction,
+etc. Nevertheless, there are many other factors as well, but that's beyond the
+purpose of this post.
 
 The more reliable and flexible network we build, the more customers are going 
 to trust your company, and your company is going to trust the network. Currently
