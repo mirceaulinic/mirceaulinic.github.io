@@ -222,19 +222,50 @@ the traffic levels are increasing much faster than ever before. I'm not telling
 you a secret with this, you probably know these details very well already; I'm
 taking this chance to emphasise our role in this machinery TODO.
 
+### The CLI is dead
+
+I am not sure what are the origins of this myth - perhaps vendors trying to sell
+new products, or just the same old features branded under a fancy label, perhaps
+overly excited fanboys, but hear me out: the CLI is not dead - I am still using
+it, you are still using it, we will continue using it. I have initially
+understood this sentence as a metaphor interpreted as "we are not going to
+depend massively on the native CLI" - which potentially, ideally, would be true.
+But I was wrong: I was surprised to find out that the projected "expectations"
+should be that future devices would eventually be delivered without any CLI at
+all.
+
+We inherit the automation methodologies from the server side, we are barely
+following what they did decades ago. Did you hear any story about Debian,
+OpenBSD, or another Unix distribution dropping their CLI because there are
+automation tools allowing remote execution without requiring CLI? You probably
+didn't, simply because that's not going to ever happen. :-)
+
+I expect us - and hope - that we're going to use less and less the CLI, and
+steadily migrate to the automaton tools we'll eventually have in place. But,
+between this, and assuming that we'll suddenly get rid of the CLI completely,
+is just a fairytale with unicorns. That's even more ridiculous when one of the
+vendors largely trumpeting this out, Cisco, still doesn't provide a reliable
+API, particularly on some platforms such as Cisco IOS, and the CLI remains the
+only option you can actually use - also for automation, sadly.
+
 Quick results
 =============
 
 I will start with an example from the real world: when starting to build a new
-house, do you expect to move in immediately after starting the building it? The
+house, do you expect to move in immediately after starting to build it? The
 same goes with automation: think about it as a construction site - you may not
 see the results and the benefits immediately, but when it's done, it's so much
-better to sit inside than outside. Besides, you can actually start moving in
-before being 100% ready! ;-)
+better to stay inside than outside. Besides, you can actually start moving in
+before it's 100% ready! ;-)
 
 Please be patient, invest time, hire more people that have experience with
 writing software - even though they may not have much experience in the
-networking space, they'll learn.
+networking space, they'll learn. At the same time, your network engineers might
+be interested to learn software; give them time, invest in them, sign them up
+to trainings and start with the programming basics. Even though it may take a
+long time, or simply they'll never write hardcore software, if they have an
+interest in this direction, it's good to have a background and an understanding
+of what's happening under the hood.
 
 Waiting for the "best" tool to be built
 =======================================
