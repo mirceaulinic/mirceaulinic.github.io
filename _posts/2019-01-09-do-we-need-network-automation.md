@@ -71,7 +71,9 @@ running a command manually, i.e., automatic BGP prefix limit update when the
 neighbours breach the existing limits, automatic Jira tickets raised when the
 BGP password is incorrect, automatic emails sent to transit providers on high
 service degradation due to packet loss, etc. You can similarly implement and
-automate all of these for more reliable, stable, and self-resilient networks.
+automate all of these, and many, many others for more reliable, stable, and
+self-resilient networks.
+
 This is what network automation is all about.
 
 Automation is a just a fancy thing to be in-line with the rest of the tech
@@ -109,47 +111,66 @@ positive impact on the business, as in terms of revenue, customer satisfaction,
 etc. Nevertheless, there are many other factors as well, but that's beyond the
 purpose of this post.
 
-The more reliable and flexible network we build, the more customers are going 
-to trust your company, and your company is going to trust the network. Currently
-that's not that case with most networks: in fact, when something goes wrong, the
-famous "it's always the network" tends to be accurate. We need to do better than
-this, we can do better than this, we have all the resources to do so.
+The more reliable and flexible is your network, the more customers are going 
+to trust your company. Currently that's not that case with most networks: in
+fact, when something goes wrong, the famous "it's always the network" tends to
+be accurate. We need to do better than this, we can do better than this, we
+have all the resources to do so.
 
 Everyone needs to learn to code
 ===============================
 
 This is one of the weakest arguments against automation I've heard. No, not
-everyone has to learn to code. At most your toolset might change and might be
+everyone has to learn to code. At most, your toolset might change and might be
 exposed to new a slightly new world. Eventually, instead of CLI command X, you
 might execute the CLI command Y, and that's pretty much it -- but the effect of
 what the command does is the key here: it goes without saying that there'll
-forever be a requirement for engineers that have to deeply understand the effect
-from a networking perspective. Even more, if we think that the new command Y
-does a lot more then the previous command X. Providing access to someone that
-doesn't fully understand the implications, may lead to disastrous results.
+forever be a requirement for engineers that have to deeply understand the
+effects of deploying a change - be it local or global across your network - 
+from a networking perspective. We need an even stronger background when you
+think that the new command Y does a lot more then the previous command X (from
+my previous example). Providing access to someone that doesn't fully understand
+the implications, may lead to disastrous results.
 
 We inherit most of the methodologies from the system side. If you look into the
 structure of the system administration teams, you'll find out that they are
-usually divided (but not a hard split) into engineers that continuously
-develop and the rest that are (fully) dedicated to operations. There is no
-reason why people would assume that the existing network operations team would
-migrate over night to fully development. A softer delimitation between
-developers and operational engineers that actively collaborate in a continuous
-feedback loop is the winning combination in my opinion. I am also saying this
-out of the experience I had in the last two teams I worked with. Operational
-engineers don't have to write code. If they want however, they must be
-encouraged, their initiative is laudable, but this cannot and it will never be
-enforced.
+usually divided (although not always a hard split) into engineers that
+continuously write code, and the others that are (fully) dedicated to
+operations. There is no reason why people would assume that the existing network
+operations teams would migrate over night and everyone would start writing code.
+Yes, there is a high demand of people writing code for networking; but, as I
+mentioned in the previous paragraph, there's an even higher demand of engineers
+that understand networking.
 
-To sum this up: I don't think it's feasible to assume that wiring code will ever
-be a hard requirement. I do expect however small changes in the day to day
+A soft delimitation between developers and operational engineers that actively
+collaborate in a continuous feedback loop, is going to win on the long term -
+in my opinion. I am also saying this out of the experience I had in the last two
+teams I worked with. Operational engineers don't have to write code. If they
+want however, they must be encouraged, their initiative is laudable, but this
+cannot possibly and it will never be enforced.
+
+To sum this up: I don't think it's feasible to assume that writing code is ever
+going be a hard requirement. I do expect however small changes in the day to day
 operations, but these are completely normal. Besides, network engineers are
-smart and have always been able to adapt and learn new technologies. At the same
-time, I would always encourage everyone to dive into writing code - at least for
-fun. Kirk Byers periodically runs a nice Python course for beginners which I 
-would recommend. I will similarly make time to lay down some notes in this
-direction, sharing some tricks to show everyone how easy it is today to build
-something around the existing tooling, with little background and a bit of will.
+smart and have always been able to adapt and learn new technologies.
+
+At the same time, I would always encourage everyone to dive into writing code -
+at least for fun. It's surely a plus, at the end of the day, and you may end up
+landing a better (paid) job. :-)
+
+A vast majority of the networking tooling is written in Python. If you are
+interested, I would recommend a few good resources, but not limited to:
+
+- Mark Lutz's [*Learning Python*](https://learning-python.com/about-lp.html):
+  it is the first book I read about Python. A beautiful book, I totally enjoyed
+  reading.
+- Kirk Byers periodically runs a nice Python course for beginners.
+- Matt Harrison's courses at the [O'Reilly online learning 
+  platform](https://www.safaribooksonline.com/search/?query=matt%20harrison&extended_publisher_data=true&highlight=true&is_academic_institution_account=false&source=user&include_assessments=false&include_case_studies=true&include_courses=true&include_orioles=true&include_playlists=true&formats=live%20online%20training&publishers=O%27Reilly%20Media%2C%20Inc.&sort=date_added&utm_medium=email&utm_source=topic+optin&utm_campaign=awareness&utm_content=20181229+prog+nl&mkt_tok=eyJpIjoiWW1FMk9EYzNPV1ZrTlRFeSIsInQiOiJBSDF4ZnZKcGlwU3ZtZEgwRUs0NHlLa29RY1pVcEMwT0tGMmpqdDhyN25nMWhKcHpTejA3SlBlZDhyamdJMlAxK2FUdEhXdUVyNDE2VTh3d2dLMUkwODhQS1lSWnR5V0NnQjM0N3pGd2VmNDNseGFBcEZ3Skt3ek9ScUJvRFo3biJ9)
+
+I will similarly make time to put down some notes in this direction, sharing
+some tricks to show everyone how easy it is today to build something around
+the existing tooling, without requiring advanced background and a bit of will.
 
 We'll loose our jobs
 ====================
@@ -161,7 +182,20 @@ This excuse is somewhat related to the previous myth regarding the requirement
 of writing code. Many people fear that automation would restrict everyone to
 having to learn and write code, therefore they would be replaced. Well, I hope
 that with the thoughts I shared previously, I've been able to clarify that this
-scenario is surely impossible.
+scenario is surely impossible. With the risk of being pedantic, I must confess
+that I have experienced that myself too: at the very beginning, I felt some
+engineers slightly anxious - perhaps due to the same reason; but after some
+time, seeing the potential of automation, how much it simplifies their job and
+exploits more their networking skills rather than their speed-typing skills, how
+easy is to deploy a configuration change on hundreds of devices instantly, and
+how the network auto-detects issues before they become a real concern, they
+started to love automation. If you still don't believe in this, just give it.
+If you are an engineer struggling to have automation adopted by your team, look
+into a different approach and offer your colleagues quick and easy wins: start
+by offering solutions / tools the most painful issues you're dealing with
+frequently - taking that mass out of their shoulders and putting it onto the
+computer to deal with it, is surely going to be a winner. Given your business
+use-case, try to make it clear that automation is not about replacing engineers.
 
 In fact that's not event the point. I once had the chance to be listening to
 Tim O'Reilly speaking at APRICOT 2017 on this exact topic. His keynote
@@ -182,16 +216,16 @@ different argument, beyond the scope of this post).
 
 Another interesting outcome to remember is the human and machine hybrid.
 A good example is the aviation industry: it is a well known fact that pilots no
-longer fly modern planes mechanically; instead, they are assisted by computers.
+longer fly modern planes manually; instead, they are assisted by computers.
 I once had this argument and I have been told: "yes, but before
 introducing computers in aviation, there were 6 pilots versus only 2 or 3 now".
 This is true if you limit your view to a single plane only. But let's zoom out a
-bit: globally, how many pilots are there nowdays compared to 50 years? Millions
-probably versus a few thousands (rough approximation) 50 years ago. I think this
-speaks for itself, it's a matter of perspective. And - most importantly - that
-could not have been the case without computers: this is the very reason why
-aviation is so reliable; as in effect, more and more people are less afraid to
-fly, and continuous demand can only create more and more jobs.
+bit: globally, how many pilots are there nowdays compared to 50 years ago?
+Millions probably versus a few thousands (rough approximation) 50 years ago. I
+think this speaks for itself, it's a matter of perspective. And - most
+importantly - that could not have been the case without computers: this is the
+very reason why aviation is so reliable; in result, more and more people are
+more confident flying, and continuous demand can only create more and more jobs.
 
 I think you see the parallel I am drawing here: my belief is that networks
 managed by humans assisted by computers will only enable for more stable and
@@ -304,3 +338,8 @@ best. But spend time with that, analyse carefully, and always listen to your
 network. It doesn't matter that I'm a Salt fan, it doesn't matter if your best
 friend is an Ansible fan: all it matters is which one suits you the best, and,
 as I already said, the automation to happen!
+
+Please make it happen
+=====================
+
+
