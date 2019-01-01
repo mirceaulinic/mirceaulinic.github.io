@@ -155,8 +155,10 @@ operations, but these are completely normal. Besides, network engineers are
 smart and have always been able to adapt and learn new technologies.
 
 At the same time, I would always encourage everyone to dive into writing code -
-at least for fun. It's surely a plus, at the end of the day, and you may end up
-landing a better (paid) job. :-)
+at least for fun. It's surely a plus, at the end of the day, it's an investment
+in your own skills, and widening your view, and who knows when you might
+actually give be able to give a helping hand and pleasantly surprise your
+colleagues, or land a better (paid) job. :-)
 
 A vast majority of the networking tooling is written in Python. If you are
 interested, I would recommend a few good resources, but not limited to:
@@ -229,35 +231,62 @@ more confident flying, and continuous demand can only create more and more jobs.
 
 I think you see the parallel I am drawing here: my belief is that networks
 managed by humans assisted by computers will only enable for more stable and
-reliable networks, which will only lead for more and more job demand.
+reliable networks, which will definitely lead to more and more job demand.
 
-As mentioned in the previous paragraph, I would like to emphasise again the
-automation by auto-remediation, and automatic reporting when the machine is
-unable or unsure to deal with the issue itself. There is no standard where to
-draw the line between these, it mainly depends on the business, and a variety
-of other factors. But one thing is for sure: they will both co-exist, and
-enable us to focus on the most important issues, that the machine is unable to
-deal with, allowing engineers to practice engineer work.
+Mentioned in the previous paragraph, I would like to talk again about
+automation by auto-remediation: it's a given that the machine is never actually
+going to auto-remediate everything, but only a part of the problems, the rest of
+them being sent to a reporting system when unable or unsure what action to take.
+There is no standard where to draw the line between these, it mainly depends on
+the complexity of the business logic, and a variety of other environmental
+factors. But one thing is for sure: they will both co-exist, and enable us to
+focus on the real issues, that the machine is unable to resolve, allowing
+engineers to practice engineer work.
 
-Another fundamentally false assumption is that jobs in the networking space would
-eventually evolve in such a way that only experts in both networking and
+Another fundamentally false assumption is that jobs in the networking space
+would eventually evolve in such a way that only experts in both networking and
 software simultaneously would have their place. With the risk of being terribly
 brutal, I find this assumption ridiculous. Out of experience, it's incredibly
 hard to do both networking and software at the highest levels, at the same time
-- it's close to impossible. In my view, there may be a form of a soft split, the
-networking teams consisting on engineers that build tools, and others that make
-use of those tools using their networking knowledge, both sides connected though
-a feedback loop. At the same time, I strongly encourage you to look into
-learning to code, even though you may not be actively working on the tooling
-side - at the end of the day, it's an investment in your own skills, and
-widening your view, and who knows when you might actually give a helping hand
-and pleasantly surprise your colleagues. :-)
+- it's close to impossible. This points somehow again to the "everyone needs to
+learn to code" problem which I hope I managed to clarify already. :-)
 
 Another argument is the continuous growth of the Internet - with all these
-mobile apps and services connected through the Internet it is not surprise that
+mobile apps and services connected through the Internet it is no surprise that
 the traffic levels are increasing much faster than ever before. I'm not telling
-you a secret with this, you probably know these details very well already; I'm
-taking this chance to emphasise our role in this machinery TODO.
+you a secret with this, you probably know these details better than me; I'm
+taking this chance to emphasise our role in this entire machinery. It's clear
+that more traffic automatically implies bigger networks, when translates to
+more network devices to manage. Scaling out the human resources in order to
+match the gap by continuing to operate the network manually is only going to
+exponentially increase the number of human mistakes. But scaling the teams
+intelligently in order to operate that network more reliably through a form of
+automation is a completely different discussion. One good example of massive
+continuous growth of the network size is inside the data center. Not long ago I
+read Dinesh Dutt's
+[BGP in the data center](http://go.cumulusnetworks.com/l/32472/2017-04-14/91d5vj):
+as Dinesh pointed out, managing the data center network becomes possible only
+through automation.
+
+#### We'll lose our jobs after automation is done
+
+The truth is that there's no such thing as "automation is done". If anyone tells
+you that their network is fully automated, take that with a pinch of salt. It's
+extremely unlikely that anyone got that far yet - as of January 2019, I'm not
+aware of anyone that has that, and never heard anyone even remotely close to
+that; they may have automated configuration management fully in place - very
+good, great start - but remember: automation is so much more than just
+configuration management (I have already expanded on this topic above).
+Automation is a continuous process that is never going to end: not only that
+your network is growing, but business requirements change and expansion of the
+services offered by your company are at the heart of a healthy business. To
+put this in a different way, you'll never be done, you will always have to
+adjust / change the automation logic you put in place sooner or later (of course,
+probably not entirely, but replace old pieces of the puzzle with newer ones).
+It's a never ending game. I will refer again to the system side: they call this
+"DevOps"; they did this for many years already - are they done yet? No. In fact,
+the number of openings is now higher than ever, specifically because there's so
+much more to automate.
 
 ### The CLI is dead
 
@@ -279,7 +308,7 @@ didn't, simply because that's not going to ever happen. :-)
 
 I expect us - and hope - that we're going to use less and less the CLI, and
 steadily migrate to the automaton tools we'll eventually have in place. But,
-between this, and assuming that we'll suddenly get rid of the CLI completely,
+between this and assuming that we'll suddenly get rid of the CLI completely,
 is just a fairytale with unicorns. That's even more ridiculous when one of the
 vendors largely trumpeting this out, Cisco, still doesn't provide a reliable
 API, particularly on some platforms such as Cisco IOS, and the CLI remains the
@@ -336,10 +365,39 @@ Have a meeting with your team and evaluate your needs; put together a list of
 requirements, then investigate which automation framework would suit your needs
 best. But spend time with that, analyse carefully, and always listen to your
 network. It doesn't matter that I'm a Salt fan, it doesn't matter if your best
-friend is an Ansible fan: all it matters is which one suits you the best, and,
-as I already said, the automation to happen!
+friend is an Ansible fan: all it matters is which one suits you the best.
+
+Why automate
+============
+
+Besides the obvious gains in terms of speed and reliability of the configuration
+changes, there's a number of other benefits including:
+
+- Easy to audit changes, and the actual configuration the devices are running.
+  If your company is interested in PCI compliance, this is a big plus.
+- Peer review: a change doesn't get in without being reviewed by multiple pairs
+  of eyes.
+- History: you can keep tracking of the changes, and easier follow,
+  incrementally what has changes and why. This is also a big win in tracking
+  down the root cause of an issue introduced by a particular change. It is true
+  that some platforms such as Junos offer, however it comes with some
+  limitations in terms of number of steps you can look back into the history,
+  the description (the reasoning) of the change, and accessing that information
+  locally vs globally (i.e., you need to log into each and every device to check
+  this information, while through an automated system, this is centralised).
+- Reuse code, and existing tooling.
 
 Please make it happen
 =====================
 
+As 2019 just begun, I hope this post is going to help you be less afraid of
+automation. If you have any other concerns, or disagree with what I said, please
+leave a comment or drop me an email and I will be happy to discuss. Similarly,
+if you heard other weak arguments against automation which I didn't cover, I
+would love to hear them.
 
+In the end, I would like to share a video from NANOG 71, where together with
+Scott Lowe, Kirk Byers, David Barroso, Jeremy Stretch, and Jathan McCollum, we
+put together a panel on network automation:
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/aQFbSovedIE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
