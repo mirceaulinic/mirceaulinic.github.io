@@ -5,12 +5,12 @@ title: Do we really need network automation?
 
 In my mind, especially after seeing how automation massively helped one of the
 largest global networks (Cloudflare - my current employer), I simply cannot
-conceive that a network can run reliably without a form of automation.
+conceive that a network can possibly run reliably without a form of automation.
 However, there still are plenty of examples of networks running (often with
 major outages) without any automation at all, yet reluctant to start adopting
 automation methodologies.
 
-I have debated the subject at many conferences and meetups, and I heard a
+I have debated the subject at many conferences and meet-ups, and I heard a
 variety of weak arguments against automation, or a form of anxiety caused by
 false assumptions.
 
@@ -39,30 +39,32 @@ the engineers in your team.
 
 In simpler words: consider to automate whatever is the most painful to you, or
 causing the most issues to your organisation. Start automating what you hate
-doing the most. These are easy wins that will equally bring excitement in your
-team seeing that automation actually works, but also creates more time for you
+doing the most. These are easy wins that will bring excitement in your team
+seeing that automation actually works, and equally creates more time for you
 to automate more. The goal is, of course, to automate everything possible, but
 it's always good to see early results.
 
-What does "everything possible" mean? We now have so many sources of data
-that give enough information about our networks, so the question is: what do you
-do with all this data? The answer is not "Watch a monitor and when an event
-occurs you run a command to deploy a configuration change": not only that this
-conflicts with the definitions I shared above, but this process also would rely
-on you to see the event at the right time and act on it before your customers
-are impacted; sometimes, this might be too late. (Surely, assuming the
-configuration change you apply manually is correct and it won't impact
-negatively your network). In my opinion, you should aim for a self-healing
+What does "everything possible" mean? We now have so many tools that provide you
+enough information about what happens in your network (either developed or
+extended internally, e.g., napalm-logs, Prometheus metrics, etc., or commercial
+products, e.g., ThousandEyes, etc.), so the question is: what do you do with all
+this data? "Watch a display and when an event occurs you execute manually a
+command to apply a configuration change", is not the right answer - not only
+that it conflicts with the definitions I shared above, but this process also
+would rely on you to see the event at the right time and act on it before your
+customers are impacted; sometimes, this might be too late. (Surely, assuming the
+configuration change you deploy manually is correct and it won't impact even
+more negatively your network). In my opinion, one should aim for a self-healing
 system that when it detects an event also applies the necessary changes.
 
-But there's so much more to it than auto-remediation: what about the boring
+But there's more to it than auto-remediation: what about the boring
 notifications you need to write manually (i.e., in case of BGP session flapping,
 interface flapping, massive packet loss caused by your transit providers, etc.).
-Similarly, not always the system will be capable to fix the issue by itself, but
-it can create the notifications for humans to investigate the issues further,
-for example by raising a ticket.
+Additionally, the system won't always be capable to fix the issue by itself: in
+this case, it can create the notifications for humans to investigate the issues
+further, for example by raising a ticket.
 
-At RIPE77 I had a talk that might help you see what I mean:
+At RIPE 77 I had a talk that might help you see what I mean:
 [Three years of automating large scale networks using 
 Salt](https://ripe77.ripe.net/wp-content/uploads/presentations/113-RIPE77_Three_years_of_automating_large-scale_networks_using_Salt-Mircea_Ulinic.pdf)
 presents some good examples (the list can be nearly
@@ -205,7 +207,7 @@ is luckily recorded and I recommend you to watch it: it is part of the
 [opening ceremony](https://youtu.be/EkS_HArfu3M), the actual keynote starting
 at [1:47](https://youtu.be/EkS_HArfu3M?t=2163). A slightly different version of
 the same is available at https://youtu.be/s3ha6vHapcI - a better quality of the
-recording, however the APRICOT talk touched slightly some topics more specific
+recording, however the APRICOT talk slightly covered some topics more specific
 to the networking industry. If you don't have the time right now, don't skip it.
 At the very least, bookmark it for later. The key takeaway of this speech is
 that you should see the power of automation as an opportunity for more
@@ -226,8 +228,25 @@ bit: globally, how many pilots are there nowdays compared to 50 years ago?
 Millions probably versus a few thousands (rough approximation) 50 years ago. I
 think this speaks for itself, it's a matter of perspective. And - most
 importantly - that could not have been the case without computers: this is the
-very reason why aviation is so reliable; in result, more and more people are
-more confident flying, and continuous demand can only create more and more jobs.
+very reason why aviation is so reliable; in result, more and more people feel
+more confident to fly, and continuously increasing demand can only create more
+and more jobs.
+
+With all these mobile apps and services connected through the Internet it is no
+surprise that the traffic levels are increasing much faster than ever before.
+I'm not telling you a secret with this, you probably know these details better
+than me; I'm taking this chance to emphasise our role in this entire machinery.
+It's clear that more traffic automatically implies bigger networks, when
+translates to more network devices to manage. Scaling out the human resources in
+order to match the gap by continuing to operate the network manually is only
+going to exponentially increase the number of human mistakes. But scaling the
+teams intelligently in order to operate that network more reliably through a
+form of automation is a completely different discussion. One good example of
+massive continuous growth of the network size is inside the data center. Not
+long ago I read Dinesh Dutt's
+[BGP in the data center](http://go.cumulusnetworks.com/l/32472/2017-04-14/91d5vj):
+as Dinesh pointed out, managing the data center network becomes possible only
+through automation.
 
 I think you see the parallel I am drawing here: my belief is that networks
 managed by humans assisted by computers will only enable for more stable and
@@ -250,23 +269,6 @@ brutal, I find this assumption ridiculous. Out of experience, it's incredibly
 hard to do both networking and software at the highest levels, at the same time
 - it's close to impossible. This points somehow again to the "everyone needs to
 learn to code" problem which I hope I managed to clarify already. :-)
-
-Another argument is the continuous growth of the Internet - with all these
-mobile apps and services connected through the Internet it is no surprise that
-the traffic levels are increasing much faster than ever before. I'm not telling
-you a secret with this, you probably know these details better than me; I'm
-taking this chance to emphasise our role in this entire machinery. It's clear
-that more traffic automatically implies bigger networks, when translates to
-more network devices to manage. Scaling out the human resources in order to
-match the gap by continuing to operate the network manually is only going to
-exponentially increase the number of human mistakes. But scaling the teams
-intelligently in order to operate that network more reliably through a form of
-automation is a completely different discussion. One good example of massive
-continuous growth of the network size is inside the data center. Not long ago I
-read Dinesh Dutt's
-[BGP in the data center](http://go.cumulusnetworks.com/l/32472/2017-04-14/91d5vj):
-as Dinesh pointed out, managing the data center network becomes possible only
-through automation.
 
 #### We'll lose our jobs after automation is done
 
@@ -361,11 +363,12 @@ extend their capabilities and adapt them to your own needs; eventually,
 whenever possible, it would very nice to give back to the community and open
 source bits of your work. This is the way that is proven to produce the quickest
 results for yourself, and help driving the community efforts at the same time.
-Have a meeting with your team and evaluate your needs; put together a list of
-requirements, then investigate which automation framework would suit your needs
-best. But spend time with that, analyse carefully, and always listen to your
-network. It doesn't matter that I'm a Salt fan, it doesn't matter if your best
-friend is an Ansible fan: all it matters is which one suits you the best.
+Have an extensive meeting with your team and evaluate your needs; put together a
+list of requirements, then investigate which automation framework would suit your
+needs best. Spend time with that, analyse carefully, and always listen to your
+network. It doesn't matter that I'm always telling you how great is Salt, it
+doesn't matter if your best friend is an Ansible fan: all it matters is which
+one suits you the best.
 
 Why automate
 ============
