@@ -380,15 +380,19 @@ changes, there's a number of other benefits including:
   If your company is interested in PCI compliance, this is a big plus.
 - Peer review: a change doesn't get in without being reviewed by multiple pairs
   of eyes.
+- In-line with the above, you can setup a CI/CD pipleline to automatically
+  check and validate your changes.
 - History: you can keep tracking of the changes, and easier follow,
-  incrementally what has changes and why. This is also a big win in tracking
-  down the root cause of an issue introduced by a particular change. It is true
-  that some platforms such as Junos offer, however it comes with some
+  incrementally what has changed, when, and why. This is also a big win in
+  tracking do`wn the root cause of an issue introduced by a particular change.
+  It is true that some platforms such as Junos offer, however it comes with some
   limitations in terms of number of steps you can look back into the history,
   the description (the reasoning) of the change, and accessing that information
   locally vs globally (i.e., you need to log into each and every device to check
-  this information, while through an automated system, this is centralised).
-- Reuse code, and existing tooling.
+  this information, while through an automated system, this information is
+  centralised and immediately avaialble).
+- Reuse code, and existing tooling already available.
+- 
 
 Please make it happen
 =====================
