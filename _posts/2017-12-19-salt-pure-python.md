@@ -83,7 +83,7 @@ can do this very easily, just adding a shebang (``#!``) at the top of the file
 and name the Renderers you'd like to use, separated by pipe (``|``).
 With these said, the default header is ``#!jinja|yaml``.
 
-The shebang required to select the Python renderer is ``!#py``. The only
+The shebang required to select the Python renderer is ``#!py``. The only
 constraint is that you need a function named ``run`` that returns the data you
 need. For instance, the equivalent SLS for the examples above would be the
 following:
