@@ -176,7 +176,7 @@ I will similarly make time to put down some notes in this direction, sharing
 some tricks to show everyone how easy it is today to build something around
 the existing tooling, without requiring advanced background and a bit of will.
 
-We'll loose our jobs
+We'll lose our jobs
 ====================
 
 No, we won't. Nobody will. In fact, all the companies that embraced automation
@@ -206,7 +206,7 @@ Tim O'Reilly speaking at APRICOT 2017 on this exact topic. His keynote
 is luckily recorded and I recommend you to watch it: it is part of the
 [opening ceremony](https://youtu.be/EkS_HArfu3M), the actual keynote starting
 at [1:47](https://youtu.be/EkS_HArfu3M?t=2163). A slightly different version of
-the same is available at https://youtu.be/s3ha6vHapcI - a better quality of the
+the same is available [here](https://youtu.be/s3ha6vHapcI) - a better quality of the
 recording, however the APRICOT talk slightly covered some topics more specific
 to the networking industry. If you don't have the time right now, don't skip it.
 At the very least, bookmark it for later. The key takeaway of this speech is
@@ -266,9 +266,9 @@ Another fundamentally false assumption is that jobs in the networking space
 would eventually evolve in such a way that only experts in both networking and
 software simultaneously would have their place. With the risk of being terribly
 brutal, I find this assumption ridiculous. Out of experience, it's incredibly
-hard to do both networking and software at the highest levels, at the same time
-- it's close to impossible. This points somehow again to the "everyone needs to
-learn to code" problem which I hope I managed to clarify already. :-)
+hard to do both networking and software at the highest levels, at the same
+time - it's close to impossible. This points somehow again to the "everyone
+needs to learn to code" problem which I hope I managed to clarify already. :-)
 
 #### We'll lose our jobs after automation is done
 
