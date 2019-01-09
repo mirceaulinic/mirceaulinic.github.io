@@ -165,10 +165,10 @@ colleagues, or land a better (paid) job. :-)
 A vast majority of the networking tooling is written in Python. If you are
 interested, I would recommend a few good resources, but not limited to:
 
+- Kirk Byers periodically runs a nice Python course for beginners.
 - Mark Lutz's [*Learning Python*](https://learning-python.com/about-lp.html):
   it is the first book I read about Python. A beautiful book, I totally enjoyed
   reading.
-- Kirk Byers periodically runs a nice Python course for beginners.
 - Matt Harrison's courses at the [O'Reilly online learning 
   platform](https://www.safaribooksonline.com/search/?query=matt%20harrison&extended_publisher_data=true&highlight=true&is_academic_institution_account=false&source=user&include_assessments=false&include_case_studies=true&include_courses=true&include_orioles=true&include_playlists=true&formats=live%20online%20training&publishers=O%27Reilly%20Media%2C%20Inc.&sort=date_added&utm_medium=email&utm_source=topic+optin&utm_campaign=awareness&utm_content=20181229+prog+nl&mkt_tok=eyJpIjoiWW1FMk9EYzNPV1ZrTlRFeSIsInQiOiJBSDF4ZnZKcGlwU3ZtZEgwRUs0NHlLa29RY1pVcEMwT0tGMmpqdDhyN25nMWhKcHpTejA3SlBlZDhyamdJMlAxK2FUdEhXdUVyNDE2VTh3d2dLMUkwODhQS1lSWnR5V0NnQjM0N3pGd2VmNDNseGFBcEZ3Skt3ek9ScUJvRFo3biJ9)
 
@@ -338,9 +338,8 @@ of what's happening under the hood.
 Waiting for the "best" tool to be built
 =======================================
 
-Are you waiting for them to build themselves? Knock-knock, this is not
-science-fiction, this is real life here. WE build the tools, and by _we_ I'm
-including you too.
+Are you waiting for them to build themselves? WE build the tools, and by _we_
+I'm including you too.
 
 Besides: there's no such thing as "best" tool - there are simply tools that are
 good to solve a particular set of challenges, and others that perfectly resolve
@@ -392,7 +391,8 @@ changes, there's a number of other benefits including:
   this information, while through an automated system, this information is
   centralised and immediately avaialble).
 - Reuse code, and existing tooling already available.
-- 
+- Yet again, it's much more than just configuration management. It's about
+  making your life easier and your job more reliable, from any perspective.
 
 Please make it happen
 =====================
