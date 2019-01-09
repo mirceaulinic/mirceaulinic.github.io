@@ -270,7 +270,7 @@ hard to do both networking and software at the highest levels, at the same
 time - it's close to impossible. This points somehow again to the "everyone
 needs to learn to code" problem which I hope I managed to clarify already. :-)
 
-#### We'll lose our jobs after automation is done
+### We'll lose our jobs after automation is done
 
 The truth is that there's no such thing as "automation is done". If anyone tells
 you that their network is fully automated, take that with a pinch of salt. It's
