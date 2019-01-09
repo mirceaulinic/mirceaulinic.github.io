@@ -383,7 +383,7 @@ changes, there's a number of other benefits including:
   check and validate your changes.
 - History: you can keep tracking of the changes, and easier follow,
   incrementally what has changed, when, and why. This is also a big win in
-  tracking do`wn the root cause of an issue introduced by a particular change.
+  tracking down the root cause of an issue introduced by a particular change.
   It is true that some platforms such as Junos offer, however it comes with some
   limitations in terms of number of steps you can look back into the history,
   the description (the reasoning) of the change, and accessing that information
