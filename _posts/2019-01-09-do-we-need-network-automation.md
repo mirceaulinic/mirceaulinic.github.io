@@ -176,7 +176,7 @@ I will similarly make time to put down some notes in this direction, sharing
 some tricks to show everyone how easy it is today to build something around
 the existing tooling, without requiring advanced background and a bit of will.
 
-We'll loose our jobs
+We'll lose our jobs
 ====================
 
 No, we won't. Nobody will. In fact, all the companies that embraced automation
