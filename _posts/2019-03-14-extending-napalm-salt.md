@@ -36,9 +36,10 @@ to before going any further.
 you have to do in order to follow when I'm descirbing in the steps below, is to
 copy the files directly from GitHub. For example, one of the files required is
 [napalm_mod.py](https://github.com/saltstack/salt/blob/2019.2/salt/modules/napalm_mod.py).
-To be able to use this module in older Salt releases, simply copy this file into
-one of your ``file_roots`` directory. For example, if one of the ``file_roots``
-directory is ``/etc/salt/extmods``, then you only have to execute, e.g.,
+To be able to use this module with older Salt releases, simply copy this file
+into one of your ``file_roots`` directory. For example, if one of the
+``file_roots`` directory is ``/etc/salt/extmods``, then you only have to
+execute, e.g.,
 
 ```bash
 $ cd /etc/salt/extmods
@@ -49,6 +50,27 @@ $ wget https://raw.githubusercontent.com/saltstack/salt/2019.2/salt/modules/napa
 *Remember* to always use ``wget`` with the _raw_ link from GitHub, otherwise
 you'll download an HTML file instead. :-)
 
+The same goes with any other module type to port features from 2019.2.0 and use
+them in older releases. Check out the list of features for network automation
+available wih this release: [Salt 2019.2.0 release 
+notes](https://docs.saltstack.com/en/develop/topics/releases/2019.2.0.html).
+
+To make it easier, I have added them in the [napalm-salt](https://github.com/napalm-automation/napalm-salt)
+GitHub repository, under the [``fluorine`` 
+directory](https://github.com/napalm-automation/napalm-salt/tree/master/fluorine),
+so you can simply clone the repo and add the path to your ``file_roots``.
+
+Additionally, if you want to quickly have a play with these new features, you
+might want to take a look at the [``napalmautomation/salt-master`` Docker 
+image](https://hub.docker.com/r/napalmautomation/salt-master/tags), currently
+offering two versions: ``2018.3.3-fluorine`` providing the ports for the
+Fluorine release (2019.2.0), based on the 2018.3.3 Salt stable code, and
+``2017.7.8-fluorine`` based on the 2017.7.8 stable release, respectively. For
+example, if you want to run the 2017.7.8 release armed with the modules
+available in 2019.2.0, you'd execute, e.g.,
+``$ docker run -it napalmautomation/salt-master:2017.7.8-fluorine``.
+
 Writing Execution Modules is easy
 ---------------------------------
+
 
