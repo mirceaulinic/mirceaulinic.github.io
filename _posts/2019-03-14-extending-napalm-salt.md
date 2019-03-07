@@ -20,7 +20,7 @@ subclassing NAPALM's native classes (i.e., JunOSDriver, EOSDriver, etc.) and
 extending them by adding more methods I needed. While this approach was easy
 enough, after writing the code, there were two additional steps required:
 1. release a new version of this custom library, and 2. install it. While both
-are easy enough in theory (actually in practice too), when releasing code often
+are easy enough in theory, when releasing code often (several times a day)
 it can get tedious, especially when you have to mess with Python's poor
 packaging system, and, on top of that, it is little point to do so when using
 Salt which provides mature ways of spreading out new code out of the box. Salt's
@@ -70,7 +70,21 @@ example, if you want to run the 2017.7.8 release armed with the modules
 available in 2019.2.0, you'd execute, e.g.,
 ``$ docker run -it napalmautomation/salt-master:2017.7.8-fluorine``.
 
+These features in the latest Salt release provide low level interaction with the
+network device, by exposing you directly the available API (if any, otherwise
+you can use screen scraping via the Netmiko library). Using these, you can very
+easily extend Salt's capabilities for your own needs, but writing a small
+Execution Module. That said, let's take a look at how to write Execution Modules
+in your own environment.
+
 Writing Execution Modules is easy
 ---------------------------------
 
+I borrwoed this title from the official Salt documentation for [writing
+Execution Modules](https://docs.saltstack.com/en/latest/ref/modules/). This
+document explains very well this subject, and covers many aspects that you may
+need sooner or later. Please take a moment and skim through it, then re-read it
+thoroughly later. I wouldn't have much to add to it, however I would like to
+insist a little on the aspect of the ``file_roots`` which is often neglected or
+imcmpletely understood.
 
