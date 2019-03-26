@@ -38,7 +38,7 @@ copy the files directly from GitHub. For example, one of the files required is
 [napalm_mod.py](https://github.com/saltstack/salt/blob/2019.2/salt/modules/napalm_mod.py).
 To be able to use this module with older Salt releases, simply copy this file
 into one of your ``file_roots`` directory. For example, if one of the
-``file_roots`` directory is ``/etc/salt/extmods``, then you only have to
+``file_roots`` directories is ``/etc/salt/extmods``, then you only have to
 execute, e.g.,
 
 ```bash
@@ -47,8 +47,8 @@ $ mkdir _modules && cd _modules/
 $ wget https://raw.githubusercontent.com/saltstack/salt/2019.2/salt/modules/napalm_mod.py
 ```
 
-*Remember* to always use ``wget`` with the _raw_ link from GitHub, otherwise
-you'll download an HTML file instead. :-)
+*Remember* to always download the file using the _raw_ link from GitHub,
+otherwise you'll download an HTML file instead. :-)
 
 The same goes with any other module type to port features from 2019.2.0 and use
 them in older releases. Check out the list of features for network automation
@@ -189,7 +189,7 @@ the following platforms:
   issue CLI commands and return the text output, as you'd normally have on your
   terminal when executing the command(s) manually).
   You can find the complete list of supported platforms on [GitHub](https://github.com/ktbyers/netmiko#supports).
-  
+
   While this is not encouraged usage, it is sometimes the only available choice,
   particularly on plaforms that fail to offer a (proper) or consistent API, but
   not limited to: for example, on Junos (and others) that have high coverage
@@ -239,4 +239,232 @@ without any further effort: once the modules are available, you can start using:
     template rendering pipeline (by default using Jinja as the template
     rendering engine).
 
+Let's take a look at some examples, from the command line:
 
+### ``napalm.junos_cli``
+
+Let's gather the RPKI statistics using the Juniper CLI command ``show validation statistics``
+as we would execute manually from the CLI of the router:
+
+```bash
+$ salt 'juniper-router' napalm.junos_cli 'show validation statistics'
+juniper-router:
+    ----------
+    message:
+        
+        Total RV records: 78242
+        Total Replication RV records: 78242
+          Prefix entries: 73193
+          Origin-AS entries: 78242
+        Memory utilization: 15058371 bytes
+        Policy origin-validation requests: 0
+          Valid: 0
+          Invalid: 0
+          Unknown: 0
+        BGP import policy reevaluation notifications: 1925885
+          inet.0, 1763165
+          inet6.0, 162720
+    out:
+        True
+```
+
+The putput returned is plain text, as you'd normally get when executing manually
+direactly on the device.
+
+The ``napalm.junos_cli`` command is smart enough to execute RPC requests
+even though you're invoking via the CLI command, by passing the ``format=xml``
+argument, e.g,
+
+```bash
+$ salt 'juniper-router' napalm.junos_cli 'show validation statistics' format=xml
+juniper-router:
+    ----------
+    message:
+        ----------
+        rv-statistics-information:
+            ----------
+            rv-statistics:
+                ----------
+                rv-bgp-import-policy-reevaluations:
+                    1925885
+                rv-bgp-import-policy-rib-name:
+                    - inet.0
+                    - inet6.0
+                rv-bgp-import-policy-rib-reevaluations:
+                    - 1763165
+                    - 162720
+                rv-memory-utilization:
+                    15058761
+                rv-origin-as-count:
+                    78244
+                rv-policy-origin-validation-requests:
+                    0
+                rv-policy-origin-validation-results-invalid:
+                    0
+                rv-policy-origin-validation-results-unknown:
+                    0
+                rv-policy-origin-validation-results-valid:
+                    0
+                rv-prefix-count:
+                    73195
+                rv-record-count:
+                    78244
+                rv-replication-record-count:
+                    78244
+    out:
+        True
+```
+
+In this case, the output returned by ``napalm.junos_cli`` is a Python dictionary.
+If you're not familiar with Salt yet, to convince yourself, let's take a look at
+the raw object (the above is a visual display of the same, for a more human
+readable output):
+
+```bash
+$ salt 'juniper-router' napalm.junos_cli 'show validation statistics' format=xml --out=raw
+{'juniper-router': {'message': {'rv-statistics-information': {'rv-statistics': {'rv-bgp-import-policy-rib-reevaluations': ['1763165', '162720'], 'rv-policy-origin-validation-requests': '0', 'rv-policy-origin-validation-results-valid': '0', 'rv-origin-as-count': '78244', 'rv-memory-utilization': '15058761', 'rv-prefix-count': '73195', 'rv-record-count': '78244', 'rv-policy-origin-validation-results-unknown': '0', 'rv-bgp-import-policy-rib-name': ['inet.0', 'inet6.0'], 'rv-replication-record-count': '78244', 'rv-bgp-import-policy-reevaluations': '1925885', 'rv-policy-origin-validation-results-invalid': '0'}}}, 'out': True}}
+```
+
+### ``napalm.junos_rpc``
+
+While the CLI command is easier to use (and morea readable / self-explanatory),
+it is often better to invoke the RPC as that is the same cross-platform / cross-version,
+while the CLI command is not guaranteed to be consistent. To find out the RPC
+request to use, from the CLI of your router you can append ``| display xml rpc``
+to the usual command, e.g.,
+
+```
+mircea@juniper-router> show validation statistics | display xml rpc 
+<rpc-reply xmlns:junos="http://xml.juniper.net/junos/18.1R3/junos">
+    <rpc>
+        <get-validation-statistics-information>
+        </get-validation-statistics-information>
+    </rpc>
+    <cli>
+        <banner></banner>
+    </cli>
+</rpc-reply>
+```
+
+The RPC in this case is ``get-validation-statistics-information``, and this is
+what we're going to pass to the ``napalm.junos_rpc`` function:
+
+```bash
+$ salt 'juniper-router' napalm.junos_rpc get-validation-statistics-information
+juniper-router:
+    ----------
+    comment:
+    out:
+        ----------
+        rv-statistics-information:
+            ----------
+            rv-statistics:
+                ----------
+                rv-bgp-import-policy-reevaluations:
+                    1925885
+                rv-bgp-import-policy-rib-name:
+                    - inet.0
+                    - inet6.0
+                rv-bgp-import-policy-rib-reevaluations:
+                    - 1763165
+                    - 162720
+                rv-memory-utilization:
+                    15058761
+                rv-origin-as-count:
+                    78244
+                rv-policy-origin-validation-requests:
+                    0
+                rv-policy-origin-validation-results-invalid:
+                    0
+                rv-policy-origin-validation-results-unknown:
+                    0
+                rv-policy-origin-validation-results-valid:
+                    0
+                rv-prefix-count:
+                    73195
+                rv-record-count:
+                    78244
+                rv-replication-record-count:
+                    78244
+    result:
+        True
+```
+
+### ``napalm.pyeapi_run_commands``
+
+In a similar way, we can invoke show-like commands on Arista switches, and
+the ``napalm.pyeapi_run_commands`` accepts one or more commands to be executed,
+by default returning the output as Python object, e.g.,
+
+```bash
+$ salt 'arista-switch' napalm.pyeapi_run_commands 'show version'
+arista-switch:
+    |_
+      ----------
+      architecture:
+          i386
+      bootupTimestamp:
+          1534844216.0
+      hardwareRevision:
+          11.03
+      internalBuildId:
+          5c08e74b-ab2b-49fa-bde3-ef7238e2e1ca
+      internalVersion:
+          4.20.8M-9384033.4208M
+      isIntlVersion:
+          False
+      uptime:
+          18767827.61
+      version:
+          4.20.8M
+```
+
+To execute more than one operational command, pass them sequentially, e.g.,
+``salt 'arista-switch' napalm.pyeapi_run_commands 'show lldp neighbors' 'bash timeout 10 ping 1.1.1.1 -c 5'``.
+
+To receive the output as text (instead of Python object), set the argument
+``encoding`` as ``text``, e.g.,
+``salt 'arista-switch napalm.pyeapi_run_commands 'show version' encoding=text``.
+
+### ``napalm.netmiko_commands``
+
+I'm going to skip the other functions mentioned earlier and focus on the Netmiko
+functions for a little. Firstly, let's take a look at some examples when using
+Netmiko through the ``napalm`` Salt module, even when working with platforms
+already covered and provide good API support (though not 100% complete), such as
+Arista, e.g.,
+
+```bash
+$ salt 'arista-switch' napalm.netmiko_commands 'show version'
+arista-switch:
+    - Hardware version:    11.03
+      
+      Software image version: 4.20.8M
+      Architecture:           i386
+      Internal build version: 4.20.8M-9384033.4208M
+      Internal build ID:      5c08e74b-ab2b-49fa-bde3-ef7238e2e1ca
+      
+      Uptime:                 31 weeks, 0 days, 5 hours and 28 minutes
+```
+
+Which this usage may be superfluous in this particular case, this function can
+be very handy when you require the output of a specific command, that is not
+available over the API. For example, on Junos platforms I needed to collect MTR
+results automatically, but the ``traceroute monitor`` command is not available
+over NETCONF. So here's how ``napalm.netmiko_commands`` can save the day:
+
+```bash
+$ salt 'juniper-router' napalm.netmiko_commands 'traceroute monitor 1.1.1.1 summary'
+juniper-router:
+    - 
+      HOST: edge01.lad01                Loss%   Snt   Last   Avg  Best  Wrst StDev
+        1. one.one.one.one               0.0%    10    0.6   1.0   0.5   4.2   1.1
+```
+
+While on platforms that provide good API support such as Junos or Arista
+``napalm.netmiko_commands`` is only used in corner cases, it's one of the few
+options you can have when working with operating systems such as Cisco IOS,
+IOS-XR, and many others.
+
+In a imilar way to ``napalm.pyeapi_run_commands``, you can pass multiple CLI
+comamnds to execute and collect their text output.
