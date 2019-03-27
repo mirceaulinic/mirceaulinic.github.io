@@ -16,14 +16,15 @@ and had this sort of need to implement a niche requirement or a very specific
 business logic that would definitely not have its place into the public library.
 
 At the beginning, I started extending NAPALM into a custom library, by
-subclassing NAPALM's native classes (i.e., JunOSDriver, EOSDriver, etc.) and
+[subclassing](https://www.digitalocean.com/community/tutorials/understanding-class-inheritance-in-python-3)
+NAPALM's native classes (i.e., JunOSDriver, EOSDriver, etc.) and
 extending them by adding more methods I needed. While this approach was easy
-enough, after writing the code, there were two additional steps required:
-1. release a new version of this custom library, and 2. install it. While both
+enough, after writing the code, there were two additional steps required: 1.
+release a new version of this custom library, and 2. install it. While both
 are easy enough in theory, when releasing code often (several times a day)
 it can get tedious, especially when you have to mess with Python's poor
 packaging system, and, on top of that, it is little point to do so when using
-Salt which provides mature ways of spreading out new code out of the box. Salt's
+Salt which provides mature ways of spreading out new code, out of the box. Salt's
 native filesystem can be used to release new code in the form of Execution
 Modules. In the latest Salt release, 2019.2.0 - codename Fluorine, there are
 many new features that expose the low level API that NAPALM is using (and beyond
@@ -33,7 +34,7 @@ Check out the [release notes](https://docs.saltstack.com/en/develop/topics/relea
 to before going any further.
 
 *Note*: If you are not running 2019.2.0 yet, dont' worry, you are covered: all
-you have to do in order to follow when I'm descirbing in the steps below, is to
+you have to do in order to follow when I'm describing in the steps below, is to
 copy the files directly from GitHub. For example, one of the files required is
 [napalm_mod.py](https://github.com/saltstack/salt/blob/2019.2/salt/modules/napalm_mod.py).
 To be able to use this module with older Salt releases, simply copy this file
@@ -48,7 +49,7 @@ $ wget https://raw.githubusercontent.com/saltstack/salt/2019.2/salt/modules/napa
 ```
 
 *Remember* to always download the file using the _raw_ link from GitHub,
-otherwise you'll download an HTML file instead. :-)
+otherwise you'll download an HTML document instead of a Python module. :-)
 
 The same goes with any other module type to port features from 2019.2.0 and use
 them in older releases. Check out the list of features for network automation
@@ -576,7 +577,7 @@ information into th Grains, and access it from a module as
 gather other pieces of information from the network device, that are not present
 into the Grains.
 
-Once saved, you can execute as:
+Once saved and synchronsed, you can execute as:
 
 ```bash
 $ salt 'arista-switch' example.version
