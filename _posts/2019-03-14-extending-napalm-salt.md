@@ -78,7 +78,7 @@ Execution Module. That said, let's take a look at how to write Execution Modules
 in your own environment.
 
 Writing Execution Modules is easy
----------------------------------
+=================================
 
 I borrwoed this title from the official Salt documentation for [writing
 Execution Modules](https://docs.saltstack.com/en/latest/ref/modules/). This
@@ -457,7 +457,7 @@ over NETCONF. So here's how ``napalm.netmiko_commands`` can save the day:
 $ salt 'juniper-router' napalm.netmiko_commands 'traceroute monitor 1.1.1.1 summary'
 juniper-router:
     - 
-      HOST: edge01.lad01                Loss%   Snt   Last   Avg  Best  Wrst StDev
+      HOST: juniper-router              Loss%   Snt   Last   Avg  Best  Wrst StDev
         1. one.one.one.one               0.0%    10    0.6   1.0   0.5   4.2   1.1
 ```
 
@@ -466,5 +466,221 @@ While on platforms that provide good API support such as Junos or Arista
 options you can have when working with operating systems such as Cisco IOS,
 IOS-XR, and many others.
 
-In a imilar way to ``napalm.pyeapi_run_commands``, you can pass multiple CLI
+In a similar way to ``napalm.pyeapi_run_commands``, you can pass multiple CLI
 comamnds to execute and collect their text output.
+
+As a side note, in order to process that output further you might prefer using
+the [TextFSM](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.textfsm_mod.html)
+module natively integrated into Salt starting with release 2018.3.0, which is
+also very easy to use.
+
+### ``napalm.netmiko_config``
+
+This function can help you send configuration commands to the targeted device,
+through Netmiko (thus over SSH). You can equally load one or more configuration
+commands, and it reproduces the behaviour of an user that would normally be
+configuring the device manually, e.g.,
+
+```bash
+$ sudo salt 'arista-swtich' napalm.netmiko_config 'ntp server 10.10.10.1'
+arista-swtich:
+    config term
+    arista-swtich(config)#ntp server 10.10.10.1
+    arista-swtich(config)#end
+    arista-swtich#
+```
+
+One particular note to kepe in mind with this command is that on platforms such
+as Juniper, where you need to commit the configuration, and transfer the changes
+into the running config, you will need to explicitly pass the argument
+``commit=True``, otherwise it's going to discard the changes. It is always a
+good practice to use the ``commit`` argument whenever you are absolutely
+confident that the changes are correct:
+
+```bash
+$ salt 'juniper-router' napalm.netmiko_config 'set system ntp server 10.10.10.1'
+juniper-router:
+    configure 
+    Entering configuration mode
+    
+    [edit]
+    salt@juniper-router# set system ntp server 10.10.10.1 
+    
+    [edit]
+    salt@juniper-router# exit configuration-mode 
+    The configuration has been changed but not committed
+    Exiting configuration mode
+    
+    salt@juniper-router> 
+```
+
+The correct usgae for the above would be:
+
+```bash
+$ salt 'juniper-router' napalm.netmiko_config 'set system ntp server 10.10.10.1' commit=True
+juniper-router:
+    configure 
+    Entering configuration mode
+    The configuration has been changed but not committed
+    
+    [edit]
+    salt@juniper-router# set system ntp server 10.10.10.1 
+    
+    [edit]
+    salt@juniper-router# commit 
+    commit complete
+    
+    [edit]
+    salt@juniper-router#
+```
+
+That said, I am not aware of any use case where you'd require Netmiko for
+configuration management on Juniper platforms, but I wanted to share this
+however, as Netmiko covers a large variety of platforms, and you might find
+this helpful at some point.
+
+Calling low-level API functions from your custom functions
+==========================================================
+
+To be able to fully understand this section, I would need you to make sure the
+previous paragraphs are entirely clear to you.
+
+Looking again at the _Cross-calling Executon Modules_ paragraph, you can invoke
+any of the functions previously presented, from your custom module. For example,
+let's start with something very simple and write a function that returns the
+operating system version. For an Arista switch, the code would be as simple as:
+
+``/etc/salt/_modules/example.py``
+```python
+def version():
+    res = __salt__['napalm.pyeapi_run_commands'](‘show version’)
+    return res[0]['version']
+```
+
+As ``napalm.pyeapi_run_commands`` can execute one or more commands, the output
+is a list, which is why you need to do a lookup at index ``0``, then return the
+operating system version under the ``version`` key. To check the exact structure
+and know exactly what keys to lookup for, I always execute the equivalent CLI
+command checking the raw Python output:
+
+```bash
+$ salt 'arista-switch' napalm.pyeapi_run_commands 'show version' --out=raw
+{'arista-switch': [{'uptime': 6776189.66, 'internalVersion': '4.20.8M-9384033.4208M', 'architecture': 'i386', 'bootupTimestamp': 1534844216.0, 'version': '4.20.8M', 'isIntlVersion': False, 'internalBuildId': '5c08e74b-ab2b-49fa-bde3-ef7238e2e1ca', 'hardwareRevision': '11.03'}]}
+```
+
+*Note*: The example above has been crafted for examplifcation purpose only, to
+be easier to be understood, and focus on how to achieve something very easy. In
+this particular case, if you need to check the running version, you can this
+information into th Grains, and access it from a module as
+``__grains__['version']``. The example stands however when you would need to
+gather other pieces of information from the network device, that are not present
+into the Grains.
+
+Once saved, you can execute as:
+
+```bash
+$ salt 'arista-switch' example.version
+arista-switch:
+    4.20.8M
+```
+
+Cross-platform implementation
+-----------------------------
+
+The features presented work independently for every platform, and their output
+is similarly different (as the network device presents it, over the API of
+choice). Now, in order to preserve one of the most important adavantages of
+NAPALM, you have to abstract away the functionality, so the end users are
+able to use the exact syntax regadless of the platform they are targeting. There
+are two good ways do do so, and it mainly depends on personal preference which
+one you prefer.
+
+Say we continue the previous example, and write a function that returns the
+operating system version, while preserving the same syntax when invoking the
+function. In both cases, the key is using the ``os`` Grain which tells you what
+operating system are you executing against.
+
+### Abstract away inside the function
+
+I'll firstly provide the code example, then explain below:
+
+``/etc/salt/_modules/example.py``
+```python
+def version():
+    if __grains__['os'] == 'junos':
+        ret = __salt__['napalm.junos_cli']('show version', format='xml')
+        return ret['message']['software-information']['junos-version']
+    elif __grains__['os'] == 'eos':
+        ret = __salt__['napalm.pyeapi_run_commands']('show version')
+        return ret[0]['version']
+    elif __grains__['os'] == 'nxos':
+        ret = __salt__['napalm.nxos_api_rpc']('show version')
+        return ret[0]['result']['body']['sys_ver_str']
+    return 'Not supported on this platform'
+```
+
+What the code does, is simply checking the operating system name, by inspecting
+the ``os`` Grain, and then invoke the appropriate Salt function. This way, when
+the function is executed against a Juniper device, it's going to cross-call
+``napalm.junos_cli`` then do the lookup under the ``message``,
+``software-information``, and ``junos-version`` keys (do check the raw output to
+make sure you understand why), while against an Arista switch, it's invoking
+``napalm.pyeapi_run_commands`` as explained previously.
+
+### Separate modules per platform
+
+While in the above the logic per platform is implemented inside the same
+function, when we have to put a lot more business logic, the code may get too
+complex or harder to follow (arguably, again, depends on personal preference).
+
+The alternative is splitting the code into separate files, one per platform.
+This is using Salt's feature for registering different physical modules under
+the same virtual name. Check out the documentation for [virtual 
+modules](https://docs.saltstack.com/en/latest/ref/modules/#virtual-modules).
+
+The core idea is that you create one file for each platform, and declare the
+same virtual name. Say we want to continue using the module name from the
+previous examples, ``example``, then the files would be called
+``example_junos.py``, ``example_eos.py``, and ``example_nxos.py``. Note, you
+can choose whatever filename you may prefer, the platform availability is made
+inside the ``__virtual__`` function:
+
+``/etc/salt/_modules/example_junos.py``
+```python
+def __virtual__():
+    if __grains__['os'] == 'junos':
+        return 'example'
+    else:
+        return (False, 'Not loading this module, as this is not a Junos device')
+
+
+def version():
+    ret = __salt__['napalm.junos_cli']('show version', format='xml')
+    return ret['message']['software-information']['junos-version']
+```
+
+The ``__virtual__`` function returns ``example`` (which is the virtual name of
+the module, i.e., the name you're going to use on the CLI, or other Execution
+Modules), but only when the ``os`` Grain is ``junos``, otherwise, the code from
+``example_junos.py`` will not be loaded (and it may load the code from a
+different physical module instead).
+Let's take a look at the equivalent module for ``eos``:
+
+``/etc/salt/_modules/example_eos.py``
+```python
+def __virtual__():
+    if __grains__['os'] == 'eos':
+        return 'example'
+    else:
+        return (False, 'Not loading this module, as this is not an Arista switch')
+
+
+def version():
+    ret = __salt__['napalm.pyeapi_run_commands']('show version')
+    return ret[0]['version']
+```
+
+Both options are good, you can use whichever you feel more comfortable to with.
+I use both, depending on the complexity of the code.
+
+
