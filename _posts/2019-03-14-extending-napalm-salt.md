@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Extending NAPALM's capabilities in the Salt environment
+subtitle: Python development for infrastructure management using Salt
 ---
 
 Having the privilege to maintain one of the widely used tools for network
