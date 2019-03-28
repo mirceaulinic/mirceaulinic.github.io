@@ -684,4 +684,40 @@ def version():
 Both options are good, you can use whichever you feel more comfortable to with.
 I use both, depending on the complexity of the code.
 
+Happy hacking
+=============
 
+Using this methodology, I've been able to significantly speed up the development
+process, and make it more enjoyable at the same time. It goes without saying
+that you would still be able to help the community with your contributions by
+submiting the modules to the
+[official Salt codebse](https://github.com/saltstack/salt) so they will be
+available in the next Salt release, or into the [salt-contrib repository](https://github.com/saltstack/salt-contrib),
+[napalm-salt](https://github.com/napalm-automation/napalm-salt), or even your
+own repository (and please let everyone know -- if you prefer, let me know, and
+I would be happy spread the word for awareness).
+
+Beyond the modules I have expanded on, you also have an army of few other
+features such as the 
+[ciscoconfparse module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.ciscoconfparse_mod.html)
+for the [ciscoconfparse Python library](http://www.pennington.net/py/ciscoconfparse/index.html),
+[iosconfig](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.iosconfig.html#module-salt.modules.iosconfig) 
+for transforming Cisco IOS-like text-based configuration style into Python
+structures to be easier to work with. These are similarly integrated within the
+``napalm`` Execution Module for ease of use -- see for example
+[napalm.config_filter_lines](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_mod.html#salt.modules.napalm_mod.config_filter_lines),
+[napalm.config_tree](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_mod.html#salt.modules.napalm_mod.config_tree), or
+[napalm.scp_put](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_mod.html#salt.modules.napalm_mod.scp_put) 
+and 
+[napalm.scp_get](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.napalm_mod.html#salt.modules.napalm_mod.scp_get) 
+which can help you implement the business logic you need. In
+the end, I'd also like to invite you to take a look at the 
+[PeeringDB module](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.peeringdb.html#module-salt.modules.peeringdb),
+as well as the [module for 
+NetBox](https://docs.saltstack.com/en/develop/ref/modules/all/salt.modules.netbox.html#module-salt.modules.netbox),
+which now has many more features available. I hope it's pretty clear that now
+it is easier than ever to get started to automate and write code for your
+network, by simply reusing and invoking features you have at your fingertips.
+
+If you have a story to share in this direction, I'd love to hear it, and learn
+from your experience. 
