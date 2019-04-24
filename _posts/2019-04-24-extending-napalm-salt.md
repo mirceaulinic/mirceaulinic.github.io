@@ -5,7 +5,7 @@ subtitle: Python development for infrastructure management using Salt
 ---
 
 Having the privilege to maintain one of the widely used tools for network
-automation, NAPALM, I am ofen asked various questions, many of them related to
+automation, NAPALM, I am often asked various questions, many of them related to
 the extensibility of the library. It is a given, and a design choice that NAPALM
 does not and cannot possibly fulfill all the existing scenarios and features
 when interacting with the network device - either retrieving or pushing data.
@@ -34,7 +34,7 @@ business logic you need. The implementation is much easier that it sounds.
 Check out the [release notes](https://docs.saltstack.com/en/develop/topics/releases/2019.2.0.html#napalm)
 to before going any further.
 
-*Note*: If you are not running 2019.2.0 yet, dont' worry, you are covered: all
+*Note*: If you are not running 2019.2.0 yet, don't worry, you are covered: all
 you have to do in order to follow when I'm describing in the steps below, is to
 copy the files directly from GitHub. For example, one of the files required is
 [napalm_mod.py](https://github.com/saltstack/salt/blob/2019.2/salt/modules/napalm_mod.py).
@@ -54,7 +54,7 @@ otherwise you'll download an HTML document instead of a Python module. :-)
 
 The same goes with any other module type to port features from 2019.2.0 and use
 them in older releases. Check out the list of features for network automation
-available wih this release: [Salt 2019.2.0 release 
+available with this release: [Salt 2019.2.0 release 
 notes](https://docs.saltstack.com/en/develop/topics/releases/2019.2.0.html).
 
 To make it easier, I have added them in the [napalm-salt](https://github.com/napalm-automation/napalm-salt)
@@ -121,7 +121,7 @@ def first():
 ```
 
 As you can notice, the code is linear, and similar to writing an arbitrary
-Python scripts without any specifica.
+Python scripts without any specifics.
 
 After loading the module by executing 
 [``saltutil.sync_modules``](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.saltutil.html#salt.modules.saltutil.sync_modules),
@@ -173,7 +173,7 @@ your-device:
 invoke the function -- ``__salt__`` is a mapping to all the available functions
 Salt is aware of, each element pointing to the memory address where the function
 is available for execution. Therefore, it is important to have the braces even
-thugh you may not pass any arguments to the function, as in the previous
+though you may not pass any arguments to the function, as in the previous
 examples.
 
 Salt functions for low-level API calls
@@ -193,7 +193,7 @@ the following platforms:
   You can find the complete list of supported platforms on [GitHub](https://github.com/ktbyers/netmiko#supports).
 
   While this is not encouraged usage, it is sometimes the only available choice,
-  particularly on plaforms that fail to offer a (proper) or consistent API, but
+  particularly on platforms that fail to offer a (proper) or consistent API, but
   not limited to: for example, on Junos (and others) that have high coverage
   over the API for the available commands, there are cases when some are not
   currently supported. As an example, on Junos you cannot gather the MTR results
@@ -231,7 +231,7 @@ without any further effort: once the modules are available, you can start using:
     Python object.
   - [``napalm.nxos_api_config``](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.napalm_mod.html#salt.modules.napalm_mod.nxos_api_config):
     configure the Nexus switch with the specified commands, via the NX-API.
-- Any platform suported by Netmiko (including the ones above):
+- Any platform supported by Netmiko (including the ones above):
   - [``napalm.netmiko_commands``](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.napalm_mod.html#salt.modules.napalm_mod.netmiko_commands): 
     send one or more CLI commands to be executed on the device, and return the
     output as plain text.
@@ -270,8 +270,8 @@ juniper-router:
         True
 ```
 
-The putput returned is plain text, as you'd normally get when executing manually
-direactly on the device.
+The output returned is plain text, as you'd normally get when executing manually
+directly on the device.
 
 The ``napalm.junos_cli`` command is smart enough to execute RPC requests
 even though you're invoking via the CLI command, by passing the ``format=xml``
@@ -329,7 +329,7 @@ $ salt 'juniper-router' napalm.junos_cli 'show validation statistics' format=xml
 
 ### ``napalm.junos_rpc``
 
-While the CLI command is easier to use (and morea readable / self-explanatory),
+While the CLI command is easier to use (and more readable / self-explanatory),
 it is often better to invoke the RPC as that is the same cross-platform / cross-version,
 while the CLI command is not guaranteed to be consistent. To find out the RPC
 request to use, from the CLI of your router you can append ``| display xml rpc``
@@ -469,7 +469,7 @@ options you can have when working with operating systems such as Cisco IOS,
 IOS-XR, and many others.
 
 In a similar way to ``napalm.pyeapi_run_commands``, you can pass multiple CLI
-comamnds to execute and collect their text output.
+commands to execute and collect their text output.
 
 As a side note, in order to process that output further you might prefer using
 the [TextFSM](https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.textfsm_mod.html)
@@ -492,7 +492,7 @@ arista-swtich:
     arista-swtich#
 ```
 
-One particular note to kepe in mind with this command is that on platforms such
+One particular note to keep in mind with this command is that on platforms such
 as Juniper, where you need to commit the configuration, and transfer the changes
 into the running config, you will need to explicitly pass the argument
 ``commit=True``, otherwise it's going to discard the changes. It is always a
@@ -516,7 +516,7 @@ juniper-router:
     salt@juniper-router> 
 ```
 
-The correct usgae for the above would be:
+The correct usage for the above would be:
 
 ```bash
 $ salt 'juniper-router' napalm.netmiko_config 'set system ntp server 10.10.10.1' commit=True
@@ -570,7 +570,7 @@ $ salt 'arista-switch' napalm.pyeapi_run_commands 'show version' --out=raw
 {'arista-switch': [{'uptime': 6776189.66, 'internalVersion': '4.20.8M-9384033.4208M', 'architecture': 'i386', 'bootupTimestamp': 1534844216.0, 'version': '4.20.8M', 'isIntlVersion': False, 'internalBuildId': '5c08e74b-ab2b-49fa-bde3-ef7238e2e1ca', 'hardwareRevision': '11.03'}]}
 ```
 
-*Note*: The example above has been crafted for examplifcation purpose only, to
+*Note*: The example above has been crafted for exemplification purpose only, to
 be easier to be understood, and focus on how to achieve something very easy. In
 this particular case, if you need to check the running version, you can this
 information into th Grains, and access it from a module as
@@ -578,7 +578,7 @@ information into th Grains, and access it from a module as
 gather other pieces of information from the network device, that are not present
 into the Grains.
 
-Once saved and synchronsed, you can execute as:
+Once saved and synchronised, you can execute as:
 
 ```bash
 $ salt 'arista-switch' example.version
@@ -591,9 +591,9 @@ Cross-platform implementation
 
 The features presented work independently for every platform, and their output
 is similarly different (as the network device presents it, over the API of
-choice). Now, in order to preserve one of the most important adavantages of
+choice). Now, in order to preserve one of the most important advantages of
 NAPALM, you have to abstract away the functionality, so the end users are
-able to use the exact syntax regadless of the platform they are targeting. There
+able to use the exact syntax regardless of the platform they are targeting. There
 are two good ways do do so, and it mainly depends on personal preference which
 one you prefer.
 
@@ -691,7 +691,7 @@ Happy hacking
 Using this methodology, I've been able to significantly speed up the development
 process, and make it more enjoyable at the same time. It goes without saying
 that you would still be able to help the community with your contributions by
-submiting the modules to the
+submitting the modules to the
 [official Salt codebse](https://github.com/saltstack/salt) so they will be
 available in the next Salt release, or into the [salt-contrib repository](https://github.com/saltstack/salt-contrib),
 [napalm-salt](https://github.com/napalm-automation/napalm-salt), or even your
