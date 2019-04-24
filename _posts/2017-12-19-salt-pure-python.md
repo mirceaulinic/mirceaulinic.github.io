@@ -483,7 +483,7 @@ Minions), merged with the Pillar and Grains data. To propagate a change in your
 system - as described above, would only imply adjusting the (Proxy) Minion
 config file, e.g.,:
 
-``/etc/salt/minion`` (excerpt)
+``/etc/salt/minion``
 {% highlight yaml %}
 ip_addresses_base: 192.168.1
 {% endhighlight %}
