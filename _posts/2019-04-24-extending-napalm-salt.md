@@ -153,7 +153,7 @@ def second():
     return __salt__['test.false']()
 
 
-def thrid():
+def third():
     return __salt__['example.first']()
 ```
 
@@ -164,7 +164,7 @@ can execute from the CLI:
 $ salt 'your-device' example.second
 your-device:
     False
-$ salt 'your-device' example.thrid
+$ salt 'your-device' example.third
 your-device:
     True
 ```
