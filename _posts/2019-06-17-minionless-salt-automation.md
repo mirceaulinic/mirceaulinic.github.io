@@ -84,14 +84,15 @@ identified as ``edge1.thn.lon``:
 $ salt-sproxy edge1.thn.lon net.arp
 ```
 
-
-TODO: To have the above work fine, you need to have the ``pillar_roots``
+To have the above work fine, you will need to have the ``pillar_roots``
 correctly configured into the Master configuration file (even though you may not
 run a Salt Master process) -- typically ``/etc/salt/master``. In that file you
 specify the paths to where Salt should load the Pillars from (or what External
-Pillars to use to pull the data). Everything you knew remains the exact same:
+Pillars to use to pull the data). Everything you know remains the exact same:
 you need to have the ``proxy`` key into the Pillar providing the ``proxytype``
-along with the connection credentials 
+along with the connection credentials, as well as a Pillar ``top.sls`` file, etc.
+-- the only change is that you don't need to start any Proxy processes, and the
+usage syntax is slightly different.
 
 To use a different Salt configuration file, you can specify it using the ``-c``
 option, e.g.,
@@ -135,9 +136,13 @@ So what's the catch?
 
 Does it sound too good to be true? Well, it is that good, and there isn't any
 catch. It might not be immediately obvious what are the implications and the
-benefits to using this methodology, but it made me very happy when I finally
-been able to 
+benefits to using this methodology, but it made me very happy when I've finally
+been able to put this together.
 
+TODO: difference to the salt command and the need for the Roster (and examples
+without the Roster). Maybe include here the "migrating from Ansible" paragraph?
+
+TODO: explain that it dynamically injects a Runner
 
 Does it work only with NAPALM?
 ------------------------------
@@ -147,13 +152,51 @@ No. You can use any of the available [Proxy modules](TODO) in the exact same way
 doesn't require the Proxy process to be running. If you have a device that isn't
 currently supported by Salt natively, just write a Proxy module for it - see
 [this guide](TODO) - put it into the ``salt://_proxy`` directory, and then make
-sure that the module is referenced in the ``proxytype:`` Pillar field. For
-example, if your 
+sure that the module is referenced in the ``proxytype:`` Pillar field. If you're
+unsure what ``salt://_proxy`` means, please check [this](TODO) article again.
+
+Suppose we write a custom Proxy module, e.g., ``customproxy.py`` which we put
+under ``/srv/salt/extmods/_proxy``. Then, to use it, when targeting a device,
+e.g., ``obscure-platform``, in the Pillar you'll need to have the following
+structure:
+
+```yaml
+proxy:
+  proxytype: customproxy
+  ~~~ connection credentials ~~~
+```
+
+To check that the data is indeed available for the ``obscure-platform`` Minion,
+you can always run the following command:
+
+```bash
+$ salt-run pillar.show_pillar obscure-platform
+```
+
+Then you should be all set to give it a go:
+
+
+```bash
+$ salt-sproxy obscure-platform test.ping
+```
+
+I am not going to detail on this further, but you can follow the notes from
+[TODO](TODO) with the minor differences described above.
 
 Migrating from Ansible to Salt and salt-sproxy
 ----------------------------------------------
 
-If you're already an Ansible user
+If you're already an Ansible user, ``salt-sproxy`` should make it even easier to
+migrate to using Salt. This is thanks to 
+
+TODO
+
+
+Even-driven automation? Not a problem
+-------------------------------------
+
+TODO: link to the dynamically injected Runner that can be used, though requires
+an always running Master.
 
 
 Does it work on Windows?
@@ -186,4 +229,6 @@ to evaluate which devices require frequent changes / interaction (for which
 you would start Proxy processes), and which are more statical (which you'd
 probably manage using the ``salt-sproxy``).
 
-I hope you are going to find this helpful, and 
+I hope you are going to find this helpful, and TODO.
+
+TODO: still WIP, waiting for feedback and hopefully PRs
