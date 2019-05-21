@@ -131,6 +131,106 @@ $ salt-sproxy juniper-router example.version
 To be able to load your custom modules, as explained in the blog post, you would
 need to have the correct configuration for the ``file_roots``.
 
+Quick start
+-----------
+
+Let's start with something very easy and use the ``dummy`` Proxy Minion to
+connect to the local machine; we have the following configuration:
+
+- The Master configuration file:
+
+``/etc/salt/master``
+```yaml
+pillar_roots:
+  base:
+    - /etc/salt/pillar
+```
+
+- The Pillar Top file:
+
+``/etc/salt/pillar/top.sls``
+```yaml
+base:
+  minion1:
+    - dummy
+```
+
+- The ``dummy`` Pillar:
+
+``/etc/salt/pillar/dummy.sls``
+```yaml
+proxy:
+  proxytype: dummy
+```
+
+To check that the Pillar is correctly setup, execute (you don't need a Master
+running for this):
+
+```bash
+$ salt-run pillar.show_pillar minion1
+proxy:
+    ----------
+    proxytype:
+        dummy
+```
+
+With this configuration, you can go ahead and run:
+
+```bash
+$ salt-sproxy minion1 test.ping
+minion1:
+    True
+```
+
+As you can see, the dummy ``minion1`` is now usable without having to start up
+a dedicated Proxy process for this. In the same way, you're now able to execute
+any other Salt function, for example ``pip.list`` which would display the list
+of the installed PIP-managed Python packages on the local computer (or wherever
+you're executing salt-sproxy on).
+
+The same methodology can then be applied for connecting to network gear through
+your Proxy module of choice. For example, [``napalm``](TODO); update the Pillar
+and Top file accordingly:
+
+``/etc/salt/pillar/top.sls``
+```yaml
+base:
+  juniper-router1:
+    - junos
+  arista-switch1:
+    - eos
+```
+
+``/etc/salt/pillar/junos.sls``
+```yaml
+proxy:
+  proxytype: napalm
+  driver: junos
+  hostname: hostname-or-fqdn
+  username: your-username
+  password: your-password
+```
+
+Similarly it is a good idea to check using
+``salt-run pillar.show_pillar juniper-router1`` that the Pillar is indeed
+correctly defined, then you're good to go, e.g.,
+
+- Retrieve the ARP table of ``juniper-router1``:
+
+```bash
+$ salt-sproxy juniper-router1 net.arp
+TODO
+```
+
+- Load a configuration change:
+
+```bash
+$ salt-sproxy juniper-router1 net.load_config text='set system ntp server 10.10.1.1'
+```
+
+As promised, the methodology remains the same, without the headache of managing
+thousands of always running processes.
+
 So what's the catch?
 --------------------
 
@@ -139,10 +239,25 @@ catch. It might not be immediately obvious what are the implications and the
 benefits to using this methodology, but it made me very happy when I've finally
 been able to put this together.
 
-TODO: difference to the salt command and the need for the Roster (and examples
-without the Roster). Maybe include here the "migrating from Ansible" paragraph?
-
-TODO: explain that it dynamically injects a Runner
+There are some differences however, that you should be aware of. The usual
+``salt`` command when executing, spreads out a job to all the connected Minions,
+and those that match the target are going to reply. As ``salt-sproxy``, by
+design, doesn't have any Minions connected (as they are not running), it won't
+be aware of what Minions should match your target. For this reasoning, it needs
+some "help". Salt already has had a subsystem named Salt SSH which works in a
+similar way, i.e., manage a remote system without having a Minion process up and
+running, connecting to the device over SSH. Read more about Salt SSH
+[here](TODO).
+Due to this similarity, the Salt SSH system has the same limitation and
+therefore why not have the same solution. That said, I borrowed the
+[``Roster``](TODO) interface from Salt SSH, which is another pluggable Salt
+interface, that provides a list of devices and their connection credentials,
+given a specific target. In order words, you sometimes might have more complex
+targets that a single device or a list (e.g., you can have a regular expression
+-- ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
+several Roster modules available natively, and you can explore them
+[here](TODO).
+I will provide below an usage example, using the Ansible Roster module.
 
 Does it work only with NAPALM?
 ------------------------------
@@ -186,11 +301,35 @@ I am not going to detail on this further, but you can follow the notes from
 Migrating from Ansible to Salt and salt-sproxy
 ----------------------------------------------
 
-If you're already an Ansible user, ``salt-sproxy`` should make it even easier to
-migrate to using Salt. This is thanks to 
+I've seen a lot Ansible users that were interested to migrate to Salt, however
+the radically different mentality that you need to adopt (including the always
+running processes) was a blocker for many. Hopefully this should no longer be
+the case anymore. If you're already an Ansible user, ``salt-sproxy`` should
+make it even easier to migrate to using Salt.
 
+As briefly presented above, to be able to match more sophisticated targets 
+(groups of devices), you may need a Roster. Even easier for you probably to
+provide a Roster file, as you might already have an Ansible inventory file.
+Simply move/copy the Ansible inventory to ``/etc/salt/roster``, and tell
+``salt-proxy`` to use it by configuring the ``proxy_roster`` option:
+
+``/etc/salt/master``
+```yaml
+proxy_roster: ansible
+```
+
+One particular difference to always remember is that the Ansible Roster /
+inventory file doesn't need to provide the connection details, as those are
+already managed into the Pillar, as detailed previously.
+
+When the configuration is correctly setup, you should be able to check the list
+of devices matches by your target expression (determined via the Roster
+interface):
+
+```bash
+$ salt-sproxy <tgt> --preview-target
 TODO
-
+```
 
 Even-driven automation? Not a problem
 -------------------------------------
