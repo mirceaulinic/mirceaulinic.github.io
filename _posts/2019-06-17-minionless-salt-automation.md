@@ -1,7 +1,34 @@
 ---
 layout: post
-title: A (Proxy) Minion-less Approach for Network Automation using Salt
+title: A (Proxy) Minion-less Approach to Network Automation using Salt
 ---
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mirceaulinic.net/2019-06-17-minionless-salt-automation/"
+  },
+  "headline": "A (Proxy) Minion-less Approach to Network Automation using Salt",
+  "datePublished": "2019-06-17T08:10:00+00:00",
+  "dateModified": "2019-07-17T08:10:00+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "Mircea Ulinic"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Mircea Ulinic",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mirceaulinic.net/img/avatar-icon.png"
+    }
+  },
+  "description": "A (Proxy) Minion-less Approach to Network Automation using Salt"
+}
+</script>
 
 Salt is currently one of the largely adopted automating frameworks, and perhaps
 one of the most complete and flexible. But these - including support for
@@ -300,17 +327,22 @@ design, doesn't have any Minions connected (as they are not running), it won't
 be aware of what Minions should match your target. For this reasoning, it needs
 some "help". Salt already has had a subsystem named Salt SSH which works in a
 similar way, i.e., manage a remote system without having a Minion process up and
-running, connecting to the device over SSH. Read more about Salt SSH
-[here](TODO).
-Due to this similarity, the Salt SSH system has the same limitation and
-therefore why not have the same solution. That said, I borrowed the
+running, connecting to the device over SSH. If interested, you can read more
+about Salt SSH [here](TODO).
+
+Due to this similarity, the Salt SSH system has the same limitation which made
+me thing: "then why not have the same solution?". So I borrowed the
 [``Roster``](TODO) interface from Salt SSH, which is another pluggable Salt
 interface, that provides a list of devices and their connection credentials,
 given a specific target. In order words, you sometimes might have more complex
 targets that a single device or a list (e.g., you can have a regular expression
 -- ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
 several Roster modules available natively, and you can explore them
-[here](TODO).
+[here](TODO). 
+
+At the end of the day, it is the same methodology with other well
+know automation tools such as Ansible where you have to provide an *inventory*
+with all the devices it should be aware of.
 I will provide below an usage example, using the Ansible Roster module.
 
 Migrating from Ansible to Salt and salt-sproxy
@@ -363,8 +395,17 @@ $ salt-sproxy <tgt> --preview-target
 TODO
 ```
 
-More extensive details are documented at: https://salt-sproxy.readthedocs.io/en/latest/roster.html,
-and configuration examples at https://github.com/mirceaulinic/salt-sproxy/tree/master/examples.
+More extensive details are documented at:
+https://salt-sproxy.readthedocs.io/en/latest/roster.html,
+and configuration examples at
+https://github.com/mirceaulinic/salt-sproxy/tree/master/examples. For Ansible
+specifically, you might want to focus on these two sections:
+https://salt-sproxy.readthedocs.io/en/latest/roster.html#TODO and
+https://github.com/mirceaulinic/salt-sproxy/tree/master/examples/ansible/.
+
+In this way, you can benefit from Ansible's simplicity and Salt's power and
+flexibility (and ease of extensibility) altogether, *while you don't have to
+learn a DSL to use the tool*.
 
 Migrating from Proxy Minions to salt-sproxy
 -------------------------------------------
@@ -378,17 +419,135 @@ you should be able to go ahead and execute arbitrary commands immediately, e.g.,
 
 ```bash
 $ salt-sproxy 'iosxr-router' route.show '0.0.0.0/0'
+iosxr-router:
+    # TODO get output from an XR
 ```
 
 The previous command would show the routes to ``0.0.0.0/0`` on the
 ``iosxr-router`` which is supposed to be already configured as a Proxy.
+Confirming that works well, you can go ahead and turn off your Proxy service
+for ``iosxr-router``, and so on.
+
+Why not use both Proxy Minions and salt-sproxy
+----------------------------------------------
+
+You can do that too. ``salt-sproxy`` has been designed in such a way that if you
+already have Proxy Minions up and running, you can start using it straight away -
+as seen in the previous paragraph. If you decide not to turn them off, the CLI
+option ``--use-existing-proxy`` is going to execute the command on the existing
+Proxy Minions, whenever possible. In case your target is valid and didn't match
+an existing Proxy Minion, then salt-sproxy will detect this and will try to
+execute the Salt function locally.
+
+If you will want to have this as the default behaviour, you can set the
+following option in the Master config:
+
+```yaml
+use_existing_proxy: true
+```
 
 Even-driven automation? Not a problem
 -------------------------------------
 
-TODO: link to the dynamically injected Runner that can be used, though requires
-an always running Master.
+Have you raised eyebrows reading this title? If you're a seasoned Salt
+user, you might be wondering what does a program that is executed on demand,
+have anything to do with the event-driven paradigm? Well, you are still going
+to need a Master running. But now the good news: the master is all you need,
+which I think is a sufficiently good trade-off to have only one process always
+running that practically allows you to leverage the entire power of Salt.
 
+The recipe is fairly simple, I see three directions:
+
+1. Not interested in event-driven automation - use just ``salt-sproxy``.
+2. Interested in event-driven automation, but in a not highly dynamic
+  environment - use ``salt-sproxy`` together with a Salt Master.
+3. Interested in event-driven automation, in a highly dynamic environment - use
+  Proxy Minions.
+
+If you're still here, it means you're probably curious about (2). As I mentioned
+already, you are going to need a Salt Master up and running. Using the CLI
+option ``--events``, ``salt-sproxy`` is able to inject events on the Salt bus,
+which you can then trigger reactions in response to these events, or - why not -
+export these events as a way to monitor who is executing what. That, for example,
+is a nice and easy win for compliance and ensuring you have visibility in your
+network. For example, executing one of the previously used commands, with the
+``--events`` option:
+
+```bash
+$ salt-sproxy minion1 test.ping --events
+```
+
+Whatching the event bus in a separate terminal while running the previous
+command:
+
+```bash
+$ salt-run state.event pretty=True
+TODO
+```
+
+!!!!
+TODO copy from the documentation the event types and analogy
+!!!!
+
+
+If you would like this to be the default behaviour, simply add this line to
+the Master config:
+
+```yaml
+events: true
+```
+
+But wait: there's more - it also works the other way around; you can trigger
+jobs against network devices, in response to various events. The actual core of
+salt-sproxy is a Salt Runner named ``proxy``, which is loaded dynamically on
+run time. With this Runner, you can execute Salt commands on devices, without 
+having Minions.
+
+Let's take an example from one of my previous posts,
+[Event-driven network automation using napalm-logs and 
+Salt](https://mirceaulinic.net/2017-10-19-event-driven-network-automation).
+Take a moment and read, or re-read that post as it's essential in order to 
+fully understand the following.
+
+One of the Reactor files I exemplified was the following (triggered in response
+to an interface down event):
+
+``/etc/salt/reactor/if_down_shutdown.sls``
+{% raw %}
+```yaml
+shutdown_interface:
+  local.net.load_template:
+    - tgt: {{ data.host }}
+    - kwarg:
+        template_name: salt://templates/shut_interface.jinja
+        interface_name: {{ data.yang_message.interfaces.interface.keys()[0] }}
+```
+{% endraw %}
+
+This Reactor file can be transformed in the following way, to use execute the
+commands through the ``proxy`` Runner:
+
+``/etc/salt/reactor/if_down_shutdown.sls``
+{% raw %}
+```yaml
+shutdown_interface:
+  runner.proxy.execute_devices:
+    - devices: [ {{ data.host }} ]
+    - fun: net.load_template
+    - kwarg:
+        template_name: salt://templates/shut_interface.jinja
+        interface_name: {{ data.yang_message.interfaces.interface.keys()[0] }}
+```
+{% endraw %}
+
+As you can notice, the difference is small: ``local.net.load_template`` becomes
+``runner.proxy.execute_devices`` which tells the Reactor to invoke the
+``proxy.execute_devices`` Runner, which in turn executes the ``net.load_template``
+Salt function against the devices from the ``devices`` key.
+
+I could expand longer on this, and I'll probably follow up with a dedicated post
+if this is not clear and expand as much as possible. For now, I hope this brief
+introduction would be intriguing - at least. :-)
 
 Does it work on Windows?
 ------------------------
@@ -404,8 +563,19 @@ machines. If you can, please submit a PR to provide a ``.bat`` script or
 anything that provides the equivalent functionality on Windows - the community
 would greatly appreciate that. Thanks in advance!
 
+!!!!!!
+TODO ^ make that make file!!!
+!!!!!!
+
 Conclusions
 -----------
+
+I am super excited to release this project, and I hope it is going to
+help a lot. Salt is a beautiful tool, but often overlooked due to its high entry
+bar and loads of requirements. I believe that ``salt-sproxy`` is going to ease
+this and make it much easier for everyone to start automating. I recommend you
+to see the [Quick Start](TODO) section of the documentation and convince
+yourself.
 
 I don't think the ``salt-sproxy`` is meant to replace the existing Proxy Minion-
 based approach, but rather fill in some gaps where the Proxy Minions fall short,
@@ -420,9 +590,13 @@ to evaluate which devices require frequent changes / interaction (for which
 you would start Proxy processes), and which are more statical (which you'd
 probably manage using the ``salt-sproxy``).
 
-I hope you are going to find this helpful, and TODO.
+If you like the project, remember to star it on GitHub:
+https://github.com/mirceaulinic/salt-sproxy and why not Tweet about it, and let
+your friends know. The larger the community, the easier is going to be for every
+one of us!
 
-TODO: still WIP, waiting for feedback and hopefully PRs, and love to make it
-easier for everyone to get started to automate the networks, so please help
-improve the docs or add your examples to https://github.com/mirceaulinic/salt-sproxy/tree/master/examples
+I am looking forward to hearing your feedback. I would love to make it easier 
+for everyone to get started to automate, so please help improve the docs or add
+your usage examples to
+https://github.com/mirceaulinic/salt-sproxy/tree/master/examples
 so other engineers can follow them.
