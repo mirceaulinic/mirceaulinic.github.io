@@ -47,6 +47,11 @@ I'm very glad that after years of looking into this problem, I've _finally_
 found the solution. Today, I'm very excited to announce the
 [``salt-sproxy``](https://github.com/mirceaulinic/salt-sproxy) package.
 
+Most importantly, you don't need to learn how to use another framework, but the
+same Salt methodologies that have been around for many years already, with the
+experience of being run in thousands of environments and providing thousands of
+features ready to use, out of the box.
+
 ``salt-sproxy``
 ---------------
 
@@ -57,12 +62,12 @@ running a lightweight version of the Proxy Minion - that is, the regular Proxy
 Minion start up, including compiling the Pillar, or collecting the Grains, but
 without other components that wouldn't make sense in this case, i.e., Engines,
 Beacons, Scheduler etc. In short, it pretty much only establishes the connection
-to the remote network device, over the API of choice. As soon as the execution
-of the Salt function is finished, it closes the connection and terminates the
-subprocess.
+to the remote network device, over the API of choice, then invokes the function
+you requested; as soon as the execution of the Salt function is finished, it
+closes the connection and terminates the subprocess.
 
-``salt-sproxy`` can be very well installed on the Master, or even on your
-personal computer, as it only requires one thing: be able to connect to the
+``salt-sproxy`` can be very well installed on an existing Master, or even on
+your personal computer, as it only requires one thing: be able to connect to the
 network device from where you run it. Not only that you don't require any Proxy
 Minions always running, but you don't actually need a Salt Master either. It's
 as easy as that: install and use. It is [available on 
@@ -106,7 +111,6 @@ are already used to, and you can, e.g., use the [Returner](TODO) interface to
 forward the data into a different system, write the returned output into a file,
 or display the data on the CLI in the format you want, and so on, e.g.,
 
-
 ```bash
 $ salt-sproxy edge1.thn.lon net.lldp --out=json --out-file=/home/mircea/lldp.json
 ```
@@ -129,7 +133,9 @@ $ salt-sproxy juniper-router example.version
 ```
 
 To be able to load your custom modules, as explained in the blog post, you would
-need to have the correct configuration for the ``file_roots``.
+need to have the correct configuration for the ``file_roots``. The (positive)
+difference is that you won't need to call ``saltutil.sync_modules`` before
+calling your function, as everything is loaded on run time.
 
 Quick start
 -----------
@@ -195,9 +201,9 @@ and Top file accordingly:
 ``/etc/salt/pillar/top.sls``
 ```yaml
 base:
-  juniper-router1:
+  juniper-router:
     - junos
-  arista-switch1:
+  arista-switch:
     - eos
 ```
 
@@ -212,52 +218,24 @@ proxy:
 ```
 
 Similarly it is a good idea to check using
-``salt-run pillar.show_pillar juniper-router1`` that the Pillar is indeed
+``salt-run pillar.show_pillar juniper-router`` that the Pillar is indeed
 correctly defined, then you're good to go, e.g.,
 
-- Retrieve the ARP table of ``juniper-router1``:
+- Retrieve the ARP table of ``juniper-router``:
 
 ```bash
-$ salt-sproxy juniper-router1 net.arp
+$ salt-sproxy juniper-router net.arp
 TODO
 ```
 
 - Load a configuration change:
 
 ```bash
-$ salt-sproxy juniper-router1 net.load_config text='set system ntp server 10.10.1.1'
+$ salt-sproxy juniper-router net.load_config text='set system ntp server 10.10.1.1'
 ```
 
 As promised, the methodology remains the same, without the headache of managing
 thousands of always running processes.
-
-So what's the catch?
---------------------
-
-Does it sound too good to be true? Well, it is that good, and there isn't any
-catch. It might not be immediately obvious what are the implications and the
-benefits to using this methodology, but it made me very happy when I've finally
-been able to put this together.
-
-There are some differences however, that you should be aware of. The usual
-``salt`` command when executing, spreads out a job to all the connected Minions,
-and those that match the target are going to reply. As ``salt-sproxy``, by
-design, doesn't have any Minions connected (as they are not running), it won't
-be aware of what Minions should match your target. For this reasoning, it needs
-some "help". Salt already has had a subsystem named Salt SSH which works in a
-similar way, i.e., manage a remote system without having a Minion process up and
-running, connecting to the device over SSH. Read more about Salt SSH
-[here](TODO).
-Due to this similarity, the Salt SSH system has the same limitation and
-therefore why not have the same solution. That said, I borrowed the
-[``Roster``](TODO) interface from Salt SSH, which is another pluggable Salt
-interface, that provides a list of devices and their connection credentials,
-given a specific target. In order words, you sometimes might have more complex
-targets that a single device or a list (e.g., you can have a regular expression
--- ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
-several Roster modules available natively, and you can explore them
-[here](TODO).
-I will provide below an usage example, using the Ansible Roster module.
 
 Does it work only with NAPALM?
 ------------------------------
@@ -298,6 +276,43 @@ $ salt-sproxy obscure-platform test.ping
 I am not going to detail on this further, but you can follow the notes from
 [TODO](TODO) with the minor differences described above.
 
+In the exact same way, you can use any of the [natively available Proxy 
+modules](https://docs.saltstack.com/en/develop/ref/proxy/all/index.html) and
+manage your [VMWare 
+ESXi](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.esxi.html#module-salt.proxy.esxi),
+[Chronos cluster](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.chronos.html#module-salt.proxy.chronos),
+[Bluecoat SSL Decryption 
+devices](https://docs.saltstack.com/en/develop/ref/proxy/all/salt.proxy.bluecoat_sslv.html#module-salt.proxy.bluecoat_sslv),
+and many others.
+
+So what's the catch?
+--------------------
+
+Does it sound too good to be true? Well, it is that good, and there isn't any
+catch. It might not be immediately obvious what are the implications and the
+benefits to using this methodology, but it made me very happy when I've finally
+been able to put this together.
+
+There are some differences however, that you should be aware of. The usual
+``salt`` command when executing, spreads out a job to all the connected Minions,
+and those that match the target are going to reply. As ``salt-sproxy``, by
+design, doesn't have any Minions connected (as they are not running), it won't
+be aware of what Minions should match your target. For this reasoning, it needs
+some "help". Salt already has had a subsystem named Salt SSH which works in a
+similar way, i.e., manage a remote system without having a Minion process up and
+running, connecting to the device over SSH. Read more about Salt SSH
+[here](TODO).
+Due to this similarity, the Salt SSH system has the same limitation and
+therefore why not have the same solution. That said, I borrowed the
+[``Roster``](TODO) interface from Salt SSH, which is another pluggable Salt
+interface, that provides a list of devices and their connection credentials,
+given a specific target. In order words, you sometimes might have more complex
+targets that a single device or a list (e.g., you can have a regular expression
+-- ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
+several Roster modules available natively, and you can explore them
+[here](TODO).
+I will provide below an usage example, using the Ansible Roster module.
+
 Migrating from Ansible to Salt and salt-sproxy
 ----------------------------------------------
 
@@ -305,12 +320,12 @@ I've seen a lot Ansible users that were interested to migrate to Salt, however
 the radically different mentality that you need to adopt (including the always
 running processes) was a blocker for many. Hopefully this should no longer be
 the case anymore. If you're already an Ansible user, ``salt-sproxy`` should
-make it even easier to migrate to using Salt.
+make it even easier to migrate to Salt.
 
 As briefly presented above, to be able to match more sophisticated targets 
 (groups of devices), you may need a Roster. Even easier for you probably to
 provide a Roster file, as you might already have an Ansible inventory file.
-Simply move/copy the Ansible inventory to ``/etc/salt/roster``, and tell
+Simply move/copy your Ansible inventory to ``/etc/salt/roster``, and tell
 ``salt-proxy`` to use it by configuring the ``proxy_roster`` option:
 
 ``/etc/salt/master``
@@ -318,18 +333,55 @@ Simply move/copy the Ansible inventory to ``/etc/salt/roster``, and tell
 proxy_roster: ansible
 ```
 
+Should you prefer to store your Ansible inventory under a different path, you
+can use the ``roster_file`` option, e.g.,
+
+``/etc/salt/master``
+```yaml
+proxy_roster: ansible
+roster_file: /path/to/ansible/inventory
+```
+
 One particular difference to always remember is that the Ansible Roster /
 inventory file doesn't need to provide the connection details, as those are
 already managed into the Pillar, as detailed previously.
 
+If the configuration is correct, you can run the following to verify that the
+inventory is interpreted properly - the command should display the entire list
+of devices salt-sproxy should be aware of:
+
+```bash
+$ salt-sproxy '*' --preview-target
+```
+
 When the configuration is correctly setup, you should be able to check the list
-of devices matches by your target expression (determined via the Roster
+of devices matched by your target expression (determined via the Roster
 interface):
 
 ```bash
 $ salt-sproxy <tgt> --preview-target
 TODO
 ```
+
+More extensive details are documented at: https://salt-sproxy.readthedocs.io/en/latest/roster.html,
+and configuration examples at https://github.com/mirceaulinic/salt-sproxy/tree/master/examples.
+
+Migrating from Proxy Minions to salt-sproxy
+-------------------------------------------
+
+I do not encourage turning off all your Proxies and replacing them with
+salt-sproxy, however it might make sense to tear down some. It probably boils
+down to how many operations per second you are aiming for. Either way,
+salt-sproxy can work very well even with devices whose Proxy is already up and
+running, without any issues. Assuming that your Proxy is properly configured,
+you should be able to go ahead and execute arbitrary commands immediately, e.g.,
+
+```bash
+$ salt-sproxy 'iosxr-router' route.show '0.0.0.0/0'
+```
+
+The previous command would show the routes to ``0.0.0.0/0`` on the
+``iosxr-router`` which is supposed to be already configured as a Proxy.
 
 Even-driven automation? Not a problem
 -------------------------------------
@@ -370,4 +422,7 @@ probably manage using the ``salt-sproxy``).
 
 I hope you are going to find this helpful, and TODO.
 
-TODO: still WIP, waiting for feedback and hopefully PRs
+TODO: still WIP, waiting for feedback and hopefully PRs, and love to make it
+easier for everyone to get started to automate the networks, so please help
+improve the docs or add your examples to https://github.com/mirceaulinic/salt-sproxy/tree/master/examples
+so other engineers can follow them.
