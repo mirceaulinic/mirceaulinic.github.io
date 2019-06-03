@@ -105,8 +105,20 @@ The usage is fairly simple, very similar to the syntax of the usual ``salt``
 command:
 
 ```bash
-$ salt-sproxy <target> <function> [<arguments] [<options>]
+$ salt-sproxy <target> <function> [<arguments>] [<options>]
 ```
+
+Where:
+
+- ``target`` is the target expression to select what devices to execute the
+  command on. E.g., ``edge1.atlanta``, ``edge*.paris`` (to select all the edge
+  routers in the Paris area), etc.
+- ``function``: the Salt function to execute. There are several hundreds of Salt
+  functions natively available. You can start exploring from [here](TODO).
+- ``arguments``: arguments to be passed to the Salt function, if required. See
+  the documentation for each function for usage details and examples.
+- ``options``: options for the ``salt-sproxy`` command. See [here](TODO) the
+  available options, or execute ``salt-sproxy --help`` on the CLI.
 
 For example, the following command would retrieve the ARP table from the device
 identified as ``edge1.thn.lon``:
