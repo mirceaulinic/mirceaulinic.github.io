@@ -114,10 +114,12 @@ Where:
   command on. E.g., ``edge1.atlanta``, ``edge*.paris`` (to select all the edge
   routers in the Paris area), etc.
 - ``function``: the Salt function to execute. There are several hundreds of Salt
-  functions natively available. You can start exploring from [here](TODO).
+  functions natively available. You can start exploring from
+  [here](https://docs.saltstack.com/en/latest/ref/modules/all/).
 - ``arguments``: arguments to be passed to the Salt function, if required. See
   the documentation for each function for usage details and examples.
-- ``options``: options for the ``salt-sproxy`` command. See [here](TODO) the
+- ``options``: options for the ``salt-sproxy`` command. See
+  [here](https://salt-sproxy.readthedocs.io/en/latest/opts.html) the
   available options, or execute ``salt-sproxy --help`` on the CLI.
 
 For example, the following command would retrieve the ARP table from the device
@@ -146,7 +148,8 @@ $ salt-sproxy edge1.thn.lon net.arp -c /path/to/salt/config
 ```
 
 The good news here is that (almost) everything is exactly preserved to what you
-are already used to, and you can, e.g., use the [Returner](TODO) interface to
+are already used to, and you can, e.g., use the
+[Returner](https://docs.saltstack.com/en/latest/ref/returners/) interface to
 forward the data into a different system, write the returned output into a file,
 or display the data on the CLI in the format you want, and so on, e.g.,
 
@@ -165,7 +168,8 @@ respectively.
 Another great point - which is particularly important to me - is being able to
 invoke the custom extension function you define in your own environment. For
 example, let's consider the ``example.version`` function defined in the previous
-post on [Extending NAPALM's capabilities in the Salt environment](TODO):
+post on
+[Extending NAPALM's capabilities in the Salt environment](https://mirceaulinic.net/2019-04-24-extending-napalm-salt/):
 
 ```bash
 $ salt-sproxy juniper-router example.version
@@ -234,8 +238,9 @@ of the installed PIP-managed Python packages on the local computer (or wherever
 you're executing salt-sproxy on).
 
 The same methodology can then be applied for connecting to network gear through
-your Proxy module of choice. For example, [``napalm``](TODO); update the Pillar
-and Top file accordingly:
+your Proxy module of choice. For example,
+[``napalm``](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.napalm.html);
+update the Pillar and Top file accordingly:
 
 ``/etc/salt/pillar/top.sls``
 ```yaml
@@ -264,13 +269,61 @@ correctly defined, then you're good to go, e.g.,
 
 ```bash
 $ salt-sproxy juniper-router net.arp
-TODO
+juniper-router:
+    ----------
+    comment:
+    out:
+        |_
+          ----------
+          age:
+              849.0
+          interface:
+              fxp0.0
+          ip:
+              10.96.0.1
+          mac:
+              92:99:00:0A:00:00
+        |_
+          ----------
+          age:
+              973.0
+          interface:
+              fxp0.0
+          ip:
+              10.96.0.13
+          mac:
+              92:99:00:0A:00:00
+        |_
+          ----------
+          age:
+              738.0
+          interface:
+              em1.0
+          ip:
+              128.0.0.16
+          mac:
+              02:42:AC:13:00:02
+    result:
+        True
 ```
 
 - Load a configuration change:
 
 ```bash
 $ salt-sproxy juniper-router net.load_config text='set system ntp server 10.10.1.1'
+juniper-router:
+    ----------
+    already_configured:
+        False
+    comment:
+    diff:
+        [edit system]
+        +   ntp {
+        +       server 10.10.1.1;
+        +   }
+    loaded_config:
+    result:
+        True
 ```
 
 As promised, the methodology remains the same, without the headache of managing
@@ -279,13 +332,17 @@ thousands of always running processes.
 Does it work only with NAPALM?
 ------------------------------
 
-No. You can use any of the available [Proxy modules](TODO) in the exact same way. The
-``salt-sproxy`` relies on the Proxy modules to initiate the connection, but it
-doesn't require the Proxy process to be running. If you have a device that isn't
-currently supported by Salt natively, just write a Proxy module for it - see
-[this guide](TODO) - put it into the ``salt://_proxy`` directory, and then make
-sure that the module is referenced in the ``proxytype:`` Pillar field. If you're
-unsure what ``salt://_proxy`` means, please check [this](TODO) article again.
+No. You can use any of the available
+[Proxy modules](https://docs.saltstack.com/en/latest/ref/proxy/all/index.html)
+in the exact same way. The ``salt-sproxy`` relies on the Proxy modules to
+initiate the connection, but it doesn't require the Proxy process to be running.
+If you have a device that isn't currently supported by Salt natively, just write
+a Proxy module for it - see
+[this guide](https://docs.saltstack.com/en/latest/topics/proxyminion/index.html#proxymodules):
+put the module into the ``salt://_proxy`` directory, and then make sure that the
+module is referenced in the ``proxytype:`` Pillar field. If you're unsure what
+``salt://_proxy`` means, please check
+[this](http://mirceaulinic.net/2019-04-24-extending-napalm-salt/) article again.
 
 Suppose we write a custom Proxy module, e.g., ``customproxy.py`` which we put
 under ``/srv/salt/extmods/_proxy``. Then, to use it, when targeting a device,
@@ -313,7 +370,8 @@ $ salt-sproxy some-device test.ping
 ```
 
 I am not going to detail on this further, but you can follow the notes from
-[TODO](TODO) with the minor differences described above.
+[this guide](https://docs.saltstack.com/en/latest/topics/proxyminion/index.html)
+with the minor differences described above.
 
 In the exact same way, you can use any of the [natively available Proxy 
 modules](https://docs.saltstack.com/en/develop/ref/proxy/all/index.html) and
@@ -340,17 +398,18 @@ be aware of what Minions should match your target. For this reasoning, it needs
 some "help". Salt already has had a subsystem named Salt SSH which works in a
 similar way, i.e., manage a remote system without having a Minion process up and
 running, connecting to the device over SSH. If interested, you can read more
-about Salt SSH [here](TODO).
+about Salt SSH [here](https://docs.saltstack.com/en/latest/topics/ssh/).
 
 Due to this similarity, the Salt SSH system has the same limitation which made
 me think: "then why not have the same solution?". So I borrowed the
-[``Roster``](TODO) interface from Salt SSH, which is another pluggable Salt
-interface, which provides a list of devices and their connection credentials,
-given a specific target. In order words, you sometimes might have more complex
-targets that a single device or a list (e.g., you can have a regular expression
--- ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
+[``Roster``](https://docs.saltstack.com/en/latest/topics/ssh/roster.html)
+interface from Salt SSH, which is another pluggable Salt interface, which
+provides a list of devices and their connection credentials, given a specific
+target. In order words, you sometimes might have more complex targets that a
+single device or a list (e.g., you can have a regular expression --
+``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
 several Roster modules available natively, and you can explore them
-[here](TODO). 
+[here](https://docs.saltstack.com/en/latest/ref/roster/all/index.html#all-salt-roster). 
 
 At the end of the day, it is the same methodology with other well
 know automation tools such as Ansible where you have to provide an *inventory*
@@ -404,7 +463,13 @@ interface):
 
 ```bash
 $ salt-sproxy <tgt> --preview-target
-TODO
+- edge1.seattle
+- edge1.vancouver
+- edge1.atlanta
+- edge2.atlanta
+- edge1.raleigh
+- edge1.la
+- edge1.sfo
 ```
 
 More extensive details are documented at:
@@ -412,7 +477,8 @@ https://salt-sproxy.readthedocs.io/en/latest/roster.html,
 and configuration examples at
 https://github.com/mirceaulinic/salt-sproxy/tree/master/examples. For Ansible
 specifically, you might want to focus on these two sections:
-https://salt-sproxy.readthedocs.io/en/latest/roster.html#TODO and
+https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible
+and
 https://github.com/mirceaulinic/salt-sproxy/tree/master/examples/ansible/.
 
 In this way, you can benefit from Ansible's simplicity and Salt's power and
@@ -489,7 +555,7 @@ network. For example, executing one of the previously used commands, with the
 $ salt-sproxy minion1 test.ping --events
 ```
 
-Whatching the event bus in a separate terminal while running the previous
+Watching the event bus in a separate terminal while running the previous
 command:
 
 ```bash
@@ -509,19 +575,29 @@ the Master config:
 events: true
 ```
 
-With this, enabling an Engine, for instance the [``http_logstash``](TODO) Engine,
-on the Master (check out the [documentation](TODO) how to do so), Salt is going
-to export the selected (or all) events into Logstash which instantly gives you
+With this, enabling an Engine, for instance the
+[``http_logstash``](https://docs.saltstack.com/en/latest/ref/engines/all/salt.engines.http_logstash.html#module-salt.engines.http_logstash)
+Engine, on the Master (check out the
+[documentation](https://docs.saltstack.com/en/latest/ref/engines/all/salt.engines.http_logstash.html#module-salt.engines.http_logstash)
+how to do so), Salt is going to export the selected (or all) events into
+[Logstash](https://www.elastic.co/products/logstash )which instantly gives you
 visibility on who, what and when applies a configuration change, or any other
-command touching your network. Frankly speaking, it can't get easier than that.
+command touching your network. Frankly speaking, I don't think it can't be any
+easier than that.
 
 The same goes with any other Salt components watching the event bus: you can
 forward your events into a database using a Returner, forward execution errors
-to [Sentry](TODO) using [this](TODO) Returner, or even send SMSs in case
-of critical events. Take a look at the available Returners and Engines. As
-usually, there are many interfaces natively available, but it is possible that
-they can't cover your needs exactly; in that case, it's very easy to write a
-Returner or an Engine in your own environment.
+to [Sentry](https://sentry.io/welcome/) using
+[this](https://docs.saltstack.com/en/latest/ref/returners/all/salt.returners.sentry_return.html)
+Returner, or even send
+[SMSs](https://docs.saltstack.com/en/latest/ref/returners/all/salt.returners.sms_return.html)
+in case of critical events. In all these cases, everything you have to do is
+providing the configuration as documented. Take a look at the available
+[Returners](https://docs.saltstack.com/en/latest/ref/returners/index.html#full-list-of-returners)
+and [Engines](https://docs.saltstack.com/en/latest/ref/engines/all/index.html).
+As usually, there are many interfaces natively available, but it is possible
+that they can't cover your needs exactly; in that case, it's very easy to write
+a Returner or an Engine in your own environment.
 
 But wait: there's more - it also works the other way around; you can trigger
 jobs against network devices, in response to various events. The actual core of
@@ -606,8 +682,9 @@ I am super excited to release this project, and I hope it is going to
 help a lot. Salt is a beautiful tool, but often overlooked due to its high entry
 barrier and loads of requirements. I believe that ``salt-sproxy`` is going to
 ease this and make it much easier for everyone to start automating. I recommend
-you to see the [Quick Start](TODO) section of the documentation and convince
-yourself.
+you to see the
+[Quick Start](https://salt-sproxy.readthedocs.io/en/latest/#quick-start) section
+of the documentation and convince yourself.
 
 I don't think the ``salt-sproxy`` is meant to replace the existing Proxy Minion-
 based approach, but rather fill in some gaps where the Proxy Minions fall short,
