@@ -32,9 +32,9 @@ title: A (Proxy) Minion-less Approach to Network Automation using Salt
 
 Salt is currently one of the largely adopted automating frameworks, and perhaps
 one of the most complete and flexible. But these - including support for
-several types of topologies, large cardinal of native capabilities and features,
+several architectures, large cardinal of native capabilities and features,
 ability to easily extend it in your own environment, and so on - come with a
-cost. And that is setting up and maintaining an infrastructure to facilitate and
+cost. The cost is setting up and maintaining an infrastructure to facilitate and
 leverage these capabilities.
 
 In the networking space, Salt has had native support for automating networks
@@ -44,8 +44,8 @@ either through [NAPALM](https://github.com/napalm-automation/napalm) (and the
 available [community drivers](https://github.com/napalm-automation-community/)),
 or various others natively integrated modules. Network gear is generally managed
 through Proxy Minions, which is a derivative of regular Salt Minion allowing to
-manage the targeted device remotely. Let's make one step back: as you probably
-know very well already, a regular Minion is a software managing the machine it
+manage the targeted device remotely. Let's make one step back: as you may
+know very well already, a regular Minion is a service managing the machine it
 is running on; but the issue here is that you generally cannot install and run
 custom software on legacy network gear, therefore you cannot install the regular
 Minion on the network device and manage it like that. That said, the remaining
@@ -277,7 +277,7 @@ unsure what ``salt://_proxy`` means, please check [this](TODO) article again.
 
 Suppose we write a custom Proxy module, e.g., ``customproxy.py`` which we put
 under ``/srv/salt/extmods/_proxy``. Then, to use it, when targeting a device,
-e.g., ``obscure-platform``, in the Pillar you'll need to have the following
+e.g., ``some-device``, in the Pillar you'll need to have the following
 structure:
 
 ```yaml
@@ -286,18 +286,18 @@ proxy:
   ~~~ connection credentials ~~~
 ```
 
-To check that the data is indeed available for the ``obscure-platform`` Minion,
+To check that the data is indeed available for the ``some-device`` Minion,
 you can always run the following command:
 
 ```bash
-$ salt-run pillar.show_pillar obscure-platform
+$ salt-run pillar.show_pillar some-device
 ```
 
 Then you should be all set to give it a go:
 
 
 ```bash
-$ salt-sproxy obscure-platform test.ping
+$ salt-sproxy some-device test.ping
 ```
 
 I am not going to detail on this further, but you can follow the notes from
@@ -317,8 +317,8 @@ So what's the catch?
 
 Does it sound too good to be true? Well, it is that good, and there isn't any
 catch. It might not be immediately obvious what are the implications and the
-benefits to using this methodology, but it made me very happy when I've finally
-been able to put this together.
+benefits to using this methodology, but it made me very happy when I've been
+able to put this together.
 
 There are some differences however, that you should be aware of. The usual
 ``salt`` command when executing, spreads out a job to all the connected Minions,
@@ -331,9 +331,9 @@ running, connecting to the device over SSH. If interested, you can read more
 about Salt SSH [here](TODO).
 
 Due to this similarity, the Salt SSH system has the same limitation which made
-me thing: "then why not have the same solution?". So I borrowed the
+me think: "then why not have the same solution?". So I borrowed the
 [``Roster``](TODO) interface from Salt SSH, which is another pluggable Salt
-interface, that provides a list of devices and their connection credentials,
+interface, which provides a list of devices and their connection credentials,
 given a specific target. In order words, you sometimes might have more complex
 targets that a single device or a list (e.g., you can have a regular expression
 -- ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
@@ -375,7 +375,7 @@ roster_file: /path/to/ansible/inventory
 ```
 
 One particular difference to always remember is that the Ansible Roster /
-inventory file doesn't need to provide the connection details, as those are
+inventory file doesn't have to provide the connection details, as those are
 already managed into the Pillar, as detailed previously.
 
 If the configuration is correct, you can run the following to verify that the
@@ -411,8 +411,8 @@ Migrating from Proxy Minions to salt-sproxy
 -------------------------------------------
 
 I do not encourage turning off all your Proxies and replacing them with
-salt-sproxy, however it might make sense to tear down some. It probably boils
-down to how many operations per second you are aiming for. Either way,
+salt-sproxy, however it might make sense to tear down some of them. It probably
+boils down to how many operations per second you are aiming for. Either way,
 salt-sproxy can work very well even with devices whose Proxy is already up and
 running, without any issues. Assuming that your Proxy is properly configured,
 you should be able to go ahead and execute arbitrary commands immediately, e.g.,
@@ -459,7 +459,7 @@ running that practically allows you to leverage the entire power of Salt.
 The recipe is fairly simple, I see three directions:
 
 1. Not interested in event-driven automation - use just ``salt-sproxy``.
-2. Interested in event-driven automation, but in a not highly dynamic
+2. Interested in event-driven automation, but not in a highly dynamic
   environment - use ``salt-sproxy`` together with a Salt Master.
 3. Interested in event-driven automation, in a highly dynamic environment - use
   Proxy Minions.
@@ -496,6 +496,20 @@ the Master config:
 ```yaml
 events: true
 ```
+
+With this, enabling an Engine, for instance the [``http_logstash``](TODO) Engine,
+on the Master (check out the [documentation](TODO) how to do so), Salt is going
+to export the selected (or all) events into Logstash which instantly gives you
+visibility on who, what and when applies a configuration change, or any other
+command touching your network. Frankly speaking, it can't get easier than that.
+
+The same goes with any other Salt components watching the event bus: you can
+forward your events into a database using a Returner, forward execution errors
+to [Sentry](TODO) using [this](TODO) Returner, or even send SMSs in case
+of critical events. Take a look at the available Returners and Engines. As
+usually, there are many interfaces natively available, but it is possible that
+they can't cover your needs exactly; in that case, it's very easy to write a
+Returner or an Engine in your own environment.
 
 But wait: there's more - it also works the other way around; you can trigger
 jobs against network devices, in response to various events. The actual core of
@@ -543,11 +557,17 @@ shutdown_interface:
 As you can notice, the difference is small: ``local.net.load_template`` becomes
 ``runner.proxy.execute_devices`` which tells the Reactor to invoke the
 ``proxy.execute_devices`` Runner, which in turn executes the ``net.load_template``
-Salt function against the devices from the ``devices`` key.
+Salt function against the devices from the ``devices`` key. The arguments under
+``kwargs`` are preserved, with the same effect. The difference is however in the
+way it works: while previously with ``local.net.load_template`` the execution is
+sent to the Minion managing the device, changing to
+``runner.proxy.execute_devices`` the execution takes place locally. This is
+practically the main difference between using Proxy Minions and salt-sproxy in
+this context.
 
 I could expand longer on this, and I'll probably follow up with a dedicated post
 if this is not clear and expand as much as possible. For now, I hope this brief
-introduction would be intriguing - at least. :-)
+introduction is intriguing - at least. :-)
 
 Does it work on Windows?
 ------------------------
@@ -572,19 +592,19 @@ Conclusions
 
 I am super excited to release this project, and I hope it is going to
 help a lot. Salt is a beautiful tool, but often overlooked due to its high entry
-bar and loads of requirements. I believe that ``salt-sproxy`` is going to ease
-this and make it much easier for everyone to start automating. I recommend you
-to see the [Quick Start](TODO) section of the documentation and convince
+barrier and loads of requirements. I believe that ``salt-sproxy`` is going to
+ease this and make it much easier for everyone to start automating. I recommend
+you to see the [Quick Start](TODO) section of the documentation and convince
 yourself.
 
 I don't think the ``salt-sproxy`` is meant to replace the existing Proxy Minion-
 based approach, but rather fill in some gaps where the Proxy Minions fall short,
 or are a burden to manage. As I mentioned in the beginning of this post, in my
 opinion, Proxy Minions would always make sense in dynamic environments, or
-to manage devices likely to change their environment very quickly. On the long
-term, I would assume that the winning combination is running both Proxy Minions
-and ``salt-sproxy`` concomitantly, although there may be exceptions. It depends
-very much on your operations, the network topology, what are your goals and many
+to manage devices susceptible to frequent change. On the long term, I would
+assume that the winning combination is running both Proxy Minions and
+``salt-sproxy`` concomitantly, although there may be exceptions. It depends very
+much on your operations, the network topology, what are your goals and many
 other aspects on where to draw the line; I think that the rule of thumb here is
 to evaluate which devices require frequent changes / interaction (for which
 you would start Proxy processes), and which are more statical (which you'd
