@@ -701,14 +701,13 @@ give it a try, then let me know. Normally, if you're able to install ``salt``
 from PyPI, ``salt-sproxy`` should be usable too - that is my guess, at least.
 
 In the [``salt-sproxy``](https://github.com/mirceaulinic/salt-sproxy) repository
-I've added a Makefile that should normally facilitate the installation on Unix
-machines. If you can, please submit a PR to provide a ``.bat`` script or
+I've added a script that should normally facilitate the installation on Unix
+machines: https://raw.githubusercontent.com/mirceaulinic/salt-sproxy/master/install.sh
+(and usage details at https://salt-sproxy.readthedocs.io/en/latest/install.html).
+
+If you can, please submit a PR to provide a ``.bat`` script or
 anything that provides the equivalent functionality on Windows - the community
 would greatly appreciate that. Thanks in advance!
-
-!!!!!!
-TODO ^ make that make file!!!
-!!!!!!
 
 Conclusions
 -----------
