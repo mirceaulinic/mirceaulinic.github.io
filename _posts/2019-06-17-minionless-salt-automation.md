@@ -91,7 +91,7 @@ I'll firstly present what it does and then we'll take a look at how to use. The
 core idea is that ``salt-sproxy`` creates a subprocess for every device matching
 the target executing the requested Salt function. Under each subprocess it's
 running a lightweight version of the Proxy Minion - that is, the regular Proxy
-Minion start up, including compiling the Pillar, or collecting the Grains, but
+Minion start up, including compiling the Pillar, collecting the Grains, but
 without other components that wouldn't make sense in this case, i.e., Engines,
 Beacons, Scheduler etc. In short, it pretty much only establishes the connection
 to the remote network device, over the API of choice, then invokes the function
@@ -696,6 +696,48 @@ this context.
 I could expand longer on this, and I'll probably follow up with a dedicated post
 if this is not clear and expand as much as possible. For now, I hope this brief
 introduction is intriguing - at least. :-)
+
+Execution over the Salt REST API? Sorted!
+-----------------------------------------
+
+Through the same Runner as previously, after enabling the Salt HTTP API (see
+https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html
+to learn how to correctly set it up), you should be able to execute, e.g.,
+
+```bash
+$ curl -sS localhost:8080/run -H 'Accept: application/x-yaml' \
+  -d client='runner' \
+  -d fun='proxy.execute' \
+  -d username='mircea' \
+  -d password='pass' \
+  -d eauth='pam' \
+  -d tgt='minion1' \
+  -d function='test.ping' \
+  -d sync='true'
+return:
+- minion1: true
+```
+
+Or from Python:
+
+```python
+>>> resp = session.post('http://localhost:8080/run', json={
+... 'client': 'runner',
+... 'fun': 'proxy.execute',
+... 'username': 'mircea',
+... 'password': 'pass',
+... 'eauth': 'auto',
+... 'tgt': 'minion1',
+... 'function': 'test.ping',
+... 'sync': True})
+>>> resp.json()
+{u'return': [{u'minion1': True}]}
+```
+
+Both examples above are the equivalent of the CLI ``salt-sproxy minion1 test.ping``.
+
+See https://salt-sproxy.readthedocs.io/en/latest/salt_api.html for more details
+and usage examples.
 
 Does it work on Windows?
 ------------------------
