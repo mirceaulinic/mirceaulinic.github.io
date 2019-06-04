@@ -82,6 +82,11 @@ features ready to use, out of the box.
 ``salt-sproxy``
 ---------------
 
+salt-sproxy is an agentless approach to automation, while still using Salt, but
+without requiring Proxy or regular Minions. It is a plugin, extending Salt, so
+you can continue to benefit from the scalability, extensibility and flexibility
+of Salt, while you don't have to manage thousands of (Proxy) Minion services.
+
 I'll firstly present what it does and then we'll take a look at how to use. The
 core idea is that ``salt-sproxy`` creates a subprocess for every device matching
 the target executing the requested Salt function. Under each subprocess it's
