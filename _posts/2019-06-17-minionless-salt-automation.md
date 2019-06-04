@@ -553,6 +553,8 @@ network. For example, executing one of the previously used commands, with the
 
 ```bash
 $ salt-sproxy minion1 test.ping --events
+minion1:
+    True
 ```
 
 Watching the event bus in a separate terminal while running the previous
@@ -560,16 +562,44 @@ command:
 
 ```bash
 $ salt-run state.event pretty=True
-TODO
+
+20190604102025230045	{
+    "_stamp": "2019-06-04T09:20:25.230783",
+    "minions": [
+        "minion1"
+    ]
+}
+proxy/runner/20190604102025232023/new	{
+    "_stamp": "2019-06-04T09:20:25.232688",
+    "arg": [],
+    "fun": "test.ping",
+    "jid": "20190604102025232023",
+    "minions": [
+        "minion1"
+    ],
+    "tgt": "minion1",
+    "tgt_type": "glob",
+    "user": "mircea"
+}
+proxy/runner/20190604102025232023/ret/minion1	{
+    "_stamp": "2019-06-04T09:20:25.330420",
+    "fun": "test.ping",
+    "fun_args": [],
+    "id": "minion1",
+    "jid": "20190604102025232023",
+    "return": true,
+    "success": true
+}
 ```
 
-!!!!
-TODO copy from the documentation the event types and analogy
-!!!!
+The events pushed on the Salt bus have the same structure as the native Salt
+execution events, the only difference being that the tag is registered under the
+``proxy/runner`` namespace vs. ``salt/job`` as the usual Salt events.
+See https://salt-sproxy.readthedocs.io/en/latest/events.html for further details
+and examples.
 
-
-If you would like this to be the default behaviour, simply add this line to
-the Master config:
+If you would like to have Salt events by default, simply add this line to
+your Master config:
 
 ```yaml
 events: true
@@ -580,10 +610,10 @@ With this, enabling an Engine, for instance the
 Engine, on the Master (check out the
 [documentation](https://docs.saltstack.com/en/latest/ref/engines/all/salt.engines.http_logstash.html#module-salt.engines.http_logstash)
 how to do so), Salt is going to export the selected (or all) events into
-[Logstash](https://www.elastic.co/products/logstash )which instantly gives you
+[Logstash](https://www.elastic.co/products/logstash) which instantly gives you
 visibility on who, what and when applies a configuration change, or any other
 command touching your network. Frankly speaking, I don't think it can't be any
-easier than that.
+easier than that. :-)
 
 The same goes with any other Salt components watching the event bus: you can
 forward your events into a database using a Returner, forward execution errors
@@ -599,11 +629,11 @@ As usually, there are many interfaces natively available, but it is possible
 that they can't cover your needs exactly; in that case, it's very easy to write
 a Returner or an Engine in your own environment.
 
-But wait: there's more - it also works the other way around; you can trigger
-jobs against network devices, in response to various events. The actual core of
-salt-sproxy is a Salt Runner named ``proxy``, which is loaded dynamically on
-run time. With this Runner, you can execute Salt commands on devices, without 
-having Minions.
+But wait: there's more: it also works the other way around; you can trigger
+jobs to be executed against network devices, in response to various events. The
+actual core of ``salt-sproxy`` is a Salt Runner named ``proxy``, which is loaded
+dynamically on run time. With this Runner, you can execute Salt commands on
+devices, without having Minions.
 
 Let's take an example from one of my previous posts,
 [Event-driven network automation using napalm-logs and 
