@@ -514,7 +514,7 @@ already have Proxy Minions up and running, you can start using it straight away 
 as seen in the previous paragraph. If you decide not to turn them off, the CLI
 option ``--use-existing-proxy`` is going to execute the command on the existing
 Proxy Minions, whenever possible. In case your target is valid and didn't match
-an existing Proxy Minion, then salt-sproxy will detect this and will try to
+an existing Proxy Minion, then ``salt-sproxy`` will detect this and will try to
 execute the Salt function locally.
 
 If you will want to have this as the default behaviour, you can set the
@@ -523,6 +523,9 @@ following option in the Master config:
 ```yaml
 use_existing_proxy: true
 ```
+
+You can find out more about running mixed environments at
+https://salt-sproxy.readthedocs.io/en/latest/mixed_envs.html
 
 Even-driven automation? Not a problem
 -------------------------------------
@@ -642,7 +645,9 @@ Take a moment and read, or re-read that post as it's essential in order to
 fully understand the following.
 
 One of the Reactor files I exemplified was the following (triggered in response
-to an interface down event):
+to an
+[interface down event](http://napalm-logs.com/en/latest/messages/INTERFACE_DOWN.html)
+from [napalm-logs](https://github.com/napalm-automation/napalm-logs)):
 
 ``/etc/salt/reactor/if_down_shutdown.sls``
 {% raw %}
