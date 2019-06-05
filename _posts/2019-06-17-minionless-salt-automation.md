@@ -675,7 +675,7 @@ commands through the ``proxy`` Runner:
 shutdown_interface:
   runner.proxy.execute:
     - tgt: {{ data.host }}
-    - fun: net.load_template
+    - function: net.load_template
     - kwarg:
         template_name: salt://templates/shut_interface.jinja
         interface_name: {{ data.yang_message.interfaces.interface.keys()[0] }}
@@ -685,7 +685,7 @@ shutdown_interface:
 As you can notice, the difference is small: ``local.net.load_template`` becomes
 ``runner.proxy.execute_devices`` which tells the Reactor to invoke the
 ``proxy.execute_devices`` Runner, which in turn executes the ``net.load_template``
-Salt function against the devices from the ``devices`` key. The arguments under
+Salt function against the device(s) from the ``tgt`` key. The arguments under
 ``kwargs`` are preserved, with the same effect. The difference is however in the
 way it works: while previously with ``local.net.load_template`` the execution is
 sent to the Minion managing the device, changing to
@@ -693,9 +693,9 @@ sent to the Minion managing the device, changing to
 practically the main difference between using Proxy Minions and salt-sproxy in
 this context.
 
-I could expand longer on this, and I'll probably follow up with a dedicated post
-if this is not clear and expand as much as possible. For now, I hope this brief
-introduction is intriguing - at least. :-)
+I could expand longer on this, but I'll probably follow up with a dedicated post
+if this is not clear and elaborate as much as possible. For now, I hope this
+brief introduction is intriguing - at least. :-)
 
 Execution over the Salt REST API? Sorted!
 -----------------------------------------
@@ -726,7 +726,7 @@ Or from Python:
 ... 'fun': 'proxy.execute',
 ... 'username': 'mircea',
 ... 'password': 'pass',
-... 'eauth': 'auto',
+... 'eauth': 'pam',
 ... 'tgt': 'minion1',
 ... 'function': 'test.ping',
 ... 'sync': True})
@@ -734,7 +734,8 @@ Or from Python:
 {u'return': [{u'minion1': True}]}
 ```
 
-Both examples above are the equivalent of the CLI ``salt-sproxy minion1 test.ping``.
+The examples above are the equivalent of the CLI
+``salt-sproxy minion1 test.ping``.
 
 See https://salt-sproxy.readthedocs.io/en/latest/salt_api.html for more details
 and usage examples.
@@ -762,8 +763,10 @@ Conclusions
 I am super excited to release this project, and I hope it is going to
 help a lot. Salt is a beautiful tool, but often overlooked due to its high entry
 barrier and loads of requirements. I believe that ``salt-sproxy`` is going to
-ease this and make it much easier for everyone to start automating. I recommend
-you to see the
+make it *much* easier for everyone to start automating, while allowing you to
+enjoy the most beautiful parts in Salt, together with its flexibility,
+extensibility and tons of features ready to be used, including the REST API and
+the event-driver methodology. I recommend you to take a look at the
 [Quick Start](https://salt-sproxy.readthedocs.io/en/latest/#quick-start) section
 of the documentation and convince yourself.
 
@@ -780,7 +783,7 @@ to evaluate which devices require frequent changes / interaction (for which
 you would start Proxy processes), and which are more statical (which you'd
 probably manage using the ``salt-sproxy``).
 
-If you like the project, remember to star it on GitHub:
+If you also like the project, remember to star it on GitHub:
 https://github.com/mirceaulinic/salt-sproxy and why not Tweet about it, and let
 your friends know. The larger the community, the easier is going to be for every
 one of us!
@@ -788,5 +791,5 @@ one of us!
 I am looking forward to hearing your feedback. I would love to make it easier 
 for everyone to get started to automate, so please help improve the docs or add
 your usage examples to
-https://github.com/mirceaulinic/salt-sproxy/tree/master/examples
-so other engineers can follow them.
+https://github.com/mirceaulinic/salt-sproxy/tree/master/examples so other
+engineers can follow them.
