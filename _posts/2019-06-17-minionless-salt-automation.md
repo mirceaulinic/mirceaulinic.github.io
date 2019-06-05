@@ -673,8 +673,8 @@ commands through the ``proxy`` Runner:
 {% raw %}
 ```yaml
 shutdown_interface:
-  runner.proxy.execute_devices:
-    - devices: [ {{ data.host }} ]
+  runner.proxy.execute:
+    - tgt: {{ data.host }}
     - fun: net.load_template
     - kwarg:
         template_name: salt://templates/shut_interface.jinja
