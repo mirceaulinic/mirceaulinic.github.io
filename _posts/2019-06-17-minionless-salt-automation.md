@@ -130,7 +130,6 @@ Where:
 For example, the following command would retrieve the ARP table from the device
 identified as ``edge1.thn.lon``:
 
-
 ```bash
 $ salt-sproxy edge1.thn.lon net.arp
 ```
@@ -242,6 +241,10 @@ any other Salt function, for example ``pip.list`` which would display the list
 of the installed PIP-managed Python packages on the local computer (or wherever
 you're executing salt-sproxy on).
 
+If you prefer a visual of this example, take a look at the following capture:
+
+<script id="asciicast-247697" src="https://asciinema.org/a/247697.js" async></script>
+
 The same methodology can then be applied for connecting to network gear through
 your Proxy module of choice. For example,
 [``napalm``](https://docs.saltstack.com/en/latest/ref/proxy/all/salt.proxy.napalm.html);
@@ -331,6 +334,11 @@ juniper-router:
         True
 ```
 
+I have prepared a CLI capture for this example as well, which you can watch
+below:
+
+<script id="asciicast-247726" src="https://asciinema.org/a/247726.js" async></script>
+
 As promised, the methodology remains the same, without the headache of managing
 thousands of always running processes.
 
@@ -369,14 +377,13 @@ $ salt-run pillar.show_pillar some-device
 
 Then you should be all set to give it a go:
 
-
 ```bash
 $ salt-sproxy some-device test.ping
 ```
 
 I am not going to detail on this further, but you can follow the notes from
 [this guide](https://docs.saltstack.com/en/latest/topics/proxyminion/index.html)
-with the minor differences described above.
+with the minor differences for salt-sproxy described above.
 
 In the exact same way, you can use any of the [natively available Proxy 
 modules](https://docs.saltstack.com/en/develop/ref/proxy/all/index.html) and
@@ -414,12 +421,13 @@ target. In order words, you sometimes might have more complex targets that a
 single device or a list (e.g., you can have a regular expression --
 ``edge{1,2}.thn.*``) and so on; in that case, you'd need a Roster. There are
 several Roster modules available natively, and you can explore them
-[here](https://docs.saltstack.com/en/latest/ref/roster/all/index.html#all-salt-roster). 
+[here](https://docs.saltstack.com/en/latest/ref/roster/all/index.html#all-salt-roster).
 
 At the end of the day, it is the same methodology with other well
 know automation tools such as Ansible where you have to provide an *inventory*
 with all the devices it should be aware of.
-I will provide below an usage example, using the Ansible Roster module.
+I will provide an usage example in the following paragraph, using the Ansible
+Roster module.
 
 Migrating from Ansible to Salt and salt-sproxy
 ----------------------------------------------
@@ -477,6 +485,15 @@ $ salt-sproxy <tgt> --preview-target
 - edge1.sfo
 ```
 
+Or a specific group, as defined in the inventory file, e.g.,
+
+```bash
+$ salt-sproxy -N southeast --preview-target
+- edge1.atlanta
+- edge2.atlanta
+- edge1.raleigh
+```
+
 More extensive details are documented at:
 https://salt-sproxy.readthedocs.io/en/latest/roster.html,
 and configuration examples at
@@ -487,8 +504,7 @@ and
 https://github.com/mirceaulinic/salt-sproxy/tree/master/examples/ansible/.
 
 In this way, you can benefit from Ansible's simplicity and Salt's power and
-flexibility (and ease of extensibility) altogether, *while you don't have to
-learn a DSL to use the tool*.
+flexibility (and ease of extensibility) altogether.
 
 Migrating from Proxy Minions to salt-sproxy
 -------------------------------------------
@@ -735,7 +751,7 @@ Or from Python:
 ```
 
 The examples above are the equivalent of the CLI
-``salt-sproxy minion1 test.ping``.
+``salt-sproxy minion1 test.ping`` used in the previous examples.
 
 See https://salt-sproxy.readthedocs.io/en/latest/salt_api.html for more details
 and usage examples.
