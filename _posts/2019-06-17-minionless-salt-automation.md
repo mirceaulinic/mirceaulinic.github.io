@@ -148,8 +148,11 @@ To use a different Salt configuration file, you can specify it using the ``-c``
 option, e.g.,
 
 ```bash
-$ salt-sproxy edge1.thn.lon net.arp -c /path/to/salt/config
+$ salt-sproxy edge1.thn.lon net.arp -c /path/to/salt/config/dir
 ```
+
+With this command, it'll try to load the configuration from
+``/path/to/salt/config/dir/master``.
 
 The good news here is that (almost) everything is exactly preserved to what you
 are already used to, and you can, e.g., use the
