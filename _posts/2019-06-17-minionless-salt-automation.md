@@ -520,15 +520,42 @@ running, without any issues. Assuming that your Proxy is properly configured,
 you should be able to go ahead and execute arbitrary commands immediately, e.g.,
 
 ```bash
-$ salt-sproxy 'iosxr-router' route.show '0.0.0.0/0'
-iosxr-router:
-    # TODO get output from an XR
+$ salt-sproxy 'arista-switch' route.show '0.0.0.0/8'
+arista-switch:
+    ----------
+    comment:
+    out:
+        ----------
+        0.0.0.0/8:
+            |_
+              ----------
+              age:
+                  0
+              current_active:
+                  True
+              inactive_reason:
+              last_active:
+                  True
+              next_hop:
+              outgoing_interface:
+              preference:
+                  0
+              protocol:
+                  martian
+              protocol_attributes:
+                  ----------
+              routing_table:
+                  default
+              selected_next_hop:
+                  True
+    result:
+        True
 ```
 
-The previous command would show the routes to ``0.0.0.0/0`` on the
-``iosxr-router`` which is supposed to be already configured as a Proxy.
+The previous command would show the details of the ``0.0.0.0/8`` route on the
+``arista-switch`` which is supposed to be already configured as a Proxy.
 Confirming that works well, you can go ahead and turn off your Proxy service
-for ``iosxr-router``, and so on.
+for ``arista-switch``, and so on.
 
 Why not use both Proxy Minions and salt-sproxy
 ----------------------------------------------
@@ -802,7 +829,7 @@ to evaluate which devices require frequent changes / interaction (for which
 you would start Proxy processes), and which are more statical (which you'd
 probably manage using the ``salt-sproxy``).
 
-If you also like the project, remember to star it on GitHub:
+If you like the project, remember to star it on GitHub:
 https://github.com/mirceaulinic/salt-sproxy and why not Tweet about it, and let
 your friends know. The larger the community, the easier is going to be for every
 one of us!
