@@ -500,14 +500,21 @@ $ salt-sproxy -N southeast --preview-target
 More extensive details are documented at:
 https://salt-sproxy.readthedocs.io/en/latest/roster.html,
 and configuration examples at
-https://github.com/mirceaulinic/salt-sproxy/tree/master/examples. For Ansible
+https://salt-sproxy.readthedocs.io/en/latest/examples/. For Ansible
 specifically, you might want to focus on these two sections:
 https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible
 and
-https://github.com/mirceaulinic/salt-sproxy/tree/master/examples/ansible/.
+https://salt-sproxy.readthedocs.io/en/latest/examples/ansible.html.
 
 In this way, you can benefit from Ansible's simplicity and Salt's power and
 flexibility (and ease of extensibility) altogether.
+
+You can similarly load the list of devices / inventory from whatever data source,
+including JSON / YAML / [you name it] files, HTTP APIs, MySQL / Postgres
+database, Redis / Consul / MongoDB, and many others, by loading the data through
+the Pillar: see https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-pillar
+for more information and examples, as well as
+https://salt-sproxy.readthedocs.io/en/latest/examples/pillar_roster.html.
 
 Migrating from Proxy Minions to salt-sproxy
 -------------------------------------------
