@@ -498,13 +498,13 @@ $ salt-sproxy -N southeast --preview-target
 ```
 
 More extensive details are documented at:
-https://salt-sproxy.readthedocs.io/en/latest/roster.html,
+[https://salt-sproxy.readthedocs.io/en/latest/roster.html](https://salt-sproxy.readthedocs.io/en/latest/roster.html),
 and configuration examples at
-https://salt-sproxy.readthedocs.io/en/latest/examples/. For Ansible
+[https://salt-sproxy.readthedocs.io/en/latest/examples/](https://salt-sproxy.readthedocs.io/en/latest/examples/). For Ansible
 specifically, you might want to focus on these two sections:
-https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible
+[https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible](https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible)
 and
-https://salt-sproxy.readthedocs.io/en/latest/examples/ansible.html.
+[https://salt-sproxy.readthedocs.io/en/latest/examples/ansible.html](https://salt-sproxy.readthedocs.io/en/latest/examples/ansible.html).
 
 In this way, you can benefit from Ansible's simplicity and Salt's power and
 flexibility (and ease of extensibility) altogether.
@@ -512,9 +512,10 @@ flexibility (and ease of extensibility) altogether.
 You can similarly load the list of devices / inventory from whatever data source,
 including JSON / YAML / [you name it] files, HTTP APIs, MySQL / Postgres
 database, Redis / Consul / MongoDB, and many others, by loading the data through
-the Pillar: see https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-pillar
+the Pillar: see
+[https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-pillar](https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-pillar)
 for more information and examples, as well as
-https://salt-sproxy.readthedocs.io/en/latest/examples/pillar_roster.html.
+[https://salt-sproxy.readthedocs.io/en/latest/examples/pillar_roster.html](https://salt-sproxy.readthedocs.io/en/latest/examples/pillar_roster.html).
 
 Migrating from Proxy Minions to salt-sproxy
 -------------------------------------------
@@ -583,7 +584,7 @@ use_existing_proxy: true
 ```
 
 You can find out more about running mixed environments at
-https://salt-sproxy.readthedocs.io/en/latest/mixed_envs.html
+[https://salt-sproxy.readthedocs.io/en/latest/mixed_envs.html](https://salt-sproxy.readthedocs.io/en/latest/mixed_envs.html).
 
 Even-driven automation? Not a problem
 -------------------------------------
@@ -656,8 +657,9 @@ proxy/runner/20190604102025232023/ret/minion1	{
 The events pushed on the Salt bus have the same structure as the native Salt
 execution events, the only difference being that the tag is registered under the
 ``proxy/runner`` namespace vs. ``salt/job`` as the usual Salt events.
-See https://salt-sproxy.readthedocs.io/en/latest/events.html for further details
-and examples.
+See
+[https://salt-sproxy.readthedocs.io/en/latest/events.html](https://salt-sproxy.readthedocs.io/en/latest/events.html)
+for further details and examples.
 
 If you would like to have Salt events by default, simply add this line to
 your Master config:
@@ -754,7 +756,7 @@ Execution over the Salt REST API? Sorted!
 -----------------------------------------
 
 Through the same Runner as previously, after enabling the Salt HTTP API (see
-https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html
+[https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html](https://docs.saltstack.com/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html)
 to learn how to correctly set it up), you should be able to execute, e.g.,
 
 ```bash
@@ -790,8 +792,9 @@ Or from Python:
 The examples above are the equivalent of the CLI
 ``salt-sproxy minion1 test.ping`` used in the previous examples.
 
-See https://salt-sproxy.readthedocs.io/en/latest/salt_api.html for more details
-and usage examples.
+See
+[https://salt-sproxy.readthedocs.io/en/latest/salt_api.html](https://salt-sproxy.readthedocs.io/en/latest/salt_api.html)
+for more details and usage examples.
 
 Does it work on Windows?
 ------------------------
@@ -803,8 +806,10 @@ from PyPI, ``salt-sproxy`` should be usable too - that is my guess, at least.
 
 In the [``salt-sproxy``](https://github.com/mirceaulinic/salt-sproxy) repository
 I've added a script that should normally facilitate the installation on Unix
-machines: https://raw.githubusercontent.com/mirceaulinic/salt-sproxy/master/install.sh
-(and usage details at https://salt-sproxy.readthedocs.io/en/latest/install.html).
+machines:
+[https://raw.githubusercontent.com/mirceaulinic/salt-sproxy/master/install.sh](https://raw.githubusercontent.com/mirceaulinic/salt-sproxy/master/install.sh)
+(and usage details at
+[https://salt-sproxy.readthedocs.io/en/latest/install.html](https://salt-sproxy.readthedocs.io/en/latest/install.html)).
 
 If you can, please submit a PR to provide a ``.bat`` script or
 anything that provides the equivalent functionality on Windows - the community
@@ -837,12 +842,12 @@ you would start Proxy processes), and which are more statical (which you'd
 probably manage using the ``salt-sproxy``).
 
 If you like the project, remember to star it on GitHub:
-https://github.com/mirceaulinic/salt-sproxy and why not Tweet about it, and let
-your friends know. The larger the community, the easier is going to be for every
-one of us!
+[https://github.com/mirceaulinic/salt-sproxy](https://github.com/mirceaulinic/salt-sproxy)
+and why not share it with your friends and colleagues. The larger the community,
+the easier is going to be for every one of us!
 
 I am looking forward to hearing your feedback. I would love to make it easier 
 for everyone to get started to automate, so please help improve the docs or add
 your usage examples to
-https://github.com/mirceaulinic/salt-sproxy/tree/master/examples so other
-engineers can follow them.
+[https://github.com/mirceaulinic/salt-sproxy/tree/master/examples](https://github.com/mirceaulinic/salt-sproxy/tree/master/examples)
+so other engineers can follow them.
