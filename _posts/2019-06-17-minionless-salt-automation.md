@@ -465,6 +465,39 @@ One particular difference to always remember is that the Ansible Roster /
 inventory file doesn't have to provide the connection details, as those are
 already managed into the Pillar, as detailed previously.
 
+```text
+all:
+  children:
+    usa:
+      children:
+        northeast: ~
+        northwest:
+          children:
+            seattle:
+              hosts:
+                edge1.seattle
+            vancouver:
+              hosts:
+                edge1.vancouver
+        southeast:
+          children:
+            atlanta:
+              hosts:
+                edge1.atlanta
+                edge2.atlanta
+            raleigh:
+              hosts:
+                edge1.raleigh
+        southwest:
+          children:
+            san_francisco:
+              hosts:
+                edge1.sfo
+            los_angeles:
+              hosts:
+                edge1.la
+```
+
 If the configuration is correct, you can run the following to verify that the
 inventory is interpreted properly - the command should display the entire list
 of devices salt-sproxy should be aware of:
@@ -478,7 +511,7 @@ of devices matched by your target expression (determined via the Roster
 interface):
 
 ```bash
-$ salt-sproxy <tgt> --preview-target
+$ salt-sproxy '*' --preview-target
 - edge1.seattle
 - edge1.vancouver
 - edge1.atlanta
@@ -486,6 +519,15 @@ $ salt-sproxy <tgt> --preview-target
 - edge1.raleigh
 - edge1.la
 - edge1.sfo
+```
+
+Select some devices using their name - shell-like globbing or regular expression,
+e.g.,
+
+```bash
+$ salt-sproxy '*.atlanta' --preview-target
+- edge1.atlanta
+- edge2.atlanta
 ```
 
 Or a specific group, as defined in the inventory file, e.g.,
