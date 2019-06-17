@@ -498,14 +498,6 @@ all:
                 edge1.la
 ```
 
-If the configuration is correct, you can run the following to verify that the
-inventory is interpreted properly - the command should display the entire list
-of devices salt-sproxy should be aware of:
-
-```bash
-$ salt-sproxy '*' --preview-target
-```
-
 When the configuration is correctly setup, you should be able to check the list
 of devices matched by your target expression (determined via the Roster
 interface):
@@ -521,8 +513,7 @@ $ salt-sproxy '*' --preview-target
 - edge1.sfo
 ```
 
-Select some devices using their name - shell-like globbing or regular expression,
-e.g.,
+Select devices using their name - shell-like globbing or regular expression, e.g.,
 
 ```bash
 $ salt-sproxy '*.atlanta' --preview-target
@@ -542,8 +533,8 @@ $ salt-sproxy -N southeast --preview-target
 More extensive details are documented at:
 [https://salt-sproxy.readthedocs.io/en/latest/roster.html](https://salt-sproxy.readthedocs.io/en/latest/roster.html),
 and configuration examples at
-[https://salt-sproxy.readthedocs.io/en/latest/examples/](https://salt-sproxy.readthedocs.io/en/latest/examples/). For Ansible
-specifically, you might want to focus on these two sections:
+[https://salt-sproxy.readthedocs.io/en/latest/examples/](https://salt-sproxy.readthedocs.io/en/latest/examples/).
+For Ansible specifically, you might want to focus on these two sections:
 [https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible](https://salt-sproxy.readthedocs.io/en/latest/roster.html#roster-example-ansible)
 and
 [https://salt-sproxy.readthedocs.io/en/latest/examples/ansible.html](https://salt-sproxy.readthedocs.io/en/latest/examples/ansible.html).
