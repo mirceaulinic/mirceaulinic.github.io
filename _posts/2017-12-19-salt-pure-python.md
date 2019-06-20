@@ -10,7 +10,7 @@ obscure language of its own: as I always like to say, to start automating
 all you need to know is YAML and Jinja, 3 rules each. For example, when you need
 a simple iteration you don't need to check the documentation and see _"what's
 that specific instruction that iterates through a list"_, but just a simple and
-straight Jinja loop, i.e., {% raw %}``{%- for element in list %}``{% endraw %}.
+straight Jinja loop, i.e., {% raw %}``{%- for element in list %} .. {%- endfor %}``{% endraw %}.
 However, there are particular cases where Jinja itself is not enough either, or
 it simply can become too complex and unreadable. When I need to deal with a
 complex task, I sometimes feel that _"I'd better write this in Python than
