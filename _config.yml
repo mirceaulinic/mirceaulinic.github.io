@@ -175,7 +175,7 @@ prose:
           label: "Publish"
           help: "Check to publish post, uncheck to hide."
 
-plugins:
+gems:
   - jekyll-paginate
 
 # Beautiful Jekyll / Dean Attali
