@@ -21,6 +21,7 @@ description: Mircea Ulinic
 navbar-links:
   About: "aboutme"
   Email List: "email_list"
+  Public Key: "gpg"
   Home: "http://mirceaulinic.net"
   Rant: "https://rant.mirceaulinic.net/"
 
