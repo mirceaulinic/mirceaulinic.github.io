@@ -55,8 +55,9 @@ management. In fact, configuration management was the main focus of just one of
 the 17 modules of the course! I'm a big fan of event-driven automation and
 orchestration [before it was cool](https://mirceaulinic.net/2017-10-19-event-driven-network-automation/).
 In the course, we covered and provided hands-on experience with napalm-logs,
-as well as other technologies such as Prometheus, Alertmanager, Grafana, NetBox,
-TextFSM, or my little side projects [salt-sproxy](https://mirceaulinic.net/2019-06-17-minionless-salt-automation/)
+as well as other technologies such as Prometheus, Alertmanager, Grafana,
+Elasticsearch & Kibana, NetBox, TextFSM, or my little side projects
+[salt-sproxy](https://mirceaulinic.net/2019-06-17-minionless-salt-automation/)
 or [ISalt](https://github.com/mirceaulinic/isalt) for debugging.
 As I'm hinting here, Salt is only the starting point from which we bootstrapped
 an event-driven environment with a [closed-loop](https://en.wikipedia.org/wiki/Closed-loop_controller)
