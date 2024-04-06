@@ -1,6 +1,7 @@
 ---
 layout: post
 title: APNIC course on Network Automation
+bigimg: /img/apnic.png
 ---
 
 From the very beginning, when I first introduced Salt to the network automation
