@@ -84,4 +84,4 @@ Make sure you register for the entire workshop duration, from 25th to 28th April
 
 For those who utilize RSS, you may subscribe to the provided RSS feed, which
 will document both past and forthcoming APNIC network automation
-workshops: https://mirceaulinic.net/courses.xml.
+workshops: https://mirceaulinic.net/workshops.xml.
