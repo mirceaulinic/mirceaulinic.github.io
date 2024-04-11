@@ -79,5 +79,9 @@ I couldn't be happier that the course is now in the skillful and experienced
 hands of David Phelan, Sheryl Hermoso, Terry Sweetser, and others from the
 APNIC training team. Over the next years, they will deliver this course.
 In fact, the next run is just a couple of weeks away at
-[SANOG 41](https://www.sanog.org/sanog41/) in Mumbai.
+[SANOG 41](https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG) in Mumbai.
 Make sure you register for the entire workshop duration, from 25th to 28th April 2024.
+
+For those who utilize RSS, you may subscribe to the provided RSS feed, which
+will document both past and forthcoming APNIC network automation
+workshops: https://mirceaulinic.net/courses.xml.

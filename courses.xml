@@ -1,0 +1,48 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>APNIC Network Automation</title>
+    <description>List of APNIC Network Automation Workshops</description>
+    <link>{{ site.url }}</link>
+    <atom:link href="{{ site.url }}/courses.xml" rel="self" type="application/rss+xml" />
+      <item>
+        <title>APRICOT 2024, Bangkok</title>
+        <description>
+            APRICOT 2024 / APNIC 57: Network Automation Workshop, 21-24 February 2024
+        </description>
+        <location>Bangkok, TH</location>
+        <venue>The Athenee Hotel</venue>
+        <address>61 Witthayu Rd, Lumphini, Pathum Wan, Bangkok 10330, Thailand</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                13.74160420861938 100.54775353901417
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Wednesday, 21 February 2024</start>
+        <end>Saturday, 24 April 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000ATtZMAW</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000ATtZMAW</guid>
+      </item>
+      <item>
+        <title>SANOG 41, Mumbai</title>
+        <description>
+            SANOG 41 / INNOG 7: Network Automation Workshop, 25-28 April 2024
+        </description>
+        <location>Mumbai, IN</location>
+        <venue>The Hotel Meluha the Fern, Powai Mumbai</venue>
+        <address>4W96+493, Central Ave, Hiranandani Gardens, Panchkutir Ganesh Nagar, Powai, Mumbai, Maharashtra 400076, India</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                19.11818502077535 72.91122833673445
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Thursday, 25 April 2024</start>
+        <end>Sunday, 28 April 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG</guid>
+      </item>
+  </channel>
+</rss>
