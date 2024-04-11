@@ -20,7 +20,7 @@ description: Mircea Ulinic
 # List of links in the navigation bar
 navbar-links:
   About: "aboutme"
-  Email List: "email_list"
+  Courses: "https://mirceaulinic.net/courses.xml"
   Public Key: "gpg"
   Home: "http://mirceaulinic.net"
   Rant: "https://rant.mirceaulinic.net/"
