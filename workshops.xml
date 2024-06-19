@@ -7,7 +7,7 @@ layout: null
     <title>APNIC Network Automation</title>
     <description>List of APNIC Network Automation Workshops</description>
     <link>{{ site.url }}</link>
-    <atom:link href="{{ site.url }}/courses.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="{{ site.url }}/workshops.xml" rel="self" type="application/rss+xml" />
       <item>
         <title>APRICOT 2024, Bangkok</title>
         <description>
@@ -43,6 +43,24 @@ layout: null
         <end>Sunday, 28 April 2024</end>
         <link>https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG</link>
         <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG</guid>
+    </item>
+      <item>
+        <title>APNIC 58, Wellington</title>
+        <description>
+            APNIC 58: Network Automation Workshop, 30 August - 2 September 2024
+        </description>
+        <location>Wellington, NZ</location>
+        <venue>Takina Wellington Convention & Exhibition Centre</venue>
+        <address>50 Cable Street, Te Aro, Wellington 6011, New Zealand</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                -41.290841577294074, 174.78085892628144
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Friday, 30 August 2024</start>
+        <end>Monday, 2 September 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000OAkbMAG</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000OAkbMAG</guid>
       </item>
   </channel>
 </rss>
