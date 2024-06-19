@@ -43,14 +43,14 @@ layout: null
         <end>Sunday, 28 April 2024</end>
         <link>https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG</link>
         <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000JOkzMAG</guid>
-    </item>
+      </item>
       <item>
         <title>APNIC 58, Wellington</title>
         <description>
             APNIC 58: Network Automation Workshop, 30 August - 2 September 2024
         </description>
         <location>Wellington, NZ</location>
-        <venue>Takina Wellington Convention & Exhibition Centre</venue>
+        <venue>Takina Wellington Convention &amp; Exhibition Centre</venue>
         <address>50 Cable Street, Te Aro, Wellington 6011, New Zealand</address>
         <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
             <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
