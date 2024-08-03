@@ -62,5 +62,23 @@ layout: null
         <link>https://academy.apnic.net/en/events?id=a0BOc000000OAkbMAG</link>
         <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000OAkbMAG</guid>
       </item>
+      <item>
+        <title>SGNOG 11, Singapore</title>
+        <description>
+            SGNOG 11 APNIC Workshop: Network Automation, 7 October - 9 October 2024
+        </description>
+        <location>Singapore, SG</location>
+        <venue>SMU School of Economics</venue>
+        <address>90 Stamford Road Singapore, Singapore 178903 Singapore</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                1.2980289306531585, 103.84891164633251
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Monday, 7 October 2024</start>
+        <end>Wednesday, 9 October 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000Rjc9MAC</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000Rjc9MAC</guid>
+      </item>
   </channel>
 </rss>
