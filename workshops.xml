@@ -63,9 +63,27 @@ layout: null
         <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000OAkbMAG</guid>
       </item>
       <item>
+        <title>mnNOG 6, Ulaanbaatar</title>
+        <description>
+            mnNOG6 - Network Automation Workshop, 30 September - 3 October 2024
+        </description>
+        <location>Ulaanbaatar, MN</location>
+        <venue>Gorkhi-Terelj National park</venue>
+        <address>6th khoroo, Terelj road Red Rock Hotel and Resorts, Terelj Rd, Mongolia, 612790</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                47.851064264429034, 107.40427103582516
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Monday, 30 September 2024</start>
+        <end>Thursday, 3 October 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000MSC9MAO</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000MSC9MAO</guid>
+      </item>
+      <item>
         <title>SGNOG 11, Singapore</title>
         <description>
-            SGNOG 11 APNIC Workshop: Network Automation, 7 October - 9 October 2024
+            SGNOG 11 APNIC Workshop: Network Automation, 7-9 October 2024
         </description>
         <location>Singapore, SG</location>
         <venue>SMU School of Economics</venue>
