@@ -3,8 +3,7 @@ layout: page
 title: About me
 ---
  
-Mircea Ulinic is a network engineer for
-[DigitalOcean](https://www.digitalocean.com/), spending most of his time writing
+Mircea Ulinic is a network engineer, spending most of his time writing
 code for network automation. He often talks and presents at industry events
 about the tools he's working on and how automation really helps to maintain
 reliable, stable, and self-resilient networks. Mircea's also a major contributor
