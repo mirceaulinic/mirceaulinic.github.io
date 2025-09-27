@@ -98,5 +98,238 @@ layout: null
         <link>https://academy.apnic.net/en/events?id=a0BOc000000Rjc9MAC</link>
         <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000Rjc9MAC</guid>
       </item>
+      <item>
+        <title>SANOG 42, Islamabad</title>
+        <description>
+            SANOG 42 - Network Automation Workshop: 22-25 October 2024
+        </description>
+        <location>Islamabad, PK</location>
+        <venue>Marriott Hotel</venue>
+        <address>Agha Khan Rd, F-5/1 F-5, Islamabad, Islamabad Capital Territory 44000, Pakistan</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                33.73294308205566, 73.08708098053053
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Tuesday, 22 October 2024</start>
+        <end>Friday, 25 October 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000aOVFMA2</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000aOVFMA2</guid>
+      </item>
+      <item>
+        <title>npNOG 10, Pokhara</title>
+        <description>
+            npNOG 10- Network Automation Workshop: 25-28 November 2024
+        </description>
+        <location>Pokhara, NP</location>
+        <venue>Atithi Resort and SPA</venue>
+        <address>Atithi Resort and SPA Pvt. Ltd, Lakeside, Pokhara, Nepal</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                28.207267885415927, 83.9666131970448
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Monday, 25 November 2024</start>
+        <end>Thursday, 28 November 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000ctptMAA</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000ctptMAA</guid>
+      </item>
+      <item>
+        <title>TWNIC 2024, Taipei</title>
+        <description>
+            TWNIC – Network Automation Workshop: 26-28 November 2024
+        </description>
+        <location>Taipei, TW</location>
+        <venue>IEAT Conference Center </venue>
+        <address>No. 350, Songjiang Rd, Zhongshan District, Taipei City, Taiwan</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                25.061864027452167, 121.53289072581657
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Tuesday, 26 November 2024</start>
+        <end>Thursday, 28 November 2024</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000birjMAA</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000birjMAA</guid>
+      </item>
+      <item>
+        <title>APRICOT 2025/APNIC 59, Petaling Jaya</title>
+        <description>
+            APRICOT 2025/APNIC 59 - Network Automation Workshop: 19-22 February 2025
+        </description>
+        <location>Petaling Jaya, MY</location>
+        <venue>AVANTÉ Hotel</venue>
+        <address>1, Persiaran Bandar Utama, Bandar Utama, 47800 Petaling Jaya, Selangor, Malaysia</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                3.1450396278542514, 101.6182022274165
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Wednesday, 19 February 2025</start>
+        <end>Saturday, 22 February 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000fn9dMAA</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000fn9dMAA</guid>
+      </item>
+      <item>
+        <title>APAN59, Yokohama</title>
+        <description>
+            APAN59 - Introduction to Network Automation: 6 March 2025
+        </description>
+        <location>Yokohama, JP</location>
+        <venue>Pacifico Yokohama North</venue>
+        <address>1-1-1 Minato Mirai, Nishi-ku, Yokohama City, Kanagawa Prefecture</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                35.461720284188175, 139.6341927866893
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Thursday, 6 March 2025</start>
+        <end>Thursday, 6 March 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000pYndMAE</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000pYndMAE</guid>
+      </item>
+      <item>
+        <title>Asi@Connect, Cox's Bazar</title>
+        <description>
+            Asi@Connect - Network Automation Workshop - Bangladesh: 20-24 April 2025
+        </description>
+        <location>Cox's Bazar, BD</location>
+        <venue>Sea Pearl Beach Resort &amp; Spa</venue>
+        <address>Cox's Bazar, Jaliapalong 4750, Bangladesh</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                21.21593952918084, 92.04887253924416
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Sunday, 20 April 2025</start>
+        <end>Wednesday, 24 April 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000zVEzMAM</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000zVEzMAM</guid>
+      </item>
+      <item>
+        <title>bdNOG19, Dhaka</title>
+        <description>
+            bdNOG19 Network Automation Workshop: 21-23 May 2025
+        </description>
+        <location>Dhaka, BD</location>
+        <venue>Hotel Lake Castle</venue>
+        <address>Dhaka, Bangladesh</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                23.802424124065002, 90.40863632764184
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Wednesday, 21 May 2025</start>
+        <end>Friday, 23 May 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000zQaHMAU</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000zQaHMAU</guid>
+      </item>
+      <item>
+        <title>INNOG 8, New Delhi</title>
+        <description>
+            INNOG 8 - Network Automation Workshop: 23-26 May 2025
+        </description>
+        <location>New Delhi, IN</location>
+        <venue>Indian Institute Of Technology Delhi (IIT Delhi)</venue>
+        <address>IIT Campus, Hauz Khas, New Delhi, Delhi 110016, India</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                28.54595359037055, 77.19310049095175
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Friday, 23 May 2025</start>
+        <end>Monday, 26 May 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000000wvPJMAY</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000000wvPJMAY</guid>
+      </item>
+      <item>
+        <title>NpNOG11, Kathmandu</title>
+        <description>
+            NpNOG11 - Network Automation Workshop: 15-18 June 2025
+        </description>
+        <location>Kathmandu, NP</location>
+        <venue>Hyatt Centric Soalteemode</venue>
+        <address>Redcross Rd, Kathmandu 44600, Nepal</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                27.699334363057154, 85.28919075470495
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Sunday, 15 June 2025</start>
+        <end>Wednesday, 18 June 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc0000014HHpMAM</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc0000014HHpMAM</guid>
+      </item>
+      <item>
+        <title>LkNOG 9, Colombo</title>
+        <description>
+            LkNOG 9 - Network Automation Workshop: 21-25 July 2025
+        </description>
+        <location>Colombo, LK</location>
+        <venue>Postgraduate Institute of Management</venue>
+        <address>28, Lesley Ranagala Mawatha, Colombo 08, Western Province, Sri Lanka</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                6.926575647101681, 79.88068386930811
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Monday, 21 July 2025</start>
+        <end>Friday, 25 July 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc0000017MhZMAU</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc0000017MhZMAU</guid>
+      </item>
+      <item>
+        <title>IDNOG 10, Jakarta</title>
+        <description>
+            IDNOG 10 - Network Automation Workshop: 21-23 July 2025
+        </description>
+        <location>Jakarta, ID</location>
+        <venue>Aston Kartika Grogol Hotel &amp; Conference Center</venue>
+        <address>Jakarta, Indonesia</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                -6.166747254665128, 106.79222822752178
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Monday, 21 July 2025</start>
+        <end>Wednesday, 23 July 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc0000014tTZMAY</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc0000014tTZMAY</guid>
+      </item>
+      <item>
+        <title>APAN60, Hong Kong</title>
+        <description>
+            APAN60 - Network Automation with SALT: 29 July 2025
+        </description>
+        <location>Hong Kong, HK</location>
+        <venue>Grand Hyatt Hong Kong</venue>
+        <address>Wan Chai, Hong Kong</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+                22.281505473584907, 114.17214613343852
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Tuesday, 29 July 2025</start>
+        <end>Tuesday, 29 July 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000001RI1tMAG</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000001RI1tMAG</guid>
+      </item>
+      <item>
+        <title>KHNOG 7, Cambodia</title>
+        <description>
+            KHNOG 7 - Network Automation Workshop: 1-3 December 2025
+        </description>
+        <location>Cambodia</location>
+        <venue>TBC</venue>
+        <address>Cambodia</address>
+        <gpl:GPL_CoordinateTuple xmlns:gpl="http://www.isotc211.org/gpl">
+            <gpl:tuple srsName="urn:ogc:def:crs:EPSG:6.6:4326">
+            </gpl:tuple>
+        </gpl:GPL_CoordinateTuple>
+        <start>Monday, 1 December 2025</start>
+        <end>Wednesday, 3 December 2025</end>
+        <link>https://academy.apnic.net/en/events?id=a0BOc000001hBsTMAU</link>
+        <guid isPermaLink="true">https://academy.apnic.net/en/events?id=a0BOc000001hBsTMAU</guid>
+      </item>
   </channel>
 </rss>
